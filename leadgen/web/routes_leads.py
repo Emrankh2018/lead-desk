@@ -6,7 +6,8 @@ from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
 from leadgen.auth import authenticate
-from leadgen.models import Business, DuplicateCandidate, IcpProfile, PipelineStage
+from leadgen.models import Business, DuplicateCandidate, IcpProfile, PipelineStage, ResearchRun
+from leadgen.research import service as research
 from leadgen.services import audit, leads
 from leadgen.services.leads import DuplicateLead, LeadError, LeadFilter, LeadInput
 from leadgen.web.app import SessionDep, UserDep, flash, render, today_local
@@ -127,6 +128,7 @@ async def create_lead(request: Request, session: Session = SessionDep, user: str
     except LeadError as exc:
         session.rollback()
         return render(request, "lead_new.html", status_code=422, form=form, error=str(exc), **_lookups(session))
+    research.rescore(session, biz)
     session.commit()
     flash(request, f"Added “{biz.name}”.")
     if fuzzy:
@@ -140,8 +142,15 @@ def lead_detail(lead_id: int, request: Request, session: Session = SessionDep, u
     dupes = list(session.scalars(select(DuplicateCandidate).where(
         DuplicateCandidate.status == "open",
         (DuplicateCandidate.business_id == biz.id) | (DuplicateCandidate.other_id == biz.id))))
+    last_run = session.scalars(select(ResearchRun).where(ResearchRun.business_id == biz.id)
+                               .order_by(ResearchRun.id.desc())).first()
+    evidence = biz.evidence
     return render(request, "lead_detail.html", lead=biz, dupes=dupes, channels=leads.CHANNELS,
-                  kinds=leads.ACTIVITY_KINDS, today=today_local(), **_lookups(session))
+                  kinds=leads.ACTIVITY_KINDS, today=today_local(), last_run=last_run,
+                  facts=[e for e in evidence if e.verified and e.kind != "fetch_issue"],
+                  limits=[e for e in evidence if not e.verified],
+                  evidence_by_id={e.id: e for e in evidence}, batch_running=request.app.state.batch.state["running"],
+                  **_lookups(session))
 
 
 @router.post("/leads/{lead_id}")
@@ -159,6 +168,7 @@ async def update_lead(lead_id: int, request: Request, session: Session = Session
         session.rollback()
         flash(request, f"Not saved: {exc}", "error")
         return _see_other(f"/leads/{lead_id}")
+    research.rescore(session, biz)
     session.commit()
     flash(request, f"Saved ({', '.join(changed)})." if changed else "No changes.")
     return _see_other(f"/leads/{lead_id}")
@@ -204,6 +214,7 @@ async def toggle_dnc(lead_id: int, request: Request, session: Session = SessionD
     biz = _get_lead(session, lead_id)
     form = await request.form()
     leads.set_do_not_contact(session, biz, form.get("value") == "1", actor=user)
+    research.rescore(session, biz)
     session.commit()
     return _see_other(f"/leads/{lead_id}")
 
@@ -257,6 +268,8 @@ async def merge_duplicate(cand_id: int, request: Request, session: Session = Ses
     remove_id = cand.other_id if keep_id == cand.business_id else cand.business_id
     keep, remove = session.get(Business, keep_id), session.get(Business, remove_id)
     leads.merge(session, keep, remove, actor=user)
+    session.flush()
+    research.rescore(session, keep)
     session.commit()
     flash(request, f"Merged into {keep.name}.")
     return _see_other(f"/leads/{keep.id}")

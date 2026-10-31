@@ -3,8 +3,8 @@
 Local-first, single-user app for finding, researching, qualifying and tracking B2B prospects. The first use is
 an AI product-advertising service in Qatar; target profiles, stages and offers are configurable for other markets.
 
-**Status:** M1 (data core + CRM UI) done. Research/scoring (M2), AI drafts (M3), discovery connectors (M4) and
-analytics (M5) are next. See `PROGRESS.md` and `docs/M0-feasibility-report.md`.
+**Status:** M1 (CRM core) and M2 (website research, evidence, explainable scoring) done. AI drafts (M3), discovery
+connectors (M4) and analytics (M5) are next. See `PROGRESS.md` and `docs/M0-feasibility-report.md`.
 
 ## Principles
 - Facts come from code and stored sources; AI output (from M3) is labelled hypothesis/draft and never auto-sent.
@@ -36,6 +36,18 @@ Configuration via environment or `.env` (git-ignored), prefix `LEADGEN_`: `DATA_
   do-not-contact (blocks outreach logging), delete with confirmation.
 - Pipeline board with configurable stages (rename, reorder, add, delete empty, mark won/lost).
 - Settings: customer profiles (ICP) and offers; audit log page.
+
+## Research and scoring (M2)
+- **Research website** on a lead (or a background batch of up to 25 on the Research page) reads robots.txt, the homepage,
+  up to two same-site contact/about pages and, for Shopify, the public product catalogue. Requests are 2 s apart, sites
+  that block or rate-limit are not retried, and leads tried in the last 14 days are left out of batches.
+- Every finding is stored as evidence with its source URL and time. Absences ("no social links found") are listed under
+  *Not verified*. Empty email/phone/Instagram fields are filled only from details the site itself published.
+- **Score (0–100)** = weighted average of six criteria that have evidence: industry fit, location fit, video opportunity,
+  sells online, visual social presence, reachable. **Coverage %** shows how much of the rubric had evidence; low coverage
+  means under-researched, not a bad lead. Weights are editable per profile (Settings → Scoring weights).
+- The score measures fit and visible opportunity, not intent to buy, and does not judge company size.
+- Add your own observations (e.g. from Instagram) with the page you checked; they appear as evidence.
 
 ## Security notes
 Binds to 127.0.0.1 only. scrypt password hashes, login throttling (5 failures → 60 s), signed HttpOnly SameSite=Strict

@@ -29,6 +29,21 @@
   <p><button type="submit">Save profile</button>{% if e %} <a class="btn secondary" href="/settings">New instead</a>{% endif %}</p>
 </form>
 
+<h2 id="scoring">Scoring weights</h2>
+<p class="small muted">Each criterion adds points only when there is evidence for it. Set a weight to 0 to ignore a criterion. Saving rescores every lead (no websites are fetched).</p>
+{% for i in icps %}
+<form method="post" action="/settings/scoring/{{ i.id }}" class="panel">
+  <strong>{{ i.name }}</strong>
+  {% set w = weights_for(i) %}
+  <div class="grid" style="margin-top:8px">
+    {% for c in criteria %}
+    <label title="{{ c.help }}">{{ c.label }} <input type="number" name="{{ c.id }}" min="0" max="100" value="{{ w[c.id] }}"><span class="small">{{ c.help }}</span></label>
+    {% endfor %}
+  </div>
+  <p><button type="submit" class="secondary">Save weights and rescore</button></p>
+</form>
+{% endfor %}
+
 <h2>Pipeline stages</h2>
 <div class="table-wrap"><table>
   <thead><tr><th>Order</th><th>Name</th><th>Outcome</th><th>Leads</th><th></th></tr></thead>

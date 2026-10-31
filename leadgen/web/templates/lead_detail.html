@@ -40,9 +40,65 @@
       <p><button type="submit">Save changes</button></p>
     </form>
 
-    <div class="panel">
-      <h2 style="margin-top:0">Research &amp; score</h2>
-      <p class="muted">Not researched yet. Website research, evidence and explainable scoring arrive in the next milestone.</p>
+    <div class="panel" id="research">
+      <div class="row" style="justify-content: space-between">
+        <h2 style="margin:0">Research &amp; score</h2>
+        <form method="post" action="/leads/{{ lead.id }}/research">
+          <button type="submit" {{ 'disabled' if batch_running }}>{{ 'Research again' if lead.researched_at else 'Research website' }}</button>
+        </form>
+      </div>
+      <p class="small muted">
+        {% if lead.researched_at %}Last researched {{ lead.researched_at|local_time }}{% else %}Website not researched yet{% endif %}
+        {% if last_run %} · last run: <span class="badge {{ {'ok': 'ok', 'partial': 'warn', 'failed': 'err', 'skipped': 'warn'}.get(last_run.status, '') }}">{{ last_run.status }}</span>
+          ({{ last_run.pages_fetched }} page{{ 's' if last_run.pages_fetched != 1 }}){% endif %}
+      </p>
+      {% if last_run and last_run.issues %}
+      <div class="flash warn"><strong>Could not verify:</strong><ul style="margin:4px 0 0">{% for i in last_run.issues %}<li>{{ i }}</li>{% endfor %}</ul></div>
+      {% endif %}
+
+      <div class="row" style="align-items: baseline; gap: 20px; margin-block: 8px">
+        <div><span style="font-size: 2rem; font-weight: 700">{{ lead.score if lead.score is not none else '—' }}</span><span class="muted">/100 fit</span></div>
+        <div class="small">Evidence coverage: <strong>{{ lead.score_coverage or 0 }}%</strong> of the rubric
+          {% if (lead.score_coverage or 0) < 60 %}<span class="badge warn">under-researched</span>{% endif %}</div>
+      </div>
+      <p class="small muted">The score shows fit with your customer profile and visible opportunity, based only on the evidence below. It does not measure willingness to buy.</p>
+      {% if lead.score_breakdown %}
+      <div class="table-wrap"><table>
+        <thead><tr><th>Criterion</th><th>Points</th><th>Why</th></tr></thead>
+        {% for r in lead.score_breakdown %}
+        <tr><td>{{ r.label }}</td>
+            <td>{% if r.fraction is none %}<span class="badge">no evidence</span> <span class="small muted">/{{ r.weight }}</span>{% else %}{{ r.points }} <span class="small muted">/{{ r.weight }}</span>{% endif %}</td>
+            <td class="small">{{ r.explanation }}
+              {% for eid in r.evidence_ids %}{% if evidence_by_id.get(eid) %} <a href="#ev-{{ eid }}">[E{{ eid }}]</a>{% endif %}{% endfor %}</td></tr>
+        {% endfor %}
+      </table></div>
+      {% endif %}
+
+      {% if facts %}
+      <h2>Evidence</h2>
+      <ul class="timeline">
+        {% for e in facts %}
+        <li id="ev-{{ e.id }}"><span class="badge">E{{ e.id }}</span> {{ e.text }}
+          <div class="small muted">{% if e.created_by == 'user' %}your observation{% else %}observed {{ e.observed_at|local_time }}{% endif %}
+            {% if e.source_url %} · <a href="{{ e.source_url }}" target="_blank" rel="noopener noreferrer">source</a>{% endif %}</div>
+          {% if e.snippet %}<div class="small" style="background:#fafbfc; padding:4px 6px; border-radius:4px">“{{ e.snippet }}”</div>{% endif %}</li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+      {% if limits %}
+      <h2>Not verified</h2>
+      <ul class="timeline">{% for e in limits %}<li id="ev-{{ e.id }}" class="small"><span class="badge warn">E{{ e.id }}</span> {{ e.text }}</li>{% endfor %}</ul>
+      {% endif %}
+
+      <form method="post" action="/leads/{{ lead.id }}/evidence" style="margin-top:12px">
+        <h2>Add your own observation</h2>
+        <p class="small muted">For things you checked yourself, e.g. on their Instagram: “Posts 3×/week, no reels since August”. Include the page you looked at.</p>
+        <div class="row">
+          <label class="grow">Observation <input type="text" name="text" required maxlength="500"></label>
+          <label class="grow">Source URL <input type="text" name="source_url" placeholder="https://www.instagram.com/…"></label>
+          <button type="submit" class="secondary">Add</button>
+        </div>
+      </form>
     </div>
 
     <div class="panel row">

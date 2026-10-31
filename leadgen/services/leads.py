@@ -15,7 +15,7 @@ CHANNELS = ["email", "instagram", "linkedin", "whatsapp", "phone", "in_person", 
 ACTIVITY_KINDS = ["note", "outreach", "reply", "meeting", "proposal"]
 # Fields copied from the removed record into the kept one when the kept one is empty.
 MERGE_FIELDS = ["website", "domain", "instagram_handle", "linkedin_url", "phone_e164", "email_public",
-                "email_source_url", "city", "country", "industry", "icp_id", "deal_value", "follow_up_on", "score"]
+                "email_source_url", "city", "country", "industry", "icp_id", "deal_value", "follow_up_on"]
 
 
 class LeadError(ValueError):
@@ -199,7 +199,8 @@ def merge(session: Session, keep: Business, remove: Business, *, actor: str) -> 
         session.delete(cand)
     session.flush()
     session.expire(remove, ["activities"])
-    session.add(Activity(business_id=keep.id, kind="merged", summary=f"Merged duplicate #{remove.id} {remove.name}"))
+    session.add(Activity(business_id=keep.id, kind="merged", summary=f"Merged duplicate #{remove.id} {remove.name}"
+                         + (" (its research evidence was discarded; re-run research)" if remove.researched_at else "")))
     session.delete(remove)
     audit.record(session, actor, "lead.merge", "business", keep.id, removed=removed_snapshot, copied_fields=sorted(copied))
 

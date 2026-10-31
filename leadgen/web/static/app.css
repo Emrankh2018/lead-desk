@@ -56,6 +56,7 @@ th { font-size: .8rem; text-transform: uppercase; letter-spacing: .03em; color: 
 .timeline { list-style: none; padding: 0; margin: 0; }
 .timeline li { padding: 8px 0; border-bottom: 1px solid var(--line); }
 .two-col { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); gap: 16px; }
-@media (max-width: 860px) { .two-col { grid-template-columns: 1fr; } }
+@media (max-width: 860px) { .two-col { grid-template-columns: minmax(0, 1fr); } }
+.timeline li, td { overflow-wrap: anywhere; }  /* long source URLs must not widen the page */
 .login { max-width: 360px; margin: 60px auto; }
 .login form { display: flex; flex-direction: column; gap: 12px; }

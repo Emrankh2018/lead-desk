@@ -35,6 +35,8 @@ class IcpProfile(Base):
     industries: Mapped[list[str]] = mapped_column(JSON, default=list)
     keywords: Mapped[list[str]] = mapped_column(JSON, default=list)
     size_notes: Mapped[str] = mapped_column(Text, default="")
+    # {criterion_id: weight}; criteria are defined in leadgen.research.scoring. Empty = defaults.
+    scoring_weights: Mapped[dict] = mapped_column(JSON, default=dict)
     active: Mapped[bool] = mapped_column(Boolean, default=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)
 
@@ -78,7 +80,11 @@ class Business(Base):
     source_ref: Mapped[str | None] = mapped_column(String(500))
     icp_id: Mapped[int | None] = mapped_column(ForeignKey("icp_profiles.id", ondelete="SET NULL"))
     stage_id: Mapped[int] = mapped_column(ForeignKey("pipeline_stages.id"))
-    score: Mapped[int | None] = mapped_column(Integer)  # filled by M2 scoring
+    score: Mapped[int | None] = mapped_column(Integer)  # 0-100 over criteria with known evidence
+    score_coverage: Mapped[int | None] = mapped_column(Integer)  # % of rubric weight backed by evidence
+    score_breakdown: Mapped[list | None] = mapped_column(JSON)
+    scored_at: Mapped[datetime | None] = mapped_column(DateTime)
+    researched_at: Mapped[datetime | None] = mapped_column(DateTime)
     deal_value: Mapped[Decimal | None] = mapped_column(Numeric(12, 2))
     deal_currency: Mapped[str] = mapped_column(String(3), default="QAR")
     do_not_contact: Mapped[bool] = mapped_column(Boolean, default=False)
@@ -91,6 +97,10 @@ class Business(Base):
     icp: Mapped[IcpProfile | None] = relationship()
     activities: Mapped[list["Activity"]] = relationship(
         back_populates="business", cascade="all, delete-orphan", order_by="Activity.occurred_at.desc()"
+    )
+    # Current evidence only; rows are removed by the database's ON DELETE CASCADE when the business is deleted.
+    evidence: Mapped[list["Evidence"]] = relationship(
+        order_by="Evidence.id", primaryjoin="and_(Business.id == Evidence.business_id, Evidence.is_current)", viewonly=True,
     )
 
 
@@ -122,6 +132,37 @@ class DuplicateCandidate(Base):
 
     business: Mapped[Business] = relationship(foreign_keys=[business_id])
     other: Mapped[Business] = relationship(foreign_keys=[other_id])
+
+
+class ResearchRun(Base):
+    __tablename__ = "research_runs"
+    id: Mapped[int] = mapped_column(primary_key=True)
+    business_id: Mapped[int] = mapped_column(ForeignKey("businesses.id", ondelete="CASCADE"), index=True)
+    status: Mapped[str] = mapped_column(String(12), default="running")  # running | ok | partial | failed | skipped
+    pages_fetched: Mapped[int] = mapped_column(Integer, default=0)
+    issues: Mapped[list] = mapped_column(JSON, default=list)
+    started_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)
+    finished_at: Mapped[datetime | None] = mapped_column(DateTime)
+
+    business: Mapped[Business] = relationship()
+
+
+class Evidence(Base):
+    """One verifiable observation with its source. Produced by code (or entered by the user), never by an LLM."""
+    __tablename__ = "evidence"
+    id: Mapped[int] = mapped_column(primary_key=True)
+    business_id: Mapped[int] = mapped_column(ForeignKey("businesses.id", ondelete="CASCADE"), index=True)
+    run_id: Mapped[int | None] = mapped_column(ForeignKey("research_runs.id", ondelete="CASCADE"))
+    kind: Mapped[str] = mapped_column(String(40))
+    value: Mapped[dict] = mapped_column(JSON, default=dict)
+    text: Mapped[str] = mapped_column(Text)  # human-readable statement of exactly what was observed
+    verified: Mapped[bool] = mapped_column(Boolean, default=True)  # False = absence/limitation, not proof
+    source_url: Mapped[str | None] = mapped_column(String(1000))
+    snippet: Mapped[str | None] = mapped_column(Text)
+    content_hash: Mapped[str | None] = mapped_column(String(64))
+    observed_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)
+    is_current: Mapped[bool] = mapped_column(Boolean, default=True, index=True)
+    created_by: Mapped[str] = mapped_column(String(20), default="research")  # research | user
 
 
 class AuditLog(Base):

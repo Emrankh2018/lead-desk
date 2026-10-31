@@ -9,6 +9,8 @@ from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
 from leadgen.models import AuditLog, Business, IcpProfile, Offer, PipelineStage
+from leadgen.research import scoring
+from leadgen.research.service import rescore_all
 from leadgen.services import audit, exporter, importer, leads
 from leadgen.web.app import SessionDep, UserDep, flash, render, today_local
 from leadgen.web.routes_leads import _int_or_none, _lookups, filter_from_query
@@ -73,6 +75,8 @@ async def import_commit(request: Request, session: Session = SessionDep, user: s
     result = importer.commit(session, importer.rows_from_json(payload["rows"]), filename=payload["filename"],
                              icp_id=payload["icp_id"], actor=user, default_region=request.app.state.settings.default_country)
     audit.record(session, user, "import.commit", "import", None, filename=payload["filename"], **result)
+    session.flush()
+    rescore_all(session)
     session.commit()
     path.unlink(missing_ok=True)
     flash(request, f"Imported {result['created']} new leads; skipped {result['skipped']}.")
@@ -101,7 +105,8 @@ def export(request: Request, session: Session = SessionDep, user: str = UserDep)
 def settings_page(request: Request, session: Session = SessionDep, user: str = UserDep):
     counts = dict(session.execute(select(Business.stage_id, func.count()).group_by(Business.stage_id)).all())
     edit_icp = session.get(IcpProfile, _int_or_none(request.query_params.get("icp")) or 0)
-    return render(request, "settings.html", stage_counts=counts, edit_icp=edit_icp,
+    return render(request, "settings.html", stage_counts=counts, edit_icp=edit_icp, criteria=scoring.CRITERIA,
+                  weights_for=scoring.weights_for,
                   offers=list(session.scalars(select(Offer).order_by(Offer.id))), **_lookups(session))
 
 
@@ -179,6 +184,7 @@ async def save_icp(request: Request, session: Session = SessionDep, user: str = 
     session.add(icp)
     session.flush()
     audit.record(session, user, "icp.save", "icp", icp.id, name=name)
+    rescore_all(session)  # industries/keywords/countries feed the score
     session.commit()
     flash(request, f"Saved profile {name}.")
     return _see_other("/settings")

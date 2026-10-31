@@ -27,7 +27,8 @@
       <td class="small">{% if b.email_public %}✉ {{ b.email_public }}<br>{% endif %}{% if b.phone_e164 %}☎ {{ b.phone_e164 }}{% endif %}
         {% if not b.email_public and not b.phone_e164 %}<span class="muted">none verified</span>{% endif %}</td>
       <td>{% if b.follow_up_on %}<span class="badge {{ 'warn' if b.follow_up_on <= today }}">{{ b.follow_up_on }}</span>{% endif %}</td>
-      <td>{{ b.score if b.score is not none else '—' }}</td>
+      <td>{% if b.score is not none %}<strong>{{ b.score }}</strong> <span class="small muted" title="Share of the rubric backed by evidence">{{ b.score_coverage }}% cov.</span>{% else %}—{% endif %}
+        {% if not b.researched_at and b.website %}<div class="small muted">not researched</div>{% endif %}</td>
     </tr>
   {% endfor %}
   </tbody>

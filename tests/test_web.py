@@ -85,6 +85,36 @@ def test_delete_requires_typed_name(auth_client):
     assert "lead.delete" in auth_client.get("/audit").text
 
 
+def test_research_button_shows_score_and_evidence(auth_client):
+    from tests.research_helpers import make_fetcher, oudnoir_routes
+    auth_client.app.state.fetcher_factory = lambda: make_fetcher(oudnoir_routes())
+    url = auth_client.post("/leads", data={"name": "Oud Noir", "website": "oudnoir.qa", "industry": "perfume", "icp_id": "1"},
+                           follow_redirects=False).headers["location"]
+    page = auth_client.post(f"{url}/research").text
+    assert "Research finished with some pages unavailable" in page
+    assert "Public Shopify catalogue lists 4 products" in page and "robots.txt does not allow" in page
+    assert "Industry fit" in page and "100%" in page
+    assert "Oud Noir" in auth_client.get("/research").text
+    weights = {"industry_fit": "0", "location_fit": "20", "video_gap": "20", "sells_online": "15", "social_presence": "10", "reachable": "10"}
+    assert "rescored" in auth_client.post("/settings/scoring/1", data=weights).text
+    assert "Industry fit" not in auth_client.get(url).text.split("Evidence")[0].split("Research &amp; score")[1]
+
+
+def test_batch_skips_recently_failed_sites(auth_client):
+    from tests.research_helpers import make_fetcher
+    auth_client.app.state.fetcher_factory = lambda: make_fetcher({})  # every site unreachable
+    url = auth_client.post("/leads", data={"name": "Down Site", "website": "down.example"}, follow_redirects=False).headers["location"]
+    assert "Research 1 never-researched lead" in auth_client.get("/research").text
+    assert "could not read the website" in auth_client.post(f"{url}/research").text
+    assert "Nothing to research" in auth_client.post("/research/batch", data={"scope": "unresearched"}).text
+
+
+def test_manual_evidence_form(auth_client):
+    url = auth_client.post("/leads", data={"name": "Insta Brand", "instagram": "instabrand"}, follow_redirects=False).headers["location"]
+    page = auth_client.post(f"{url}/evidence", data={"text": "Posts weekly, no reels", "source_url": "https://www.instagram.com/instabrand/"}).text
+    assert "Observation saved" in page and "Posts weekly, no reels" in page and "your observation" in page
+
+
 def test_settings_add_stage_and_icp(auth_client):
     auth_client.post("/settings/stages", data={"name": "Negotiation"})
     auth_client.post("/settings/icps", data={"name": "UAE jewelry", "countries": "ae", "industries": "jewelry, watches", "active": "1"})

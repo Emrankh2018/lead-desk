@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Research{% endblock %}
+{% block content %}
+<h1>Research</h1>
+<div class="panel">
+  {% if batch.running %}
+    <p><strong>Batch running:</strong> {{ batch.done }} of {{ batch.total }} done{% if batch.current %} · now: {{ batch.current }}{% endif %}.
+       <a href="/research">Refresh</a></p>
+  {% else %}
+    {% if batch.total %}<p class="small muted">Last batch: {{ batch.done }} of {{ batch.total }} processed.{% if batch.last_error %} Last error: {{ batch.last_error }}{% endif %}</p>{% endif %}
+    <div class="row">
+      <form method="post" action="/research/batch"><input type="hidden" name="scope" value="unresearched">
+        <button type="submit" {{ 'disabled' if not pending }}>Research {{ [pending, limit]|min }} never-researched lead{{ 's' if pending != 1 }}</button></form>
+      <form method="post" action="/research/batch"><input type="hidden" name="scope" value="stale">
+        <button type="submit" class="secondary" {{ 'disabled' if not stale }}>Refresh {{ [stale, limit]|min }} unresearched or older than 14 days</button></form>
+    </div>
+  {% endif %}
+  <p class="small muted">Only leads with a website and without do-not-contact are included, at most {{ limit }} per batch. Leads tried in the last 14 days — including sites that failed or refused us — are left out; retry one from its own page if needed. Each site gets a few polite requests (robots.txt, homepage, up to two contact/about pages, Shopify catalogue), two seconds apart. Sites that block or rate-limit us are skipped, not retried.</p>
+</div>
+<h2>Recent runs</h2>
+<div class="table-wrap"><table>
+  <thead><tr><th>When</th><th>Lead</th><th>Status</th><th>Pages</th><th>Issues</th></tr></thead>
+  {% for r in runs %}
+  <tr><td class="small">{{ r.started_at|local_time }}</td><td><a href="/leads/{{ r.business_id }}#research">{{ r.business.name }}</a></td>
+      <td><span class="badge {{ {'ok': 'ok', 'partial': 'warn', 'failed': 'err', 'skipped': 'warn'}.get(r.status, '') }}">{{ r.status }}</span></td>
+      <td>{{ r.pages_fetched }}</td><td class="small">{{ r.issues|join('; ') }}</td></tr>
+  {% else %}
+  <tr><td colspan="5" class="muted">No research yet.</td></tr>
+  {% endfor %}
+</table></div>
+{% endblock %}

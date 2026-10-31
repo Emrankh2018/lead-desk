@@ -22,3 +22,24 @@
 - Deviation from plan: no HTMX; plain forms + 1 line of JS (auto-submit selects). Nothing needed it yet.
 - Not committed.
 - Next (awaiting owner go-ahead): M2 — robots-aware fetcher, extractors, evidence store, ICP scoring rubric with explanations.
+
+## 2026-11-01 — M2 research, evidence and explainable scoring (done, local)
+- Built: `leadgen/research/` — fetcher (public http(s) only, private-IP refusal, robots.txt incl. redirects, identified UA,
+  2 s per-host pacing, 3 MB cap, stop on 401/403/429/503), extractors (title/description, platform markers incl. Salla/Zid/
+  ExpandCart, JSON-LD products, Shopify `/products.json` count, video, images, social links, published email/phone,
+  Qatar mentions, redirects to other-country storefronts, copyright year, thin-JS warning), evidence store (current +
+  history, user observations), rubric-v1 scoring (6 weighted criteria, score over evidenced criteria + coverage %),
+  research button, background batch (≤25, skips leads tried in last 14 days), scoring weights in Settings, rescoring on
+  every edit/import/startup. Migration `0002` (tested on a backup copy of the dev DB: data intact).
+- Fixed during QA: shared seed ORM object (second DB got no profile), JSON-LD counted after scripts were stripped,
+  batch would re-hit sites that had just refused us, phone-width overflow from long URLs.
+- Tests: `uv run pytest -q` → 59 passed (offline fixtures; no live network in tests).
+- Real-site run (built-in browser, 7 Qatar-listed sites from OSM): 5 ok (1–3 pages each), 1 unreachable (ConnectError),
+  1 rate-limited (429, stopped, not retried). Scores: Maison Royale 96, Zabarjad 94, Al Romaizan 90, V Perfumes 87 (90% cov.),
+  Ahmed Al Maghribi 62 (redirects to UAE store + already uses video). All 12 pages fit 375 px.
+- Known limits: the rubric does not judge business size, so big chains (e.g. Al Romaizan, multi-country) can score high —
+  lower them manually or via weights; JS-rendered stores may show "no store markers"; social activity is not checked
+  automatically (use "Add your own observation").
+- Not visually verified by screenshot (pane hidden). Not committed.
+- Next (awaiting owner go-ahead): M3 — AI layer: provider interface (Ollama qwen3 4B default), labelled hypotheses
+  grounded in evidence ids, outreach drafts (email/LinkedIn/Instagram/follow-up) with approval, eval harness.

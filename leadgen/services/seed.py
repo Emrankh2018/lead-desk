@@ -18,7 +18,7 @@ DEFAULT_OFFERS = [
     ("Custom campaign", None, "Individually quoted multi-product or special-format campaigns."),
 ]
 
-DEFAULT_ICP = IcpProfile(
+DEFAULT_ICP = dict(
     name="Qatar product brands (fragrance, beauty, jewelry)",
     description="Product-based businesses in Qatar selling visually appealing products online or on social media, "
                 "who could benefit from AI-produced promo videos and product imagery.",
@@ -37,5 +37,5 @@ def seed_defaults(session: Session) -> None:
         for name, price, desc in DEFAULT_OFFERS:
             session.add(Offer(name=name, price=price, currency="QAR", description=desc))
     if not session.scalars(select(IcpProfile)).first():
-        session.add(DEFAULT_ICP)
+        session.add(IcpProfile(**DEFAULT_ICP))  # a new instance per database; ORM objects can't be shared
     session.commit()

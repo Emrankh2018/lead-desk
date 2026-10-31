@@ -19,6 +19,8 @@ from leadgen.auth import LoginThrottle
 from leadgen.config import Settings, get_settings
 from leadgen.db import Database
 from leadgen.migrate import upgrade
+from leadgen.research.fetcher import Fetcher
+from leadgen.research.service import BatchRunner, rescore_all
 from leadgen.services.seed import seed_defaults
 
 log = logging.getLogger("leadgen")
@@ -63,6 +65,8 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         upgrade(settings.db_url)
         with db.sessionmaker() as s:
             seed_defaults(s)
+            rescore_all(s)  # offline and cheap; keeps stored scores in step with the current rubric code
+            s.commit()
         yield
         db.engine.dispose()
 
@@ -70,6 +74,8 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.state.settings = settings
     app.state.db = db
     app.state.throttle = LoginThrottle()
+    app.state.fetcher_factory = Fetcher  # tests replace this with an offline fetcher
+    app.state.batch = BatchRunner(db.sessionmaker, lambda: app.state.fetcher_factory())
 
     env = jinja2.Environment(loader=jinja2.FileSystemLoader(WEB_DIR / "templates"), autoescape=True)
     env.filters["local_time"] = local_time
@@ -85,9 +91,10 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     async def _login_redirect(request: Request, _exc: LoginRequired):
         return RedirectResponse(f"/login?next={request.url.path}", status_code=303)
 
-    from leadgen.web import routes_admin, routes_leads
+    from leadgen.web import routes_admin, routes_leads, routes_research
     app.include_router(routes_leads.router)
     app.include_router(routes_admin.router)
+    app.include_router(routes_research.router)
     return app
 
 

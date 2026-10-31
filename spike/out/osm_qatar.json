@@ -1,0 +1,4013 @@
+[
+ {
+  "type": "node",
+  "id": 2292113130,
+  "lat": 25.2542976,
+  "lon": 51.545449,
+  "tags": {
+   "shop": "jewelry"
+  }
+ },
+ {
+  "type": "node",
+  "id": 2479688247,
+  "lat": 25.283335,
+  "lon": 51.5064226,
+  "tags": {
+   "name": "Blue salon",
+   "name:ar": "Blue salon",
+   "name:en": "Blue salon",
+   "shop": "beauty"
+  }
+ },
+ {
+  "type": "node",
+  "id": 2571901758,
+  "lat": 25.1713629,
+  "lon": 51.5980481,
+  "tags": {
+   "addr:street": "Abdul Rahman Bin Jasim Street",
+   "name": "Damas",
+   "shop": "jewelry",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4239745225,
+  "lat": 25.2415182,
+  "lon": 51.5645262,
+  "tags": {
+   "addr:housenumber": "villa 22",
+   "addr:postcode": "47",
+   "addr:street": "Mohammed bin mazyad st",
+   "name": "My baby home",
+   "name:en": "My baby home",
+   "shop": "cosmetics"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4252249309,
+  "lat": 25.2726151,
+  "lon": 51.5451835,
+  "tags": {
+   "internet_access": "wlan",
+   "name": "jarir book store",
+   "name:en": "jarir book store",
+   "shop": "beauty"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4284665689,
+  "lat": 25.2981467,
+  "lon": 51.5514832,
+  "tags": {
+   "addr:city": "الدوحة",
+   "addr:street": "شارع الميناء",
+   "name": "عين خالد",
+   "name:ar": "عين خالد",
+   "name:en": "Ain kaled",
+   "opening_hours": "Mo-Su 11:00-23:00",
+   "shop": "cosmetics"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4284683489,
+  "lat": 25.2248807,
+  "lon": 51.4498378,
+  "tags": {
+   "addr:street": "Salwa Road",
+   "email": "yashsoniya35@gmail.com",
+   "name": "al riyada massage center",
+   "name:en": "al riyada massage center",
+   "opening_hours": "Sa-Th 02:00-23:00",
+   "phone": "55736093",
+   "shop": "cosmetics"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4307037690,
+  "lat": 25.3417178,
+  "lon": 51.481618,
+  "tags": {
+   "name": "Cloud Nine Saloon and Spa",
+   "name:en": "Cloud Nine Saloon and Spa",
+   "shop": "cosmetics"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4326051389,
+  "lat": 25.3374158,
+  "lon": 51.4720902,
+  "tags": {
+   "addr:housenumber": "4",
+   "addr:street": "Al Markhiya Street",
+   "name": "my home abed",
+   "name:en": "my home abed",
+   "shop": "cosmetics"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4368513812,
+  "lat": 25.1720045,
+  "lon": 51.5961978,
+  "tags": {
+   "name": "صالون الفتاة الجميلة",
+   "name:ar": "صالون الفتاة الجميلة",
+   "name:en": "Nice Lady Salon",
+   "shop": "cosmetics"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4409890591,
+  "lat": 25.3302666,
+  "lon": 51.4886648,
+  "tags": {
+   "shop": "beauty"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4426465171,
+  "lat": 25.2770558,
+  "lon": 51.5135569,
+  "tags": {
+   "addr:city": "Doha",
+   "operator": "Westin hotel",
+   "shop": "beauty",
+   "wheelchair": "yes"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4427554900,
+  "lat": 25.2745584,
+  "lon": 51.5159099,
+  "tags": {
+   "shop": "jewelry"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4435504090,
+  "lat": 25.7175983,
+  "lon": 51.5934463,
+  "tags": {
+   "name:en": "al khor beach",
+   "shop": "beauty"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4436934215,
+  "lat": 25.2896306,
+  "lon": 51.5060028,
+  "tags": {
+   "name": "Almajed",
+   "name:en": "Almajed",
+   "shop": "jewelry",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4445117885,
+  "lat": 25.3153513,
+  "lon": 51.4949464,
+  "tags": {
+   "addr:city": "Doha",
+   "shop": "jewelry"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4447753089,
+  "lat": 25.2796892,
+  "lon": 51.5358681,
+  "tags": {
+   "name": "Kaylan Jewelers",
+   "name:en": "Kaylan Jewelers",
+   "shop": "jewelry",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4450006474,
+  "lat": 25.2885581,
+  "lon": 51.5057821,
+  "tags": {
+   "addr:city": "Doha",
+   "shop": "jewelry",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4453398492,
+  "lat": 25.285731,
+  "lon": 51.5366395,
+  "tags": {
+   "name:en": "Pure Gold Jewellers L.L.C.",
+   "shop": "jewelry"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4453498496,
+  "lat": 25.2857552,
+  "lon": 51.5368892,
+  "tags": {
+   "name:en": "Al Shalawi Jewellery",
+   "shop": "jewelry"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4453498497,
+  "lat": 25.2859541,
+  "lon": 51.5366224,
+  "tags": {
+   "name:en": "Gold Centre",
+   "shop": "jewelry"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4453544090,
+  "lat": 25.2857114,
+  "lon": 51.5364238,
+  "tags": {
+   "name:en": "Al Sulaiman Jewellers",
+   "shop": "jewelry"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4453544591,
+  "lat": 25.2852538,
+  "lon": 51.5371763,
+  "tags": {
+   "name:en": "Roma Jewellery",
+   "shop": "jewelry"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4453544592,
+  "lat": 25.2857322,
+  "lon": 51.5378023,
+  "tags": {
+   "addr:street": "Al Ashat Street",
+   "name": "Sky Jewellery",
+   "name:en": "Sky Jewellery",
+   "shop": "jewelry",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4453544890,
+  "lat": 25.2857363,
+  "lon": 51.5367983,
+  "tags": {
+   "contact:facebook": "alromaizanuae",
+   "contact:instagram": "alromaizanuae",
+   "contact:linkedin": "https://www.linkedin.com/company/alromaizan",
+   "contact:tiktok": "alromaizanuae",
+   "contact:twitter": "Alromaizanuae",
+   "contact:youtube": "alromaizangoldjewellery",
+   "email": "care@alromaizan.ae",
+   "name": "الرميزان",
+   "name:en": "Al Romaizan",
+   "opening_hours": "Mo-Su 08:00-13:00,16:00-22:00",
+   "operator": "Al Romaizan Gold & Jewellery",
+   "phone": "+974 4414 8519;+974 5509 5243",
+   "shop": "jewelry",
+   "website": "https://www.alromaizan.com/"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4453545189,
+  "lat": 25.2856059,
+  "lon": 51.5370828,
+  "tags": {
+   "name:en": "Gold House Jewellery",
+   "shop": "jewelry"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4453545190,
+  "lat": 25.2855695,
+  "lon": 51.537066,
+  "tags": {
+   "name:en": "S.D. Salman Al Sayegh Jewellery",
+   "phone": "44414749",
+   "shop": "jewelry"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4484180201,
+  "lat": 25.2789437,
+  "lon": 51.5364734,
+  "tags": {
+   "name:en": "Avatar Gold & Diamonds",
+   "shop": "jewelry",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4484180202,
+  "lat": 25.2789696,
+  "lon": 51.5362926,
+  "tags": {
+   "brand": "Malabar Gold and Diamonds",
+   "brand:wikidata": "Q60748883",
+   "name": "Malabar Gold and Diamonds",
+   "name:en": "Malabar Gold & Diamonds",
+   "shop": "jewelry",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4484206490,
+  "lat": 25.2789322,
+  "lon": 51.5365589,
+  "tags": {
+   "name:en": "Prakkat Jewellers",
+   "shop": "jewelry",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4484206491,
+  "lat": 25.2789584,
+  "lon": 51.5363807,
+  "tags": {
+   "name:en": "Sky Jewellery",
+   "shop": "jewelry",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4484232290,
+  "lat": 25.2789883,
+  "lon": 51.5362157,
+  "tags": {
+   "name:en": "Apollo Gold W.L.L",
+   "shop": "jewelry",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4594110689,
+  "lat": 25.1933426,
+  "lon": 51.420307,
+  "tags": {
+   "brand:wikidata": "Q55931",
+   "name": "Hyundai Service Center",
+   "name:en": "Hyundai Service Center",
+   "shop": "cosmetics"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4655296189,
+  "lat": 25.2530577,
+  "lon": 51.5456581,
+  "tags": {
+   "name:en": "Al Masa Beauty Centre",
+   "shop": "cosmetics"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4664843590,
+  "lat": 25.2775698,
+  "lon": 51.4499155,
+  "tags": {
+   "addr:housenumber": "2",
+   "addr:street": "Aspire Zone Street",
+   "name:en": "Loret Beauty Salon & Spa",
+   "phone": "44319880",
+   "shop": "cosmetics"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4678268191,
+  "lat": 25.3311392,
+  "lon": 51.5086428,
+  "tags": {
+   "name:en": "SIRAJPM HOME",
+   "shop": "cosmetics"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4779123243,
+  "lat": 25.275875,
+  "lon": 51.5470465,
+  "tags": {
+   "addr:street": "Umm Ghuwailina Street",
+   "name": "Speed Jewelery Workshop",
+   "name:en": "Speed Jewelery Workshop",
+   "shop": "jewelry",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4779123265,
+  "lat": 25.2749273,
+  "lon": 51.5463878,
+  "tags": {
+   "name": "Bludan Jewellery",
+   "name:en": "Bludan Jewellery",
+   "shop": "jewelry",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4779998786,
+  "lat": 25.2688981,
+  "lon": 51.5341822,
+  "tags": {
+   "addr:street": "Al Mansoura Street",
+   "name": "Al Meer Jewellery",
+   "name:en": "Al Meer Jewellery",
+   "shop": "jewelry",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4806019557,
+  "lat": 25.2548771,
+  "lon": 51.5097799,
+  "tags": {
+   "addr:street": "D Ring Road",
+   "name": "Royal Thaimen Spa",
+   "name:en": "Royal Thaimen Spa",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4807773311,
+  "lat": 25.2505205,
+  "lon": 51.5528483,
+  "tags": {
+   "addr:street": "Al Matar Al Qadeem Street",
+   "name": "Ashwaq Perfumes Trading",
+   "name:en": "Ashwaq Perfumes Trading",
+   "shop": "perfumery",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4807773317,
+  "lat": 25.2505633,
+  "lon": 51.5529785,
+  "tags": {
+   "addr:street": "Al Matar Al Qadeem Street",
+   "name": "Silver Star Novelty",
+   "name:en": "Silver Star Novelty",
+   "shop": "perfumery",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4808513736,
+  "lat": 25.2476536,
+  "lon": 51.5359603,
+  "tags": {
+   "addr:street": "Bilal Bin Rabah Street",
+   "name": "Al Milan Beauty Salon",
+   "name:en": "Al Milan Beauty Salon",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4815815070,
+  "lat": 25.2403075,
+  "lon": 51.5189682,
+  "tags": {
+   "addr:street": "Sufyan Bin Awf Street",
+   "name": "Medi Herb Qatar",
+   "name:en": "Medi Herb Qatar",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4818788257,
+  "lat": 25.3241959,
+  "lon": 51.500587,
+  "tags": {
+   "addr:city": "Doha",
+   "addr:country": "QA",
+   "name": "Ajnadin Spa & Beauty Centre",
+   "name:en": "Ajnadin Spa & Beauty Centre",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4818792742,
+  "lat": 25.3270717,
+  "lon": 51.4623727,
+  "tags": {
+   "addr:street": "Thani Bin Jasim Street",
+   "name": "New Look Saloon",
+   "name:en": "New Look Saloon",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4818792746,
+  "lat": 25.3270393,
+  "lon": 51.4626268,
+  "tags": {
+   "name": "Saloon 2010",
+   "name:en": "Saloon 2010",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4818802013,
+  "lat": 25.3268857,
+  "lon": 51.4635806,
+  "tags": {
+   "addr:street": "Thani Bin Jasim Street",
+   "name": "Gulf Saloon",
+   "name:en": "Gulf Saloon",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4818802016,
+  "lat": 25.3268609,
+  "lon": 51.4637438,
+  "tags": {
+   "name": "Oskar Saloon",
+   "name:en": "Oskar Saloon",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4820516701,
+  "lat": 25.3677895,
+  "lon": 51.5515949,
+  "tags": {
+   "addr:street": "Andalucia Way",
+   "name": "Karisma",
+   "shop": "cosmetics",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4820548861,
+  "lat": 25.3205478,
+  "lon": 51.4659882,
+  "tags": {
+   "addr:street": "Al Luqta",
+   "name": "Pakistan Saloon",
+   "name:en": "Pakistan Saloon",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4820548864,
+  "lat": 25.320532,
+  "lon": 51.4658505,
+  "tags": {
+   "name": "Al Badiya Saloon",
+   "name:en": "Al Badiya Saloon",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4820699546,
+  "lat": 25.3213078,
+  "lon": 51.4739343,
+  "tags": {
+   "addr:street": "Khalifa Street",
+   "name": "Sadaf Saloon",
+   "name:en": "Sadaf Saloon",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4820799082,
+  "lat": 25.3705025,
+  "lon": 51.5404557,
+  "tags": {
+   "addr:country": "QA",
+   "addr:street": "Via Marsa Arabia Way",
+   "name": "Almajed Jewellery",
+   "name:en": "Almajed Jewellery",
+   "shop": "jewelry",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4820820143,
+  "lat": 25.3707205,
+  "lon": 51.5400275,
+  "tags": {
+   "addr:street": "Via Marsa Arabia Way",
+   "name": "Alfardan Jewellery",
+   "name:en": "Alfardan Jewellery",
+   "shop": "jewelry",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4821060846,
+  "lat": 25.326948,
+  "lon": 51.4586121,
+  "tags": {
+   "name": "Al Majid Saloon",
+   "name:en": "Al Majid Saloon",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4821202742,
+  "lat": 25.2723593,
+  "lon": 51.5250438,
+  "tags": {
+   "addr:street": "Hitteen Street",
+   "name": "Al Sulaiman Jewellers",
+   "name:en": "Al Sulaiman Jewellers",
+   "shop": "jewelry",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4823346753,
+  "lat": 25.2886943,
+  "lon": 51.5058803,
+  "tags": {
+   "name": "Al Jaber Watches & Jewelry",
+   "name:en": "Al Jaber Watches & Jewelry",
+   "shop": "jewelry",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4823346755,
+  "lat": 25.288807,
+  "lon": 51.5059004,
+  "tags": {
+   "name": "Al Jazeera Perfumed",
+   "name:en": "Al Jazeera Perfumed",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4823392794,
+  "lat": 25.2810585,
+  "lon": 51.4985934,
+  "tags": {
+   "name": "Aldaham Watches",
+   "name:en": "Aldaham Watches",
+   "shop": "watches",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4823392827,
+  "lat": 25.2862354,
+  "lon": 51.5052084,
+  "tags": {
+   "name": "Amiri Gems",
+   "name:en": "Amiri Gems",
+   "shop": "jewelry",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4823416011,
+  "lat": 25.3349487,
+  "lon": 51.4443831,
+  "tags": {
+   "check_date": "2024-04-15",
+   "fixme": "name",
+   "name": "Good Saloon",
+   "name:en": "Good Saloon",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4823416027,
+  "lat": 25.3347453,
+  "lon": 51.4436891,
+  "tags": {
+   "addr:street": "Maan Bin Addi",
+   "check_date": "2024-04-15",
+   "name": "Good Evening Saloon",
+   "name:ar": "صالون مساء الخير",
+   "name:en": "Good Evening Saloon",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4823448302,
+  "lat": 25.3346611,
+  "lon": 51.4431823,
+  "tags": {
+   "addr:street": "Maan Bin Addi",
+   "name": "Saif",
+   "name:en": "Saif",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4823448316,
+  "lat": 25.3344365,
+  "lon": 51.4427239,
+  "tags": {
+   "addr:street": "Maan Bin Addi",
+   "name": "Top 1 Saloon",
+   "name:en": "Top 1 Saloon",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4823790719,
+  "lat": 25.2822829,
+  "lon": 51.5012009,
+  "tags": {
+   "name": "Diana",
+   "name:en": "Diana",
+   "shop": "jewelry",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4823790720,
+  "lat": 25.2822804,
+  "lon": 51.5011419,
+  "tags": {
+   "name": "Rieman Jewellery",
+   "name:en": "Rieman Jewellery",
+   "shop": "jewelry",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4823790945,
+  "lat": 25.2826066,
+  "lon": 51.5009199,
+  "tags": {
+   "name": "Al Hanan Beauty Salon",
+   "name:en": "Al Hanan Beauty Salon",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4823790955,
+  "lat": 25.2826858,
+  "lon": 51.503173,
+  "tags": {
+   "name": "Saloon Mannequin",
+   "name:en": "Saloon Mannequin",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4823805925,
+  "lat": 25.2816088,
+  "lon": 51.5007526,
+  "tags": {
+   "name": "K Stars Cosmetics",
+   "name:en": "K Stars Cosmetics",
+   "shop": "cosmetics",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4823805927,
+  "lat": 25.2819895,
+  "lon": 51.5008224,
+  "tags": {
+   "name": "Hilton Ladies Saloon",
+   "name:en": "Hilton Ladies Saloon",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4823877843,
+  "lat": 25.2820088,
+  "lon": 51.4978021,
+  "tags": {
+   "name": "Fine Fair",
+   "name:en": "Fine Fair",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4823877852,
+  "lat": 25.2819907,
+  "lon": 51.4972777,
+  "tags": {
+   "name": "Al Anter",
+   "name:en": "Al Anter",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4823877855,
+  "lat": 25.2819822,
+  "lon": 51.4970752,
+  "tags": {
+   "name": "Golden Tone",
+   "name:en": "Golden Tone",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4823877856,
+  "lat": 25.2819834,
+  "lon": 51.4970148,
+  "tags": {
+   "name": "Zellomsee",
+   "name:en": "Zellomsee",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4823877894,
+  "lat": 25.2813719,
+  "lon": 51.4967406,
+  "tags": {
+   "name": "Al Dhabi Oudh Amber & Perfumes",
+   "name:en": "Al Dhabi Oudh Amber & Perfumes",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4823877902,
+  "lat": 25.2814838,
+  "lon": 51.4983003,
+  "tags": {
+   "name": "Apple Beauty Center",
+   "name:en": "Apple Beauty Center",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4823936238,
+  "lat": 25.2716083,
+  "lon": 51.4821726,
+  "tags": {
+   "addr:street": "Al Waab",
+   "name": "Royal Thai Lady Spa",
+   "name:en": "Royal Thai Lady Spa",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4823936243,
+  "lat": 25.2716701,
+  "lon": 51.4823068,
+  "tags": {
+   "addr:street": "Al Waab",
+   "name": "Mara Salom",
+   "name:en": "Mara Salom",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4823936248,
+  "lat": 25.2717756,
+  "lon": 51.4825696,
+  "tags": {
+   "addr:street": "Al Waab",
+   "name": "Thai Spa Center",
+   "name:en": "Thai Spa Center",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4825417653,
+  "lat": 25.2964536,
+  "lon": 51.4207346,
+  "tags": {
+   "addr:street": "Al Shafi Street",
+   "beauty": "spa",
+   "name": "Al Fairozi Body Care Center",
+   "name:en": "Al Fairozi Body Care Center",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4825417697,
+  "lat": 25.2958268,
+  "lon": 51.4207327,
+  "tags": {
+   "addr:street": "Al Shafi Street",
+   "name": "Al Romaizan",
+   "name:en": "Al Romaizan",
+   "shop": "jewelry",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4825417698,
+  "lat": 25.2957695,
+  "lon": 51.4207287,
+  "tags": {
+   "addr:street": "Al Shafi Street",
+   "name": "Al-Prince Gold",
+   "name:en": "Al-Prince Gold",
+   "shop": "jewelry",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4825417699,
+  "lat": 25.2956855,
+  "lon": 51.4207314,
+  "tags": {
+   "addr:street": "Al Shafi Street",
+   "name": "Al Salahi Jewellery",
+   "name:en": "Al Salahi Jewellery",
+   "shop": "jewelry",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4825763451,
+  "lat": 25.2935442,
+  "lon": 51.4206172,
+  "tags": {
+   "addr:street": "Al Shafi Street",
+   "fixme": "name",
+   "name": "Gold & Jewellery",
+   "name:en": "Gold & Jewellery",
+   "shop": "jewelry",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4825763452,
+  "lat": 25.293582,
+  "lon": 51.4206172,
+  "tags": {
+   "addr:street": "Al Shafi Street",
+   "name": "Al Faleh Jewellery",
+   "name:en": "Al Faleh Jewellery",
+   "shop": "jewelry",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4825763454,
+  "lat": 25.2937019,
+  "lon": 51.4206907,
+  "tags": {
+   "name": "Abdul Samad Al Qurashi",
+   "name:en": "Abdul Samad Al Qurashi",
+   "shop": "perfumery",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4825763455,
+  "lat": 25.2937665,
+  "lon": 51.4206917,
+  "tags": {
+   "addr:street": "Al Shafi Street",
+   "name": "Moylab Al Suhlawi",
+   "name:en": "Moylab Al Suhlawi",
+   "shop": "jewelry",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4825763458,
+  "lat": 25.2939945,
+  "lon": 51.4206927,
+  "tags": {
+   "addr:street": "Al Shafi Street",
+   "name": "Al Sulaiman Jewellers",
+   "name:en": "Al Sulaiman Jewellers",
+   "shop": "jewelry",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4827342164,
+  "lat": 25.2897137,
+  "lon": 51.420164,
+  "tags": {
+   "addr:street": "Al Shafi Street",
+   "name": "Reem Perfume & Novelty Co",
+   "name:en": "Reem Perfume & Novelty Co",
+   "shop": "perfumery",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4827342184,
+  "lat": 25.2933287,
+  "lon": 51.4201621,
+  "tags": {
+   "addr:street": "Al Shafi Street",
+   "name": "Aiarefi Gold & Jewejery",
+   "name:en": "Aiarefi Gold & Jewejery",
+   "shop": "jewelry",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4827342204,
+  "lat": 25.294005,
+  "lon": 51.4201782,
+  "tags": {
+   "addr:street": "Al Shafi Street",
+   "name": "Dilu Jewellers",
+   "name:en": "Dilu Jewellers",
+   "shop": "jewelry",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4827553596,
+  "lat": 25.2956297,
+  "lon": 51.4202183,
+  "tags": {
+   "addr:street": "Al Shafi Street",
+   "name": "Al Qase Jewelers",
+   "name:en": "Al Qase Jewelers",
+   "shop": "jewelry",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4827783047,
+  "lat": 25.2741993,
+  "lon": 51.4205475,
+  "tags": {
+   "fixme": "name, name:en mismatch. name, name:en mismatch.",
+   "name": "Nicha Beauty Center",
+   "name:en": "Micha Beauty Center",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4827923228,
+  "lat": 25.2889237,
+  "lon": 51.4206592,
+  "tags": {
+   "addr:street": "Al Shafi Street",
+   "name": "Oud Elite",
+   "name:en": "Oud Elite",
+   "shop": "perfumery",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4827923233,
+  "lat": 25.2878969,
+  "lon": 51.4206687,
+  "tags": {
+   "addr:street": "Al Shafi Street",
+   "name": "Al Haramain Perfumes",
+   "name:en": "Al Haramain Perfumes",
+   "shop": "perfumery",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4828077038,
+  "lat": 25.2839854,
+  "lon": 51.412245,
+  "tags": {
+   "addr:street": "Al Innabi Street",
+   "name": "Red Carpet Beauty Center",
+   "name:en": "Red Carpet Beauty Center",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4829157619,
+  "lat": 25.3519416,
+  "lon": 51.439808,
+  "tags": {
+   "name": "Classic Moon Beauty Salon",
+   "name:en": "Classic Moon Beauty Salon",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4831444044,
+  "lat": 25.2379364,
+  "lon": 51.4996806,
+  "tags": {
+   "name": "Elegant Spa",
+   "name:en": "Elegant Spa",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4833050331,
+  "lat": 25.3953337,
+  "lon": 51.4273042,
+  "tags": {
+   "name": "Dune Saloon",
+   "name:en": "Dune Saloon",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4833358253,
+  "lat": 25.2773609,
+  "lon": 51.5380443,
+  "tags": {
+   "name": "Lotus Spa",
+   "name:en": "Lotus Spa",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4833475977,
+  "lat": 25.2760643,
+  "lon": 51.5351846,
+  "tags": {
+   "addr:street": "Ziyad Bin Eyadh",
+   "name": "Taj Mahal Saloon",
+   "name:en": "Taj Mahal Saloon",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4833589151,
+  "lat": 25.2616764,
+  "lon": 51.4570527,
+  "tags": {
+   "addr:street": "Al Waab Street",
+   "name": "Meteor Garden Beauty Salon",
+   "name:en": "Meteor Garden Beauty Salon",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4835050450,
+  "lat": 25.2814088,
+  "lon": 51.5340531,
+  "tags": {
+   "name": "Castle Men's Saloon",
+   "name:en": "Castle Men's Saloon",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4835050456,
+  "lat": 25.2811273,
+  "lon": 51.5300677,
+  "tags": {
+   "addr:street": "Al Najm",
+   "name": "Eastern Paris Saloon",
+   "name:en": "Eastern Paris Saloon",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4835050491,
+  "lat": 25.2805131,
+  "lon": 51.5289843,
+  "tags": {
+   "addr:street": "Abdul Aziz BIn Ahmed",
+   "name": "Sky Jewellery",
+   "name:en": "Sky Jewellery",
+   "shop": "jewelry",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4835227845,
+  "lat": 25.2809958,
+  "lon": 51.5286167,
+  "tags": {
+   "addr:street": "Abdul Aziz BIn Ahmed",
+   "name": "Arab Tower Saloon",
+   "name:en": "Arab Tower Saloon",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4835227876,
+  "lat": 25.2818647,
+  "lon": 51.5284791,
+  "tags": {
+   "addr:street": "Abdul Aziz BIn Ahmed",
+   "name": "Al Rashidi",
+   "name:en": "Al Rashidi",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4835268978,
+  "lat": 25.283075,
+  "lon": 51.5317859,
+  "tags": {
+   "addr:street": "Al Maymoun Street",
+   "name": "Famous Gents Saloon",
+   "name:en": "Famous Gents Saloon",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4835358458,
+  "lat": 25.2821846,
+  "lon": 51.5284235,
+  "tags": {
+   "addr:street": "Abdul Aziz Bin Ahmed",
+   "name": "Gulf Saloon",
+   "name:en": "Gulf Saloon",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4835445212,
+  "lat": 25.233829,
+  "lon": 51.4345329,
+  "tags": {
+   "addr:street": "Al Amal Street",
+   "name": "Gulf Beauty Queen",
+   "name:en": "Gulf Beauty Queen",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4835485047,
+  "lat": 25.2293279,
+  "lon": 51.4364937,
+  "tags": {
+   "addr:street": "Al Taawon Street",
+   "name": "Al Madeena Perfumes",
+   "name:en": "Al Madeena Perfumes",
+   "shop": "perfumery",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4835485048,
+  "lat": 25.2293304,
+  "lon": 51.436427,
+  "tags": {
+   "addr:street": "Al Taawon Street",
+   "name": "Al Princess Perfumes",
+   "name:en": "Al Princess Perfumes",
+   "shop": "perfumery",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4835692196,
+  "lat": 25.2719119,
+  "lon": 51.4083297,
+  "tags": {
+   "addr:street": "Umm Al Dawm",
+   "name": "Al Sulaiman Jewellers",
+   "name:en": "Al Sulaiman Jewellers",
+   "shop": "jewelry",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4835692200,
+  "lat": 25.2721786,
+  "lon": 51.4082109,
+  "tags": {
+   "addr:street": "Umm Al Dawm",
+   "name": "Al-Shaima Jewellery",
+   "name:en": "Al-Shaima Jewellery",
+   "shop": "jewelry",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4836922729,
+  "lat": 25.2665294,
+  "lon": 51.4164295,
+  "tags": {
+   "addr:street": "Al Muaither Street",
+   "name": "Abdul Samadal Qirashi",
+   "name:en": "Abdul Samadal Qirashi",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017."
+  }
+ },
+ {
+  "type": "node",
+  "id": 4836985898,
+  "lat": 25.2827975,
+  "lon": 51.5176819,
+  "tags": {
+   "addr:street": "Al Khaleej Street",
+   "name": "Saloon Handsome Men",
+   "name:en": "Saloon Handsome Men",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4837016818,
+  "lat": 25.2798109,
+  "lon": 51.4224723,
+  "tags": {
+   "addr:street": "Al Ittifaq Street",
+   "name": "Lash Salon",
+   "name:en": "Lash Salon",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017."
+  }
+ },
+ {
+  "type": "node",
+  "id": 4837052288,
+  "lat": 25.2517068,
+  "lon": 51.4507611,
+  "tags": {
+   "addr:street": "Al Aziziya Street",
+   "name": "Beauty Centre",
+   "name:en": "Beauty Centre",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4837101325,
+  "lat": 25.2446384,
+  "lon": 51.4543851,
+  "tags": {
+   "addr:street": "Al Aziziya Street",
+   "name": "Abdul Samad Al Qurashi",
+   "name:en": "Abdul Samad Al Qurashi",
+   "shop": "perfumery",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4837105324,
+  "lat": 25.2797058,
+  "lon": 51.5096355,
+  "tags": {
+   "addr:street": "Qatari Bin Al Fujaah Street",
+   "name": "Al Rassa's Gents Saloon",
+   "name:en": "Al Rassa's Gents Saloon",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4837120255,
+  "lat": 25.2816954,
+  "lon": 51.515077,
+  "tags": {
+   "name": "Middle East Gents Saloon",
+   "name:en": "Middle East Gents Saloon",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4837144800,
+  "lat": 25.2827447,
+  "lon": 51.5147231,
+  "tags": {
+   "addr:street": "Ibn Mahmoud Street",
+   "name": "Happy Women Salon",
+   "name:en": "Happy Women Salon",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4837144807,
+  "lat": 25.2833786,
+  "lon": 51.5145238,
+  "tags": {
+   "addr:street": "Ibn Mahmoud Street",
+   "name": "Rawdah",
+   "name:en": "Rawdah",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4837154934,
+  "lat": 25.2877585,
+  "lon": 51.5135972,
+  "tags": {
+   "name": "Elgnaza",
+   "name:en": "Elgnaza",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4837179031,
+  "lat": 25.283692,
+  "lon": 51.5157153,
+  "tags": {
+   "addr:street": "Al Jazira Street",
+   "name": "Platinum Salon",
+   "name:en": "Platinum Salon",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4837202612,
+  "lat": 25.2805451,
+  "lon": 51.5134253,
+  "tags": {
+   "name": "Al Badiya Saloon",
+   "name:en": "Al Badiya Saloon",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4837221952,
+  "lat": 25.284602,
+  "lon": 51.5146213,
+  "tags": {
+   "name": "Al Badiya",
+   "name:en": "Al Badiya",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4837248937,
+  "lat": 25.2795968,
+  "lon": 51.5398294,
+  "tags": {
+   "shop": "jewelry",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4837248940,
+  "lat": 25.2799015,
+  "lon": 51.539849,
+  "tags": {
+   "shop": "jewelry",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4837248969,
+  "lat": 25.2858359,
+  "lon": 51.5152584,
+  "tags": {
+   "addr:street": "Al Ikhaa Street",
+   "name": "Castle Men's Saloon",
+   "name:en": "Castle Men's Saloon",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4837264574,
+  "lat": 25.2798092,
+  "lon": 51.5380479,
+  "tags": {
+   "addr:street": "Al Wifaq",
+   "name": "Makkah Jewellery Work Shop",
+   "name:en": "Makkah Jewellery Work Shop",
+   "shop": "jewelry",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4837329299,
+  "lat": 25.2793008,
+  "lon": 51.5362585,
+  "tags": {
+   "name": "Zaiba",
+   "name:en": "Zaiba",
+   "shop": "jewelry",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4837379101,
+  "lat": 25.2842817,
+  "lon": 51.5114019,
+  "tags": {
+   "name": "Al Fairozi Saloon",
+   "name:en": "Al Fairozi Saloon",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4837402467,
+  "lat": 25.2806531,
+  "lon": 51.5398675,
+  "tags": {
+   "addr:street": "Tariq Bin Ziyad Street",
+   "name": "Canara",
+   "name:en": "Canara",
+   "shop": "jewelry",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4837449656,
+  "lat": 25.2730293,
+  "lon": 51.4905557,
+  "tags": {
+   "addr:street": "Al Amir",
+   "name": "Jovoy",
+   "name:en": "Jovoy",
+   "shop": "perfumery",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4837449708,
+  "lat": 25.2587738,
+  "lon": 51.4872132,
+  "tags": {
+   "addr:city": "Doha",
+   "addr:country": "QA",
+   "addr:street": "Salwa Road",
+   "name": "Coiffure Francaise",
+   "name:en": "Coiffure Francaise",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4837475758,
+  "lat": 25.2847056,
+  "lon": 51.5106457,
+  "tags": {
+   "addr:street": "Al Jazira Street",
+   "name": "Al Anaqa",
+   "name:en": "Al Anaqa",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4837475760,
+  "lat": 25.2847223,
+  "lon": 51.51057,
+  "tags": {
+   "addr:street": "Al Jazira Street",
+   "name": "Al Anaqa",
+   "name:en": "Al Anaqa",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4837475777,
+  "lat": 25.2847933,
+  "lon": 51.5102659,
+  "tags": {
+   "name": "Nujoom Al-Khaleej",
+   "name:en": "Nujoom Al-Khaleej",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4837571132,
+  "lat": 25.2860857,
+  "lon": 51.5375296,
+  "tags": {
+   "addr:street": "Khalid Bin Al Waleed Street",
+   "air_conditioning": "yes",
+   "currency:EUR": "yes",
+   "currency:GBP": "yes",
+   "currency:QAR": "yes",
+   "currency:USD": "yes",
+   "currency:others": "yes",
+   "email": "sales@diamondshouse.com",
+   "name": "Diamonds House",
+   "name:ar": "دار الماس",
+   "opening_hours": "Th-Sa 09:00-22:00; Fr 17:00-22:00",
+   "operator": "Diamonds House Jewellery",
+   "payment:american_express": "yes",
+   "payment:apple_pay": "yes",
+   "payment:cash": "yes",
+   "payment:contactless": "yes",
+   "payment:credit_cards": "yes",
+   "payment:debit_cards": "yes",
+   "payment:mastercard": "yes",
+   "payment:visa": "yes",
+   "phone": "+974 4441 2233",
+   "shop": "jewelry",
+   "source": "Kaart Ground Survey 2017;local knowledge",
+   "website": "https://diamondshouse.com/"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4837571133,
+  "lat": 25.2861297,
+  "lon": 51.5374593,
+  "tags": {
+   "addr:street": "Ali Bin Abdulla Street",
+   "name": "Kulsoom Jewellery",
+   "name:en": "Kulsoom Jewellery",
+   "shop": "jewelry",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4837571135,
+  "lat": 25.2861174,
+  "lon": 51.537316,
+  "tags": {
+   "addr:street": "Ali Bin Abdulla Street",
+   "contact:facebook": "alromaizanuae",
+   "contact:instagram": "alromaizanuae",
+   "contact:linkedin": "https://www.linkedin.com/company/alromaizan",
+   "contact:tiktok": "alromaizanuae",
+   "contact:twitter": "Alromaizanuae",
+   "contact:youtube": "alromaizangoldjewellery",
+   "email": "care@alromaizan.ae",
+   "name": "الرميزان",
+   "name:en": "Al Romaizan",
+   "opening_hours": "Mo-Su 08:00-13:00,16:00-22:00",
+   "operator": "Al Romaizan Gold & Jewellery",
+   "phone": "+974 4001 2294;+974 5512 1767",
+   "shop": "jewelry",
+   "source": "Kaart Ground Survey 2017",
+   "website": "https://www.alromaizan.com/"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4837571136,
+  "lat": 25.2861174,
+  "lon": 51.537243,
+  "tags": {
+   "addr:street": "Ali Bin Abdulla Street",
+   "name": "Al Sulaiman Jewellers",
+   "name:en": "Al Sulaiman Jewellers",
+   "shop": "jewelry",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4837571139,
+  "lat": 25.2861614,
+  "lon": 51.5368465,
+  "tags": {
+   "addr:street": "Ali Bin Abdulla Street",
+   "name": "Shine Gold & Diamonds",
+   "name:en": "Shine Gold & Diamonds",
+   "shop": "jewelry",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4837571141,
+  "lat": 25.2861125,
+  "lon": 51.5360584,
+  "tags": {
+   "addr:street": "Ali Bin Abdulla Street",
+   "name": "Sky Jewellery",
+   "name:en": "Sky Jewellery",
+   "shop": "jewelry",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4837860188,
+  "lat": 25.2748354,
+  "lon": 51.531394,
+  "tags": {
+   "addr:street": "B Ring Road",
+   "name": "Black Stone Saloon & Spa",
+   "name:en": "Black Stone Saloon & Spa",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4837889171,
+  "lat": 25.2857928,
+  "lon": 51.5371531,
+  "tags": {
+   "addr:street": "Al Ashat Street",
+   "name": "Zafar Jewellery",
+   "name:en": "Zafar Jewellery",
+   "shop": "jewelry",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4837889172,
+  "lat": 25.2858155,
+  "lon": 51.5372439,
+  "tags": {
+   "name": "Ruby",
+   "name:en": "Ruby",
+   "shop": "jewelry",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4837889173,
+  "lat": 25.2859008,
+  "lon": 51.5375361,
+  "tags": {
+   "name": "Cleopatra",
+   "name:en": "Cleopatra",
+   "shop": "jewelry",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4838664946,
+  "lat": 25.285643,
+  "lon": 51.5373108,
+  "tags": {
+   "addr:street": "Al Ashat Street",
+   "name": "Yathreb Jewellery",
+   "name:en": "Yathreb Jewellery",
+   "shop": "jewelry",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4838664947,
+  "lat": 25.2856753,
+  "lon": 51.5374799,
+  "tags": {
+   "addr:street": "Al Ashat Street",
+   "name": "Zafar Jewellery",
+   "name:en": "Zafar Jewellery",
+   "shop": "jewelry",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4838664948,
+  "lat": 25.2857109,
+  "lon": 51.537895,
+  "tags": {
+   "addr:street": "Khalid Bin Al Waleed Street",
+   "name": "Awal Watches & Jewellery",
+   "name:en": "Awal Watches & Jewellery",
+   "shop": "jewelry",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4841004785,
+  "lat": 25.1912918,
+  "lon": 51.5966095,
+  "tags": {
+   "addr:street": "Al Wakra Road",
+   "name": "Al Muftah Jewellery",
+   "shop": "jewelry",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4841822503,
+  "lat": 25.2781007,
+  "lon": 51.5048098,
+  "tags": {
+   "addr:street": "Al Kinana Street",
+   "name": "Elegance Beauty Salon",
+   "name:en": "Elegance Beauty Salon",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017."
+  }
+ },
+ {
+  "type": "node",
+  "id": 4841823936,
+  "lat": 25.2743786,
+  "lon": 51.5023824,
+  "tags": {
+   "addr:street": "Zaid Al Khail",
+   "name": "Falcon Club Beauty Salon",
+   "name:en": "Falcon Club Beauty Salon",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017."
+  }
+ },
+ {
+  "type": "node",
+  "id": 4841993608,
+  "lat": 25.2764178,
+  "lon": 51.4982649,
+  "tags": {
+   "addr:street": "Al Jaadi",
+   "name": "China Beauty Centre",
+   "name:en": "China Beauty Centre",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017."
+  }
+ },
+ {
+  "type": "node",
+  "id": 4841993612,
+  "lat": 25.2764849,
+  "lon": 51.4979403,
+  "tags": {
+   "addr:housenumber": "44",
+   "addr:street": "Al Jaadi",
+   "name": "China Dragon Body Care Centre",
+   "name:en": "China Dragon Body Care Centre",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017."
+  }
+ },
+ {
+  "type": "node",
+  "id": 4842200521,
+  "lat": 25.2878308,
+  "lon": 51.5386153,
+  "tags": {
+   "contact:facebook": "alromaizanuae",
+   "contact:instagram": "alromaizanuae",
+   "contact:linkedin": "https://www.linkedin.com/company/alromaizan",
+   "contact:tiktok": "alromaizanuae",
+   "contact:twitter": "Alromaizanuae",
+   "contact:youtube": "alromaizangoldjewellery",
+   "email": "care@alromaizan.ae",
+   "name": "الرميزان",
+   "name:en": "Al Romaizan",
+   "opening_hours": "Mo-Su 08:00-22:00",
+   "operator": "Al Romaizan Gold & Jewellery",
+   "phone": "+971 4 229 5350;+974 4432 7228",
+   "shop": "jewelry",
+   "source": "Kaart Ground Survey 2017",
+   "website": "https://www.alromaizan.com/"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4842200522,
+  "lat": 25.2878458,
+  "lon": 51.538755,
+  "tags": {
+   "name": "Jawaher Jewellery",
+   "name:en": "Jawaher Jewellery",
+   "shop": "jewelry",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4842200537,
+  "lat": 25.2882786,
+  "lon": 51.5389697,
+  "tags": {
+   "addr:street": "Al Jabr Street",
+   "name": "Al Haramain",
+   "name:en": "Al Haramain",
+   "shop": "perfumery",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4842392313,
+  "lat": 25.2884751,
+  "lon": 51.5383357,
+  "tags": {
+   "name": "Qatari Perfumes Est.",
+   "name:en": "Qatari Perfumes Est.",
+   "shop": "perfumery",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4842417051,
+  "lat": 25.2884356,
+  "lon": 51.5362341,
+  "tags": {
+   "addr:street": "Al Tarbiya Street",
+   "name": "Hollywood Perfumes Center",
+   "name:en": "Hollywood Perfumes Center",
+   "shop": "perfumery",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4842417053,
+  "lat": 25.2884449,
+  "lon": 51.5360645,
+  "tags": {
+   "addr:street": "Al Tarbiya Street",
+   "name": "Daym Al Saif Perfumes",
+   "name:en": "Daym Al Saif Perfumes",
+   "shop": "perfumery",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4842564965,
+  "lat": 25.2870706,
+  "lon": 51.5438005,
+  "tags": {
+   "addr:street": "Ali Bin Amur Al Attiya",
+   "name": "Oscado Saloon",
+   "name:en": "Oscado Saloon",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4842564989,
+  "lat": 25.2881368,
+  "lon": 51.5391638,
+  "tags": {
+   "addr:street": "Al Jabr Street",
+   "name": "Fantasy Perfumes",
+   "name:en": "Fantasy Perfumes",
+   "shop": "perfumery",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4842706325,
+  "lat": 25.2726765,
+  "lon": 51.4989185,
+  "tags": {
+   "addr:street": "Mohammed Bin Al Qasim",
+   "name": "Silky Lady",
+   "name:en": "Silky Lady",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4843994798,
+  "lat": 25.1547468,
+  "lon": 51.5995177,
+  "tags": {
+   "addr:street": "Abdul Rahman Bin Jasim Street",
+   "name": "Sami Spa",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 4844617067,
+  "lat": 25.1847234,
+  "lon": 51.6096026,
+  "tags": {
+   "addr:street": "Al Khaleej",
+   "name": "BaNader Salon",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "node",
+  "id": 5151161322,
+  "lat": 25.2692665,
+  "lon": 51.4885924,
+  "tags": {
+   "shop": "beauty"
+  }
+ },
+ {
+  "type": "node",
+  "id": 6296118486,
+  "lat": 25.2317815,
+  "lon": 51.5480904,
+  "tags": {
+   "name": "David’s Salon",
+   "shop": "beauty"
+  }
+ },
+ {
+  "type": "node",
+  "id": 6814801169,
+  "lat": 25.3615457,
+  "lon": 51.5223747,
+  "tags": {
+   "brand": "Cartier",
+   "brand:wikidata": "Q538587",
+   "brand:wikipedia": "en:Cartier (jeweler)",
+   "name": "Cartier",
+   "operator": "Ali Bin Ali",
+   "shop": "jewelry"
+  }
+ },
+ {
+  "type": "node",
+  "id": 6935222114,
+  "lat": 25.2625176,
+  "lon": 51.6133034,
+  "tags": {
+   "check_date": "2026-10-16",
+   "name": "Gold",
+   "shop": "jewelry"
+  }
+ },
+ {
+  "type": "node",
+  "id": 6935277383,
+  "lat": 25.2672517,
+  "lon": 51.6101402,
+  "tags": {
+   "brand": "TAG Heuer",
+   "brand:wikidata": "Q645984",
+   "check_date": "2023-10-18",
+   "name": "TAG Heuer",
+   "opening_hours": "24/7",
+   "shop": "watches"
+  }
+ },
+ {
+  "type": "node",
+  "id": 7005994486,
+  "lat": 25.3388837,
+  "lon": 51.472985,
+  "tags": {
+   "name": "fadia el mendelek",
+   "shop": "cosmetics"
+  }
+ },
+ {
+  "type": "node",
+  "id": 7285000019,
+  "lat": 25.2816939,
+  "lon": 51.420191,
+  "tags": {
+   "addr:city": "Doha",
+   "addr:housenumber": "Villa 72",
+   "addr:postcode": "00000",
+   "addr:street": "Al Salam Street",
+   "beauty": "cosmetics",
+   "name": "Salon and Spa by Eljoori",
+   "opening_hours": "Su-Th 10:00-21:00",
+   "operator": "Eljoori",
+   "payment:cash": "yes",
+   "payment:credit_cards": "yes",
+   "payment:debit_cards": "yes",
+   "payment:mastercard": "yes",
+   "shop": "beauty"
+  }
+ },
+ {
+  "type": "node",
+  "id": 7928335593,
+  "lat": 25.3749446,
+  "lon": 51.5399799,
+  "tags": {
+   "addr:city": "Doha",
+   "addr:country": "QA",
+   "addr:street": "Abraj Quartier, Pearl Boulevard Tower AQ-07",
+   "name": "eforea Spa & Health Club",
+   "opening_hours": "Mo-Su 11:00-21:00",
+   "phone": "+974 4492 4860",
+   "shop": "beauty",
+   "website": "https://www.hilton.com/en/hotels/dohprhi-hilton-doha-the-pearl/spa/"
+  }
+ },
+ {
+  "type": "node",
+  "id": 8116942321,
+  "lat": 25.2526183,
+  "lon": 51.4533617,
+  "tags": {
+   "name:en": "Almarwad",
+   "shop": "beauty"
+  }
+ },
+ {
+  "type": "node",
+  "id": 8523069335,
+  "lat": 25.3679982,
+  "lon": 51.5520789,
+  "tags": {
+   "beauty": "pedicure",
+   "name": "Foot care centre",
+   "shop": "beauty"
+  }
+ },
+ {
+  "type": "node",
+  "id": 8524123453,
+  "lat": 25.36746,
+  "lon": 51.5506722,
+  "tags": {
+   "beauty": "nails;cosmetics;spa;hair",
+   "name": "Scarlet's Spa and Salon",
+   "opening_hours": "10:00-22:00",
+   "phone": "+974 4037 0842",
+   "shop": "beauty",
+   "website": "https://www.facebook.com/scarletspadoha/"
+  }
+ },
+ {
+  "type": "node",
+  "id": 8524123457,
+  "lat": 25.3675671,
+  "lon": 51.5507201,
+  "tags": {
+   "name": "Maison Royale Beauty",
+   "shop": "beauty",
+   "website": "https://maisonroyaleqatar.com/"
+  }
+ },
+ {
+  "type": "node",
+  "id": 8537891838,
+  "lat": 25.3697759,
+  "lon": 51.5515843,
+  "tags": {
+   "name": "Ajmal Perfumes",
+   "phone": "+974 4037 5416",
+   "shop": "perfumery"
+  }
+ },
+ {
+  "type": "node",
+  "id": 8537891841,
+  "lat": 25.3691404,
+  "lon": 51.5508038,
+  "tags": {
+   "beauty": "tanning",
+   "name": "megaSun",
+   "phone": "+974 5507 7757",
+   "shop": "beauty"
+  }
+ },
+ {
+  "type": "node",
+  "id": 8607863605,
+  "lat": 25.2858225,
+  "lon": 51.5358123,
+  "tags": {
+   "addr:building": "30",
+   "addr:city": "Doha",
+   "addr:postcode": "18435",
+   "addr:street": "Alashat Street",
+   "country": "qatar",
+   "description": "Jewelry Store",
+   "email": "info@zabarjadjewelry.com",
+   "name": "Zabarjad Jewelry Gold Souq",
+   "opening_date": "27-02-2017",
+   "opening_hours": "Sun-Thur 09:00-10:00",
+   "payment:cash": "yes",
+   "phone": "+97433007548",
+   "shop": "jewelry",
+   "website": "https://zabarjadjewelry.com"
+  }
+ },
+ {
+  "type": "node",
+  "id": 8635852324,
+  "lat": 25.3677188,
+  "lon": 51.5515218,
+  "tags": {
+   "name": "Karisma",
+   "shop": "beauty"
+  }
+ },
+ {
+  "type": "node",
+  "id": 9632512937,
+  "lat": 25.3751714,
+  "lon": 51.5416248,
+  "tags": {
+   "name": "Diva Lounge",
+   "shop": "beauty"
+  }
+ },
+ {
+  "type": "node",
+  "id": 10199088785,
+  "lat": 25.2516561,
+  "lon": 51.4691355,
+  "tags": {
+   "email": "estore@ahmed-perfume.com",
+   "name": "Ahmed Al Maghribi",
+   "name:ar": "أحمد المغربي للعطور",
+   "name:en": "Ahmed Al Maghribi",
+   "opening_hours": "Fr 16:00-22:00; Mo-Th,Sa-Su 09:30-23:00",
+   "phone": "+971 6 742 0602",
+   "shop": "perfumery",
+   "website": "https://www.ahmedalmaghribi.com/"
+  }
+ },
+ {
+  "type": "node",
+  "id": 10199130424,
+  "lat": 25.380388,
+  "lon": 51.4638249,
+  "tags": {
+   "contact:email": "lbb@ahmedalmaghribi.com",
+   "contact:instagram": "https://www.instagram.com/ahmedalmaghribiperfumesqatar",
+   "contact:phone": "+974 6005 7523",
+   "contact:website": "https://www.ahmedalmaghribi.com",
+   "name": "Ahmed Al Maghribi",
+   "name:ar": "أحمد المغربي للعطور",
+   "name:en": "Ahmed Al Maghribi",
+   "opening_hours": "Fr 09:00-23:00; Mo-Th,Sa 09:30-23:00; Su 10:00-23:00",
+   "shop": "perfumery",
+   "tiktok": "https://www.tiktok.com/@ahmedalmaghribiqatar"
+  }
+ },
+ {
+  "type": "node",
+  "id": 10199130427,
+  "lat": 25.3695656,
+  "lon": 51.4745039,
+  "tags": {
+   "contact:email": "amj@ahmedalmaghribi.com",
+   "contact:instagram": "https://www.instagram.com/ahmedalmaghribiperfumesqatar",
+   "contact:phone": "+974 3338 5217",
+   "contact:website": "https://www.ahmedalmaghribi.com",
+   "name": "Ahmed Al Maghribi",
+   "name:ar": "أحمد المغربي للعطور",
+   "name:en": "Ahmed Al Maghribi",
+   "opening_hours": "Fr 09:00-23:00; Mo-Th,Sa-Su 09:30-23:00",
+   "shop": "perfumery",
+   "tiktok": "https://www.tiktok.com/@ahmedalmaghribiqatar"
+  }
+ },
+ {
+  "type": "node",
+  "id": 10199130428,
+  "lat": 25.3258401,
+  "lon": 51.3500818,
+  "tags": {
+   "contact:email": "mqr@ahmedalmaghribi.com",
+   "contact:instagram": "https://www.instagram.com/ahmedalmaghribiperfumesqatar",
+   "contact:phone": "+974 3319 7160",
+   "contact:website": "https://www.ahmedalmaghribi.com",
+   "name": "Ahmed Al Maghribi",
+   "name:ar": "أحمد المغربي للعطور",
+   "name:en": "Ahmed Al Maghribi",
+   "opening_hours": "Mo-We,Sa-Su 10:00-23:00; Th-Fr 10:00-24:00",
+   "shop": "perfumery",
+   "tiktok": "https://www.tiktok.com/@ahmedalmaghribiqatar"
+  }
+ },
+ {
+  "type": "node",
+  "id": 10199130429,
+  "lat": 25.2837088,
+  "lon": 51.5128333,
+  "tags": {
+   "email": "estore@ahmed-perfume.com",
+   "name": "Ahmed Al Maghribi",
+   "name:ar": "أحمد المغربي للعطور",
+   "name:en": "Ahmed Al Maghribi",
+   "opening_hours": "Mo-Su 09:30-22:30",
+   "phone": "+971 6 742 0602",
+   "shop": "perfumery",
+   "website": "https://www.ahmedalmaghribi.com/"
+  }
+ },
+ {
+  "type": "node",
+  "id": 10199130431,
+  "lat": 25.3843844,
+  "lon": 51.4417152,
+  "tags": {
+   "contact:email": "dhf@ahmedalmaghribi.com",
+   "contact:instagram": "https://www.instagram.com/ahmedalmaghribiperfumesqatar",
+   "contact:phone": "+974 6004 3071",
+   "contact:website": "https://www.ahmedalmaghribi.com",
+   "name": "Ahmed Al Maghribi",
+   "name:ar": "أحمد المغربي للعطور",
+   "name:en": "Ahmed Al Maghribi",
+   "opening_hours": "Mo-We,Sa-Su 10:00-22:30; Th-Fr 10:00-23:00",
+   "shop": "perfumery",
+   "tiktok": "https://www.tiktok.com/@ahmedalmaghribiqatar"
+  }
+ },
+ {
+  "type": "node",
+  "id": 10231534661,
+  "lat": 25.2427369,
+  "lon": 51.4882857,
+  "tags": {
+   "name": "Salon di Milan",
+   "name:en": "Salon di Milan",
+   "shop": "beauty"
+  }
+ },
+ {
+  "type": "node",
+  "id": 10574393330,
+  "lat": 25.2865826,
+  "lon": 51.5247444,
+  "tags": {
+   "name": "Casio",
+   "shop": "watches"
+  }
+ },
+ {
+  "type": "node",
+  "id": 11240410606,
+  "lat": 25.2615641,
+  "lon": 51.6140171,
+  "tags": {
+   "brand": "Montblanc",
+   "brand:wikidata": "Q142691",
+   "check_date": "2025-07-20",
+   "name": "Montblanc",
+   "shop": "fashion_accessories"
+  }
+ },
+ {
+  "type": "node",
+  "id": 11240410607,
+  "lat": 25.2624734,
+  "lon": 51.6142133,
+  "tags": {
+   "brand": "Omega",
+   "brand:wikidata": "Q659224",
+   "check_date": "2023-10-05",
+   "name": "Omega",
+   "shop": "watches"
+  }
+ },
+ {
+  "type": "node",
+  "id": 11240410609,
+  "lat": 25.2625917,
+  "lon": 51.6141111,
+  "tags": {
+   "brand": "Bulgari",
+   "brand:wikidata": "Q752515",
+   "check_date": "2023-10-05",
+   "name": "Bvlgari",
+   "shop": "fashion_accessories"
+  }
+ },
+ {
+  "type": "node",
+  "id": 11240410611,
+  "lat": 25.2622664,
+  "lon": 51.6142992,
+  "tags": {
+   "check_date": "2023-10-05",
+   "name": "Hublot",
+   "shop": "watches"
+  }
+ },
+ {
+  "type": "node",
+  "id": 11240410612,
+  "lat": 25.2621038,
+  "lon": 51.6144095,
+  "tags": {
+   "brand": "Tiffany & Company",
+   "brand:wikidata": "Q1066858",
+   "check_date": "2023-10-05",
+   "name": "Tiffany & Company",
+   "official_name": "Tiffany & Co.",
+   "shop": "jewelry"
+  }
+ },
+ {
+  "type": "node",
+  "id": 11581604144,
+  "lat": 25.3701838,
+  "lon": 51.5399859,
+  "tags": {
+   "addr:city": "Porto Arabia",
+   "addr:country": "QA",
+   "addr:postcode": "13714",
+   "addr:street": "Hayr Umm Shawaheen",
+   "city": "Doha",
+   "contact:instagram": "https://www.instagram.com/zabarjadqatar/",
+   "name": "Zabarjad Jewelry Pearl",
+   "name:ar": "زبرجد للمجوهرات",
+   "payment:cash": "yes",
+   "payment:credit_cards": "yes",
+   "payment:debit_cards": "yes",
+   "payment:visa": "yes",
+   "phone": "33007548",
+   "shop": "jewelry",
+   "time": "Saturday to thursday: 9 Am to 10 Pm",
+   "website": "https://zabarjadjewelry.com",
+   "zone": "Onaiza"
+  }
+ },
+ {
+  "type": "node",
+  "id": 12118477201,
+  "lat": 25.2867753,
+  "lon": 51.5392195,
+  "tags": {
+   "name": "Al Qanateer Gold & Jewellery",
+   "shop": "jewelry"
+  }
+ },
+ {
+  "type": "node",
+  "id": 12165452612,
+  "lat": 25.2499264,
+  "lon": 51.4703304,
+  "tags": {
+   "email": "estore@ahmed-perfume.com",
+   "name": "Ahmed Al Maghribi",
+   "name:ar": "أحمد المغربي للعطور",
+   "name:en": "Ahmed Al Maghribi",
+   "opening_hours": "Mo-Su 09:30-22:30",
+   "phone": "+971 6 742 0602",
+   "shop": "perfumery",
+   "website": "https://www.ahmedalmaghribi.com"
+  }
+ },
+ {
+  "type": "node",
+  "id": 12165452613,
+  "lat": 25.6713567,
+  "lon": 51.4923348,
+  "tags": {
+   "contact:email": "amk@ahmedalmaghribi.com",
+   "contact:instagram": "https://www.instagram.com/ahmedalmaghribiperfumesqatar",
+   "contact:phone": "+974 3374 4367",
+   "contact:website": "https://www.ahmedalmaghribi.com",
+   "name": "Ahmed Al Maghribi",
+   "name:ar": "أحمد المغربي للعطور",
+   "name:en": "Ahmed Al Maghribi",
+   "opening_hours": "Fr 09:00-23:00; Mo-Th,Sa-Su 09:30-23:00",
+   "shop": "perfumery",
+   "tiktok": "https://www.tiktok.com/@ahmedalmaghribiqatar"
+  }
+ },
+ {
+  "type": "node",
+  "id": 12174673679,
+  "lat": 25.285686,
+  "lon": 51.532549,
+  "tags": {
+   "contact:facebook": "alromaizanuae",
+   "contact:instagram": "alromaizanuae",
+   "contact:linkedin": "https://www.linkedin.com/company/alromaizan",
+   "contact:tiktok": "alromaizanuae",
+   "contact:twitter": "Alromaizanuae",
+   "contact:youtube": "alromaizangoldjewellery",
+   "email": "care@alromaizan.ae",
+   "name": "الرميزان",
+   "name:en": "Al Romaizan",
+   "opening_hours": "Mo-Su 08:00-22:00",
+   "operator": "Al Romaizan Gold & Jewellery",
+   "phone": "+974 5510 3281",
+   "shop": "jewelry",
+   "website": "https://www.alromaizan.com/"
+  }
+ },
+ {
+  "type": "node",
+  "id": 12174673680,
+  "lat": 25.338098,
+  "lon": 51.481102,
+  "tags": {
+   "contact:facebook": "alromaizanuae",
+   "contact:instagram": "alromaizanuae",
+   "contact:linkedin": "https://www.linkedin.com/company/alromaizan",
+   "contact:tiktok": "alromaizanuae",
+   "contact:twitter": "Alromaizanuae",
+   "contact:youtube": "alromaizangoldjewellery",
+   "email": "care@alromaizan.ae",
+   "name": "الرميزان",
+   "name:en": "Al Romaizan",
+   "opening_hours": "Mo-Su 09:00-22:00",
+   "operator": "Al Romaizan Gold & Jewellery",
+   "phone": "+974 4008 0959;+974 5510 8629",
+   "shop": "jewelry",
+   "website": "https://www.alromaizan.com/"
+  }
+ },
+ {
+  "type": "node",
+  "id": 12174673681,
+  "lat": 25.2858517,
+  "lon": 51.5380561,
+  "tags": {
+   "contact:facebook": "alromaizanuae",
+   "contact:instagram": "alromaizanuae",
+   "contact:linkedin": "https://www.linkedin.com/company/alromaizan",
+   "contact:tiktok": "alromaizanuae",
+   "contact:twitter": "Alromaizanuae",
+   "contact:youtube": "alromaizangoldjewellery",
+   "email": "care@alromaizan.ae",
+   "name": "الرميزان",
+   "name:en": "Al Romaizan",
+   "opening_hours": "Mo-Su 08:00-13:00,16:00-22:00",
+   "operator": "Al Romaizan Gold & Jewellery",
+   "phone": "+974 4001 2295;+974 5512 6530",
+   "shop": "jewelry",
+   "website": "https://www.alromaizan.com/"
+  }
+ },
+ {
+  "type": "node",
+  "id": 12187760479,
+  "lat": 25.1650253,
+  "lon": 51.5979794,
+  "tags": {
+   "contact:email": "aws@ahmedalmaghribi.com",
+   "contact:instagram": "https://www.instagram.com/ahmedalmaghribiperfumesqatar",
+   "contact:phone": "+974 6002 2182",
+   "contact:website": "https://www.ahmedalmaghribi.com",
+   "name": "Ahmed Al Maghribi",
+   "name:ar": "أحمد المغربي للعطور",
+   "name:en": "Ahmed Al Maghribi",
+   "opening_hours": "Fr 14:00-23:00; Mo-Th,Sa-Su 09:30-23:00",
+   "shop": "perfumery",
+   "tiktok": "https://www.tiktok.com/@ahmedalmaghribiqatar"
+  }
+ },
+ {
+  "type": "node",
+  "id": 12187760480,
+  "lat": 25.293534,
+  "lon": 51.4206837,
+  "tags": {
+   "contact:email": "shf@ahmedalmaghribi.com",
+   "contact:instagram": "https://www.instagram.com/ahmedalmaghribiperfumesqatar",
+   "contact:phone": "+974 3376 5514",
+   "contact:website": "https://www.ahmedalmaghribi.com",
+   "name": "Ahmed Al Maghribi",
+   "name:ar": "أحمد المغربي للعطور",
+   "name:en": "Ahmed Al Maghribi",
+   "opening_hours": "Fr 14:00-23:00; Mo-Th,Sa-Su 09:30-23:00",
+   "shop": "perfumery",
+   "tiktok": "https://www.tiktok.com/@ahmedalmaghribiqatar"
+  }
+ },
+ {
+  "type": "node",
+  "id": 12187760481,
+  "lat": 25.350469,
+  "lon": 51.4306595,
+  "tags": {
+   "contact:email": "igw@ahmedalmaghribi.com",
+   "contact:instagram": "https://www.instagram.com/ahmedalmaghribiperfumesqatar",
+   "contact:phone": "+974 5117 0465",
+   "contact:website": "https://www.ahmedalmaghribi.com",
+   "name": "Ahmed Al Maghribi",
+   "name:ar": "أحمد المغربي للعطور",
+   "name:en": "Ahmed Al Maghribi",
+   "opening_hours": "Fr 14:00-23:00; Mo-Th,Sa-Su 09:30-23:00",
+   "shop": "perfumery",
+   "tiktok": "https://www.tiktok.com/@ahmedalmaghribiqatar"
+  }
+ },
+ {
+  "type": "node",
+  "id": 12187760482,
+  "lat": 25.5464069,
+  "lon": 51.418257,
+  "tags": {
+   "contact:email": "qrn@ahmedalmaghribi.com",
+   "contact:instagram": "https://www.instagram.com/ahmedalmaghribiperfumesqatar",
+   "contact:phone": "+974 3373 9851",
+   "contact:website": "https://www.ahmedalmaghribi.com",
+   "name": "Ahmed Al Maghribi",
+   "name:ar": "أحمد المغربي للعطور",
+   "name:en": "Ahmed Al Maghribi",
+   "opening_hours": "Fr 14:00-23:00; Mo-Th,Sa-Su 09:30-23:00",
+   "shop": "perfumery",
+   "tiktok": "https://www.tiktok.com/@ahmedalmaghribiqatar"
+  }
+ },
+ {
+  "type": "node",
+  "id": 12187760483,
+  "lat": 25.2732047,
+  "lon": 51.4984277,
+  "tags": {
+   "contact:email": "nsr@ahmedalmaghribi.com",
+   "contact:instagram": "https://www.instagram.com/ahmedalmaghribiperfumesqatar",
+   "contact:phone": "+974 4481 3606",
+   "contact:website": "https://www.ahmedalmaghribi.com",
+   "name": "Ahmed Al Maghribi",
+   "name:ar": "أحمد المغربي للعطور",
+   "name:en": "Ahmed Al Maghribi",
+   "opening_hours": "Fr 14:00-23:00; Mo-Th,Sa-Su 09:30-24:00",
+   "shop": "perfumery",
+   "tiktok": "https://www.tiktok.com/@ahmedalmaghribiqatar"
+  }
+ },
+ {
+  "type": "node",
+  "id": 12204865393,
+  "lat": 25.3199937,
+  "lon": 51.4862087,
+  "tags": {
+   "contact:email": "mrk@ahmedalmaghribi.com",
+   "contact:instagram": "https://www.instagram.com/ahmedalmaghribiperfumesqatar",
+   "contact:phone": "+974 5114 6389",
+   "contact:website": "https://www.ahmedalmaghribi.com",
+   "name": "Ahmed Al Maghribi",
+   "name:ar": "أحمد المغربي للعطور",
+   "name:en": "Ahmed Al Maghribi",
+   "opening_hours": "Fr 14:00-23:00; Mo-Th,Sa-Su 09:30-23:00",
+   "shop": "perfumery",
+   "tiktok": "https://www.tiktok.com/@ahmedalmaghribiqatar"
+  }
+ },
+ {
+  "type": "node",
+  "id": 12345606120,
+  "lat": 25.2870885,
+  "lon": 51.534057,
+  "tags": {
+   "email": "waq@ahmedalmaghribi.com",
+   "name": "Ahmed Al Maghribi",
+   "name:ar": "أحمد المغربي للعطور",
+   "name:en": "Ahmed Al Maghribi",
+   "opening_hours": "Fr 16:00-23:00; Mo-Th,Sa-Su 10:00-13:00,16:00-23:00",
+   "phone": "+974 5113 5623",
+   "shop": "perfumery",
+   "website": "https://www.ahmedalmaghribi.com"
+  }
+ },
+ {
+  "type": "node",
+  "id": 12345606121,
+  "lat": 25.170704,
+  "lon": 51.587428,
+  "tags": {
+   "email": "ezd@ahmed-perfume.com",
+   "name": "Ahmed Al Maghribi",
+   "name:ar": "أحمد المغربي للعطور",
+   "name:en": "Ahmed Al Maghribi",
+   "opening_hours": "Mo-Su 10:00-23:00",
+   "phone": "+974 5117 9949",
+   "shop": "perfumery",
+   "website": "https://www.ahmedalmaghribi.com"
+  }
+ },
+ {
+  "type": "node",
+  "id": 12345606122,
+  "lat": 25.2615994,
+  "lon": 51.4302662,
+  "tags": {
+   "contact:email": "afs@ahmedalmaghribi.com",
+   "contact:instagram": "https://www.instagram.com/ahmedalmaghribiperfumesqatar",
+   "contact:phone": "+974 5590 6265",
+   "contact:website": "https://www.ahmedalmaghribi.com",
+   "name": "Ahmed Al Maghribi",
+   "name:ar": "أحمد المغربي للعطور",
+   "name:en": "Ahmed Al Maghribi",
+   "opening_hours": "Fr 14:00-23:00; Mo-Th,Sa-Su 09:30-23:00",
+   "shop": "perfumery",
+   "tiktok": "https://www.tiktok.com/@ahmedalmaghribiqatar"
+  }
+ },
+ {
+  "type": "node",
+  "id": 12345606123,
+  "lat": 25.2610415,
+  "lon": 51.4437682,
+  "tags": {
+   "email": "vil@ahmedalmaghribi.com",
+   "name": "Ahmed Al Maghribi",
+   "name:ar": "أحمد المغربي للعطور",
+   "name:en": "Ahmed Al Maghribi",
+   "opening_hours": "Mo-We,Su 10:00-23:00; Th-Sa 10:00-24:00",
+   "phone": "+974 3325 3471",
+   "shop": "perfumery",
+   "website": "https://www.ahmedalmaghribi.com"
+  }
+ },
+ {
+  "type": "node",
+  "id": 12345606125,
+  "lat": 25.2728688,
+  "lon": 51.4951033,
+  "tags": {
+   "email": "nas@ahmedalmaghribi.com",
+   "name": "Ahmed Al Maghribi",
+   "name:ar": "أحمد المغربي للعطور",
+   "name:en": "Ahmed Al Maghribi",
+   "opening_hours": "Fr 16:00-23:00; Mo-Th,Sa-Su 09:30-11:00",
+   "phone": "+971 6 742 0602",
+   "shop": "perfumery",
+   "website": "https://www.ahmedalmaghribi.com"
+  }
+ },
+ {
+  "type": "node",
+  "id": 12606497009,
+  "lat": 25.2448925,
+  "lon": 51.4562139,
+  "tags": {
+   "contact:email": "azy@ahmedalmaghribi.com",
+   "contact:instagram": "https://www.instagram.com/ahmedalmaghribiperfumesqatar",
+   "contact:phone": "+974 3332 4167",
+   "contact:website": "https://www.ahmedalmaghribi.com",
+   "name": "Ahmed Al Maghribi",
+   "name:ar": "أحمد المغربي للعطور",
+   "name:en": "Ahmed Al Maghribi",
+   "opening_hours": "Fr 14:00-23:00; Mo-Th,Sa-Su 09:30-23:00",
+   "shop": "perfumery",
+   "tiktok": "https://www.tiktok.com/@ahmedalmaghribiqatar"
+  }
+ },
+ {
+  "type": "node",
+  "id": 12606786319,
+  "lat": 25.4045399,
+  "lon": 51.5184199,
+  "tags": {
+   "name": "V Perfumes",
+   "name:ar": "للعطور V",
+   "name:en": "V Perfumes",
+   "opening_hours": "Mo-We,Su 10:00-23:00; Th-Sa 10:00-24:00",
+   "operator": "V Perfumes LLC",
+   "phone": "+974 5564 4571",
+   "shop": "cosmetics",
+   "website": "https://www.vperfumes.com"
+  }
+ },
+ {
+  "type": "node",
+  "id": 13074307788,
+  "lat": 25.247783,
+  "lon": 51.4893299,
+  "tags": {
+   "addr:city": "Abu Hamour",
+   "addr:postcode": "2615",
+   "addr:street": "Dar Al Salam Mall",
+   "contact:facebook": "61579093705662",
+   "email": "jewelryrieman@gmail.com",
+   "mobile": "+97433334165",
+   "name": "Rieman Jewelry",
+   "opening_hours": "Saturday to Thursday ( 10:00 AM to 10:00 PM ) & Friday ( 2:00 PM to 11:00 PM )",
+   "operator": "Rieman Jewelry",
+   "payment:app": "yes",
+   "payment:card": "yes",
+   "payment:cash": "yes",
+   "payment:contactless": "yes",
+   "payment:credit_cards": "yes",
+   "payment:debit_cards": "yes",
+   "payment:gold": "yes",
+   "payment:google_pay": "yes",
+   "payment:visa_debit": "yes",
+   "phone": "+974 33334165",
+   "shop": "jewelry"
+  }
+ },
+ {
+  "type": "node",
+  "id": 13075399598,
+  "lat": 25.2683938,
+  "lon": 51.6100529,
+  "tags": {
+   "brand": "Bulgari",
+   "brand:wikidata": "Q752515",
+   "check_date": "2026-10-16",
+   "level": "1",
+   "name": "Bvlgari",
+   "opening_hours": "24/7",
+   "shop": "fashion_accessories",
+   "wheelchair": "yes"
+  }
+ },
+ {
+  "type": "node",
+  "id": 13371076030,
+  "lat": 25.269808,
+  "lon": 51.6107732,
+  "tags": {
+   "check_date": "2026-10-16",
+   "level": "1",
+   "name": "Time Vallée",
+   "payment:credit_cards": "yes",
+   "payment:debit_cards": "yes",
+   "shop": "watches",
+   "wheelchair": "yes"
+  }
+ },
+ {
+  "type": "node",
+  "id": 13371076038,
+  "lat": 25.2678906,
+  "lon": 51.6102182,
+  "tags": {
+   "check_date": "2026-10-16",
+   "level": "1",
+   "name": "Be Relax",
+   "shop": "beauty"
+  }
+ },
+ {
+  "type": "node",
+  "id": 13371076039,
+  "lat": 25.2680052,
+  "lon": 51.610205,
+  "tags": {
+   "check_date": "2026-10-16",
+   "level": "1",
+   "name": "Accessories Lab",
+   "shop": "fashion_accessories",
+   "wheelchair": "yes"
+  }
+ },
+ {
+  "type": "node",
+  "id": 13371076065,
+  "lat": 25.2692694,
+  "lon": 51.6109106,
+  "tags": {
+   "brand": "Montblanc",
+   "brand:wikidata": "Q142691",
+   "check_date": "2026-10-16",
+   "level": "1",
+   "name": "Montblanc",
+   "shop": "fashion_accessories",
+   "wheelchair": "yes"
+  }
+ },
+ {
+  "type": "node",
+  "id": 13371076072,
+  "lat": 25.2688315,
+  "lon": 51.6106896,
+  "tags": {
+   "brand": "Omega",
+   "brand:wikidata": "Q659224",
+   "check_date": "2026-10-16",
+   "level": "1",
+   "name": "Omega",
+   "shop": "watches",
+   "wheelchair": "yes"
+  }
+ },
+ {
+  "type": "node",
+  "id": 13371076073,
+  "lat": 25.2687355,
+  "lon": 51.610652,
+  "tags": {
+   "brand": "Tiffany & Company",
+   "brand:wikidata": "Q1066858",
+   "check_date": "2026-10-16",
+   "level": "1",
+   "name": "Tiffany & Company",
+   "official_name": "Tiffany & Co.",
+   "shop": "jewelry",
+   "wheelchair": "yes"
+  }
+ },
+ {
+  "type": "node",
+  "id": 13371076078,
+  "lat": 25.2687677,
+  "lon": 51.6091959,
+  "tags": {
+   "brand": "Bottega Veneta",
+   "brand:wikidata": "Q894874",
+   "check_date": "2026-10-16",
+   "level": "1",
+   "name": "Bottega Veneta",
+   "shop": "fashion_accessories",
+   "wheelchair": "yes"
+  }
+ },
+ {
+  "type": "node",
+  "id": 13509317386,
+  "lat": 25.3379631,
+  "lon": 51.4804674,
+  "tags": {
+   "email": "info@vperfumes.ae",
+   "name": "V Perfumes",
+   "name:ar": "للعطور V",
+   "name:en": "V Perfumes",
+   "opening_hours": "Mo-Su 10:00-23:00",
+   "phone": "+974 3006 3039",
+   "shop": "cosmetics",
+   "website": "https://www.vperfumes.com"
+  }
+ },
+ {
+  "type": "node",
+  "id": 13509317387,
+  "lat": 25.1707349,
+  "lon": 51.5876153,
+  "tags": {
+   "email": "info@vperfumes.ae",
+   "name": "V Perfumes",
+   "name:ar": "للعطور V",
+   "name:en": "V Perfumes",
+   "opening_hours": "Mo-Su 10:00-23:00",
+   "phone": "+974 5065 1100",
+   "shop": "cosmetics",
+   "website": "https://www.vperfumes.com"
+  }
+ },
+ {
+  "type": "node",
+  "id": 14073025292,
+  "lat": 25.3818022,
+  "lon": 51.428927,
+  "tags": {
+   "shop": "beauty"
+  }
+ },
+ {
+  "type": "node",
+  "id": 14323821836,
+  "lat": 25.2624199,
+  "lon": 51.6129276,
+  "tags": {
+   "brand": "TAG Heuer",
+   "brand:wikidata": "Q645984",
+   "name": "TAG Heuer",
+   "shop": "watches"
+  }
+ },
+ {
+  "type": "node",
+  "id": 14323821840,
+  "lat": 25.262973,
+  "lon": 51.6128246,
+  "tags": {
+   "beauty": "spa",
+   "name": "Be Relax Spa",
+   "shop": "beauty"
+  }
+ },
+ {
+  "type": "way",
+  "id": 158194862,
+  "center": {
+   "lat": 25.259211,
+   "lon": 51.5399891
+  },
+  "tags": {
+   "addr:housenumber": "102",
+   "addr:street": "Al Salam Street",
+   "building": "yes",
+   "shop": "beauty"
+  }
+ },
+ {
+  "type": "way",
+  "id": 158194863,
+  "center": {
+   "lat": 25.2592143,
+   "lon": 51.5401143
+  },
+  "tags": {
+   "addr:housenumber": "100",
+   "addr:street": "Al Salam Street",
+   "building": "yes",
+   "name": "Mona Lisa Beauty Centre",
+   "name:en": "Mona Lisa Beauty Centre",
+   "shop": "beauty"
+  }
+ },
+ {
+  "type": "way",
+  "id": 158470147,
+  "center": {
+   "lat": 25.3247801,
+   "lon": 51.5399756
+  },
+  "tags": {
+   "building": "yes",
+   "layer": "1",
+   "name": "Four Seasons Spa",
+   "name:en": "Four Seasons Spa",
+   "shop": "beauty"
+  }
+ },
+ {
+  "type": "way",
+  "id": 162178693,
+  "center": {
+   "lat": 25.2622141,
+   "lon": 51.5381338
+  },
+  "tags": {
+   "addr:city": "Doha",
+   "addr:country": "QA",
+   "addr:housenumber": "111",
+   "addr:street": "Najma Street",
+   "building": "yes",
+   "name": "Moroccan Touches",
+   "name:en": "Moroccan Touches",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "way",
+  "id": 251737740,
+  "center": {
+   "lat": 25.1761482,
+   "lon": 51.596749
+  },
+  "tags": {
+   "building": "yes",
+   "name": "Ghoosan Beauty Center",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "way",
+  "id": 488122097,
+  "center": {
+   "lat": 25.261194,
+   "lon": 51.5292784
+  },
+  "tags": {
+   "addr:street": "Mohammed Bin Majah Street",
+   "building": "yes",
+   "name": "London Beauty Saloon",
+   "name:en": "London Beauty Saloon",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "way",
+  "id": 488298004,
+  "center": {
+   "lat": 25.2639541,
+   "lon": 51.5094881
+  },
+  "tags": {
+   "addr:street": "Al Maahed Street",
+   "building": "yes",
+   "name": "Al Hayam Beauty Saloon",
+   "name:en": "Al Hayam Beauty Saloon",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "way",
+  "id": 488311914,
+  "center": {
+   "lat": 25.2609611,
+   "lon": 51.5224446
+  },
+  "tags": {
+   "addr:street": "Al Suwais Street",
+   "building": "yes",
+   "name": "Beauty Center",
+   "name:en": "Beauty Center",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "way",
+  "id": 488340856,
+  "center": {
+   "lat": 25.2540293,
+   "lon": 51.5417163
+  },
+  "tags": {
+   "addr:street": "D Ring Road",
+   "building": "yes",
+   "name": "Marzooq Al Shamlan & Sons",
+   "name:en": "Marzooq Al Shamlan & Sons",
+   "shop": "jewelry",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "way",
+  "id": 488556734,
+  "center": {
+   "lat": 25.2375214,
+   "lon": 51.5348141
+  },
+  "tags": {
+   "addr:street": "Street 924",
+   "building": "yes",
+   "name": "Aisha Beauty Center",
+   "name:en": "Aisha Beauty Center",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "way",
+  "id": 489344499,
+  "center": {
+   "lat": 25.2517972,
+   "lon": 51.5188239
+  },
+  "tags": {
+   "addr:street": "Musab Bin Omair Street",
+   "building": "yes",
+   "name": "Rutosh Boutique Beauty Center",
+   "name:en": "Rutosh Boutique Beauty Center",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "way",
+  "id": 489422846,
+  "center": {
+   "lat": 25.247179,
+   "lon": 51.5089459
+  },
+  "tags": {
+   "addr:street": "Salman Bin Rabiah",
+   "building": "yes",
+   "name": "Al Moudaj Beauty Salon",
+   "name:en": "Al Moudaj Beauty Salon",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "way",
+  "id": 489422849,
+  "center": {
+   "lat": 25.242646,
+   "lon": 51.5135926
+  },
+  "tags": {
+   "addr:street": "Aba Al Ekresh",
+   "building": "yes",
+   "name": "La Vedette",
+   "name:en": "La Vedette",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "way",
+  "id": 489619972,
+  "center": {
+   "lat": 25.285838,
+   "lon": 51.4215746
+  },
+  "tags": {
+   "addr:street": "Al Wajbah",
+   "building": "yes",
+   "name": "Dayana",
+   "name:en": "Dayana",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017."
+  }
+ },
+ {
+  "type": "way",
+  "id": 489643889,
+  "center": {
+   "lat": 25.2355681,
+   "lon": 51.5034274
+  },
+  "tags": {
+   "addr:street": "Al Erbayyat",
+   "building": "yes",
+   "name": "Delight",
+   "name:en": "Delight",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "way",
+  "id": 489864923,
+  "center": {
+   "lat": 25.3208871,
+   "lon": 51.4860199
+  },
+  "tags": {
+   "addr:street": "Omar Bin Abdul Aziz St",
+   "building": "yes",
+   "name": "Lebanon Beauty Center",
+   "name:en": "Lebanon Beauty Center",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "way",
+  "id": 489909591,
+  "center": {
+   "lat": 25.3232481,
+   "lon": 51.4567787
+  },
+  "tags": {
+   "addr:street": "Tuwaim Umm Al Ghailam",
+   "building": "yes",
+   "name": "Nadia",
+   "name:en": "Nadia",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "way",
+  "id": 490176999,
+  "center": {
+   "lat": 25.3320549,
+   "lon": 51.4265916
+  },
+  "tags": {
+   "addr:street": "Al Areesh Street",
+   "building": "yes",
+   "name": "Diva Lounge Spa",
+   "name:en": "Diva Lounge Spa",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "way",
+  "id": 490200860,
+  "center": {
+   "lat": 25.2911686,
+   "lon": 51.4149223
+  },
+  "tags": {
+   "addr:street": "Al Wajbah Street",
+   "beauty": "spa",
+   "building": "yes",
+   "name": "Al-Shaikha Beauty Center - Henna & Spa & Gym",
+   "name:en": "Al-Shaikha Beauty Center - Henna & Spa & Gym",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "way",
+  "id": 490585715,
+  "center": {
+   "lat": 25.2818721,
+   "lon": 51.420023
+  },
+  "tags": {
+   "addr:street": "Al Salam Street",
+   "building": "yes",
+   "building:levels": "2",
+   "name": "Hala Beauty Center",
+   "name:en": "Hala Beauty Center",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "way",
+  "id": 490591514,
+  "center": {
+   "lat": 25.267904,
+   "lon": 51.4205963
+  },
+  "tags": {
+   "addr:street": "Al Salam Street",
+   "building": "yes",
+   "building:levels": "3",
+   "fixme": "name",
+   "name": "Beauty Center",
+   "name:en": "Beauty Center",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "way",
+  "id": 490598247,
+  "center": {
+   "lat": 25.3281988,
+   "lon": 51.5172733
+  },
+  "tags": {
+   "addr:street": "Al Eithar Street",
+   "building": "yes",
+   "name": "Organique Beauty Salon & Spa",
+   "name:en": "Organique Beauty Salon & Spa",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "way",
+  "id": 490735701,
+  "center": {
+   "lat": 25.3463973,
+   "lon": 51.4449848
+  },
+  "tags": {
+   "building": "yes",
+   "name": "Fresh Look",
+   "name:en": "Fresh Look",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "way",
+  "id": 490961530,
+  "center": {
+   "lat": 25.3648922,
+   "lon": 51.43209
+  },
+  "tags": {
+   "building": "yes",
+   "name": "Beauty Factory",
+   "name:en": "Beauty Factory",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "way",
+  "id": 490965889,
+  "center": {
+   "lat": 25.3761588,
+   "lon": 51.4201641
+  },
+  "tags": {
+   "addr:street": "Jery Rabdan",
+   "building": "yes",
+   "name": "Beaucatcher Beauty Salon",
+   "name:en": "Beaucatcher Beauty Salon",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "way",
+  "id": 490982142,
+  "center": {
+   "lat": 25.3684027,
+   "lon": 51.4437621
+  },
+  "tags": {
+   "addr:street": "Street 24",
+   "building": "yes",
+   "name": "Saloon Bint Al-Deera",
+   "name:en": "Saloon Bint Al-Deera",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "way",
+  "id": 490991946,
+  "center": {
+   "lat": 25.3983291,
+   "lon": 51.4241436
+  },
+  "tags": {
+   "addr:street": "Al Kharaitiyat",
+   "building": "yes",
+   "name": "Beauty Secret",
+   "name:en": "Beauty Secret",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "way",
+  "id": 490993961,
+  "center": {
+   "lat": 25.2490647,
+   "lon": 51.4908989
+  },
+  "tags": {
+   "addr:street": "Aamir Bin Shuaib",
+   "building": "yes",
+   "name": "Bella Dama",
+   "name:en": "Bella Dama",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "way",
+  "id": 491000273,
+  "center": {
+   "lat": 25.2674801,
+   "lon": 51.4928243
+  },
+  "tags": {
+   "addr:city": "Doha",
+   "addr:country": "QA",
+   "addr:street": "Al Mashaf",
+   "building": "yes",
+   "name": "Beauty Touch Saloon",
+   "name:en": "Beauty Touch Saloon",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "way",
+  "id": 491005638,
+  "center": {
+   "lat": 25.2647842,
+   "lon": 51.4868199
+  },
+  "tags": {
+   "addr:city": "Doha",
+   "addr:country": "QA",
+   "building": "yes",
+   "name": "Stylo Ladies Salon",
+   "name:en": "Stylo Ladies Salon",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "way",
+  "id": 491167301,
+  "center": {
+   "lat": 25.3558857,
+   "lon": 51.4436323
+  },
+  "tags": {
+   "beauty": "nails;cosmetics;spa;hair;skin_care;all",
+   "building": "yes",
+   "name": "Salon and Spa by Eljoori - Izgawa Branch",
+   "opening_hours": "Sa-Th 10:00-21:00",
+   "payment:cash": "yes",
+   "payment:credit_cards": "yes",
+   "shop": "beauty",
+   "website": "https://www.byeljoori.com/"
+  }
+ },
+ {
+  "type": "way",
+  "id": 491178087,
+  "center": {
+   "lat": 25.3562576,
+   "lon": 51.4427027
+  },
+  "tags": {
+   "building": "yes",
+   "name": "The Swan Beauty Center",
+   "name:en": "The Swan Beauty Center",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "way",
+  "id": 491180666,
+  "center": {
+   "lat": 25.3581363,
+   "lon": 51.4286489
+  },
+  "tags": {
+   "building": "yes",
+   "name": "Gospel Beauty Center",
+   "name:en": "Gospel Beauty Center",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "way",
+  "id": 491203335,
+  "center": {
+   "lat": 25.2761012,
+   "lon": 51.5348652
+  },
+  "tags": {
+   "addr:housenumber": "100",
+   "addr:street": "Ziyad Bin Eyadh",
+   "building": "yes",
+   "name": "Burmeth Gents Saloon",
+   "name:en": "Burmeth Gents Saloon",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "way",
+  "id": 491206110,
+  "center": {
+   "lat": 25.2505726,
+   "lon": 51.4616896
+  },
+  "tags": {
+   "addr:street": "Ras Bu Funtas Street",
+   "building": "yes",
+   "name": "Latin Beauty Salon",
+   "name:en": "Latin Beauty Salon",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "way",
+  "id": 491360053,
+  "center": {
+   "lat": 25.2588145,
+   "lon": 51.4824526
+  },
+  "tags": {
+   "addr:street": "Al Bustan Street",
+   "building": "yes",
+   "fixme": "name",
+   "name": "Spa",
+   "name:en": "Spa",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "way",
+  "id": 491362719,
+  "center": {
+   "lat": 25.2674551,
+   "lon": 51.4773179
+  },
+  "tags": {
+   "addr:street": "Al Bustan Street",
+   "building": "yes",
+   "name": "La Beauté Centre",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "way",
+  "id": 491379474,
+  "center": {
+   "lat": 25.2479262,
+   "lon": 51.4390931
+  },
+  "tags": {
+   "addr:street": "Osama Bin Zaid Street",
+   "building": "yes",
+   "name": "Princess Palace Salon",
+   "name:en": "Princess Palace Salon",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "way",
+  "id": 491623376,
+  "center": {
+   "lat": 25.2372791,
+   "lon": 51.4487484
+  },
+  "tags": {
+   "addr:street": "Ibn Hatem",
+   "building": "yes",
+   "name": "Hayat Beauty Center",
+   "name:en": "Hayat Beauty Center",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "way",
+  "id": 491644131,
+  "center": {
+   "lat": 25.2415321,
+   "lon": 51.4498389
+  },
+  "tags": {
+   "addr:street": "Al Alaa Bin Wahb",
+   "building": "yes",
+   "name": "Hala Beauty Center",
+   "name:en": "Hala Beauty Center",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "way",
+  "id": 491649691,
+  "center": {
+   "lat": 25.2713531,
+   "lon": 51.4913825
+  },
+  "tags": {
+   "addr:street": "Al Amir",
+   "building": "yes",
+   "name": "Ladurée Beauty Saloon",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "way",
+  "id": 491669082,
+  "center": {
+   "lat": 25.2712134,
+   "lon": 51.4915136
+  },
+  "tags": {
+   "addr:city": "Doha",
+   "addr:country": "QA",
+   "addr:street": "Al Amir",
+   "amenity": "cafe",
+   "building": "yes",
+   "name": "Ladurée",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "way",
+  "id": 491669086,
+  "center": {
+   "lat": 25.2707179,
+   "lon": 51.4800195
+  },
+  "tags": {
+   "addr:city": "Doha",
+   "addr:country": "QA",
+   "addr:housenumber": "house number 9",
+   "addr:street": "Al Waab Street",
+   "building": "yes",
+   "name": "VLCC",
+   "name:en": "VLCC",
+   "shop": "cosmetics",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "way",
+  "id": 492144558,
+  "center": {
+   "lat": 25.2744622,
+   "lon": 51.5019351
+  },
+  "tags": {
+   "addr:street": "Al Hamathani",
+   "building": "yes",
+   "name": "La Forme Beauty Lounge",
+   "name:en": "La Forme Beauty Lounge",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017."
+  }
+ },
+ {
+  "type": "way",
+  "id": 492147969,
+  "center": {
+   "lat": 25.2345326,
+   "lon": 51.3987242
+  },
+  "tags": {
+   "building": "yes",
+   "name": "Dayana Beauty Center",
+   "name:en": "Dayana Beauty Center",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "way",
+  "id": 492152001,
+  "center": {
+   "lat": 25.1610996,
+   "lon": 51.591185
+  },
+  "tags": {
+   "addr:street": "Al Wakra Hospital",
+   "building": "yes",
+   "name": "Rehab Beauty Salon",
+   "shop": "beauty",
+   "source": "Kaart Ground Survey 2017"
+  }
+ },
+ {
+  "type": "way",
+  "id": 780204162,
+  "center": {
+   "lat": 25.2816488,
+   "lon": 51.4201326
+  },
+  "tags": {
+   "addr:city": "Doha",
+   "addr:postcode": "00000",
+   "addr:street": "Al Salam Street",
+   "beauty": "all",
+   "building": "commercial",
+   "name": "Salon and Spa by Eljoori",
+   "opening_hours": "Su-Th 10:00-21:00",
+   "payment:cash": "yes",
+   "payment:credit_cards": "yes",
+   "payment:debit_cards": "yes",
+   "payment:mastercard": "yes",
+   "payment:visa": "yes",
+   "shop": "beauty"
+  }
+ },
+ {
+  "type": "way",
+  "id": 945641801,
+  "center": {
+   "lat": 25.3227213,
+   "lon": 51.5261462
+  },
+  "tags": {
+   "access": "yes",
+   "building": "yes",
+   "level": "0",
+   "name": "Hairaat",
+   "room": "shop",
+   "shop": "jewelry"
+  }
+ },
+ {
+  "type": "way",
+  "id": 945648442,
+  "center": {
+   "lat": 25.3225469,
+   "lon": 51.5264244
+  },
+  "tags": {
+   "indoor": "room",
+   "level": "0",
+   "name": "Al Baker Arts",
+   "shop": "jewelry"
+  }
+ },
+ {
+  "type": "way",
+  "id": 945648443,
+  "center": {
+   "lat": 25.3225487,
+   "lon": 51.526352
+  },
+  "tags": {
+   "brand": "Breitling",
+   "brand:wikidata": "Q665740",
+   "building": "yes",
+   "indoor": "room",
+   "level": "0",
+   "name": "Breitling",
+   "shop": "watches"
+  }
+ },
+ {
+  "type": "way",
+  "id": 945649002,
+  "center": {
+   "lat": 25.3226027,
+   "lon": 51.5263285
+  },
+  "tags": {
+   "indoor": "room",
+   "level": "0",
+   "name": "Korloff",
+   "shop": "perfumery"
+  }
+ },
+ {
+  "type": "way",
+  "id": 945651540,
+  "center": {
+   "lat": 25.3229653,
+   "lon": 51.5264526
+  },
+  "tags": {
+   "indoor": "room",
+   "level": "0",
+   "name": "Corner",
+   "shop": "perfumery"
+  }
+ },
+ {
+  "type": "way",
+  "id": 1115400064,
+  "center": {
+   "lat": 25.2857885,
+   "lon": 51.5360458
+  },
+  "tags": {
+   "addr:city": "الدوحة",
+   "addr:housenumber": "810",
+   "addr:postcode": "13714",
+   "addr:street": "شارع الأسحاط",
+   "brand": "Alsugha",
+   "building": "yes",
+   "contact:facebook": "https://www.facebook.com/alsughajewelry",
+   "description": "Jewelry & Watches Store - Buy & Sell\nمتجر مجوهرات و ساعات - بيع و شراء المستعمل و الجديد",
+   "email": "alsoghajewelry@gmail.com",
+   "height": "25",
+   "image": "https://www.alsughajewelry.com/",
+   "name": "Alsugha Jewelry & Watches",
+   "opening_hours": "Sa-Th 09:00-22:00",
+   "operator": "Jewelry Store",
+   "payment:cash": "yes",
+   "payment:cheque": "yes",
+   "payment:credit_cards": "yes",
+   "payment:debit_cards": "yes",
+   "payment:mastercard": "yes",
+   "payment:visa": "yes",
+   "phone": "50407574",
+   "shop": "jewelry",
+   "website": "https://www.alsughajewelry.com/"
+  }
+ },
+ {
+  "type": "way",
+  "id": 1116180038,
+  "center": {
+   "lat": 25.2611335,
+   "lon": 51.5174396
+  },
+  "tags": {
+   "building": "yes",
+   "contact:instagram": "arabalibeautysalon.qa",
+   "name": "Arabali Beauty Salon",
+   "phone": "74770032",
+   "shop": "beauty"
+  }
+ }
+]

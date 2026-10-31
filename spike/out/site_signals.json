@@ -1,0 +1,137 @@
+[
+ {
+  "domain": "ahmedalmaghribi.com",
+  "robots": "no robots.txt (404)",
+  "http_status": 200,
+  "fetch_ms": 1161,
+  "final_url": "https://ae.ahmedalmaghribi.com/en",
+  "title": "Buy Perfumes Online | Best Perfumes in UAE | Ahmed Al Maghribi Perfumes",
+  "meta_description": "Shop Ahmed Al Maghribi Perfumes in UAE Discover Premium Oriental Fragrance Collection with Oud Perfumes Gift Sets and Long Lasting Scents Buy Online Today",
+  "lang": "en",
+  "platforms": [
+   "wordpress"
+  ],
+  "video_tags": 22,
+  "video_embeds": 0,
+  "mp4_refs": 11,
+  "img_count": 74,
+  "socials": {
+   "facebook": "https://www.facebook.com/ahmedalmaghribiperfumesllc/",
+   "instagram": "https://www.instagram.com/ahmedalmaghribiperfumes/",
+   "youtube": "https://www.youtube.com/channel/UCzUsyi2q3zCR4YTeAA1okkg",
+   "tiktok": "https://www.tiktok.com/@ahmedalmaghribiperfumes"
+  },
+  "published_emails": [
+   "info@ahmedalmaghribi.com"
+  ],
+  "tel_links": [],
+  "text_chars": 532128,
+  "status": "ok"
+ },
+ {
+  "domain": "alromaizan.com",
+  "robots": "robots.txt parsed",
+  "http_status": 200,
+  "fetch_ms": 568,
+  "final_url": "https://alromaizan.com/",
+  "title": "Al Romaizan | Online Gold Shop",
+  "meta_description": "Shop Gold Jewellery online in the UAE, KSA, QATAR & OMAN. Find our exclusive gold & diamond jewellery collections at Al Romaizan Online Gold Shop.",
+  "lang": "en",
+  "platforms": [],
+  "video_tags": 0,
+  "video_embeds": 0,
+  "mp4_refs": 0,
+  "img_count": 24,
+  "socials": {
+   "facebook": "https://www.facebook.com/alromaizanuae/",
+   "instagram": "https://www.instagram.com/alromaizanuae/",
+   "x": "https://twitter.com/Alromaizanuae",
+   "tiktok": "https://www.tiktok.com/@alromaizanuae",
+   "whatsapp": "https://wa.me/971564099029"
+  },
+  "published_emails": [],
+  "tel_links": [],
+  "text_chars": 42958,
+  "status": "ok"
+ },
+ {
+  "domain": "vperfumes.com",
+  "robots": "robots.txt parsed",
+  "http_status": 200,
+  "fetch_ms": 254,
+  "final_url": "https://www.vperfumes.com/",
+  "title": "V Perfumes | Original Perfume in UAE, Saudi, Oman & Qatar",
+  "meta_description": "Shop 100% authentic luxury and niche perfumes at V Perfumes. Fast GCC delivery and cash on delivery across the UAE, Saudi Arabia, Oman and Qatar.\n",
+  "lang": "en",
+  "platforms": [],
+  "video_tags": 0,
+  "video_embeds": 0,
+  "mp4_refs": 0,
+  "img_count": 5,
+  "socials": {},
+  "published_emails": [],
+  "tel_links": [],
+  "text_chars": 64249,
+  "status": "ok"
+ },
+ {
+  "domain": "zabarjadjewelry.com",
+  "robots": "robots.txt parsed",
+  "http_status": 200,
+  "fetch_ms": 1078,
+  "final_url": "https://zabarjadjewelry.com/",
+  "title": "Zabarjad Jewellery – Jewellery Shop",
+  "meta_description": null,
+  "lang": "en-US",
+  "platforms": [
+   "woocommerce",
+   "wordpress"
+  ],
+  "video_tags": 0,
+  "video_embeds": 0,
+  "mp4_refs": 0,
+  "img_count": 10,
+  "socials": {},
+  "published_emails": [],
+  "tel_links": [],
+  "text_chars": 10670,
+  "status": "ok"
+ },
+ {
+  "domain": "diamondshouse.com",
+  "robots": "robots.txt parsed",
+  "http_status": 429,
+  "fetch_ms": 128,
+  "status": "unusable response (429, text/plain)"
+ },
+ {
+  "domain": "maisonroyaleqatar.com",
+  "robots": "robots.txt parsed",
+  "http_status": 200,
+  "fetch_ms": 561,
+  "final_url": "https://maisonroyaleqatar.com/",
+  "title": "Maison Royale | Fashion-Cosmetics-Perfumes",
+  "meta_description": "Buy your favorite branded perfumes, cosmetics, and dresses at Maison Royale. Enjoy cash on delivery under any purchase!\nQatar Al Dafna Doha Al Wakrah Al Khor ...",
+  "lang": "en",
+  "platforms": [],
+  "video_tags": 0,
+  "video_embeds": 0,
+  "mp4_refs": 0,
+  "img_count": 28,
+  "socials": {},
+  "published_emails": [],
+  "tel_links": [],
+  "text_chars": 286462,
+  "status": "ok"
+ },
+ {
+  "domain": "byeljoori.com",
+  "robots": "robots fetch error: ConnectError",
+  "status": "fetch error: ConnectError"
+ },
+ {
+  "domain": "alsughajewelry.com",
+  "robots": "robots fetch error: ConnectError",
+  "status": "fetch error: ConnectError"
+ }
+]

@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Import preview{% endblock %}
+{% block content %}
+<h1>Preview: {{ filename }}</h1>
+<div class="panel row">
+  <span class="badge ok">{{ counts.new }} new</span>
+  <span class="badge">{{ counts.duplicate }} already in list</span>
+  <span class="badge">{{ counts.duplicate_in_file }} repeated in file</span>
+  <span class="badge err">{{ counts.invalid }} invalid</span>
+  <span class="grow small muted">Columns used: {% for f, h in mapping.items() %}{{ h }} → {{ f }}{{ ', ' if not loop.last }}{% endfor %}</span>
+  <form method="post" action="/import/commit">
+    <input type="hidden" name="token" value="{{ token }}">
+    <button type="submit" {{ 'disabled' if not counts.new }}>Import {{ counts.new }} new lead{{ 's' if counts.new != 1 }}</button>
+  </form>
+  <a class="btn secondary" href="/import">Cancel</a>
+</div>
+<div class="table-wrap"><table>
+  <thead><tr><th>Line</th><th>Status</th><th>Name</th><th>Website / Instagram</th><th>Details</th></tr></thead>
+  <tbody>
+  {% for r in rows %}
+  <tr>
+    <td>{{ r.line }}</td>
+    <td>{% if r.status == 'new' %}<span class="badge ok">new</span>{% elif r.status == 'invalid' %}<span class="badge err">invalid</span>{% else %}<span class="badge">{{ r.status|replace('_', ' ') }}</span>{% endif %}</td>
+    <td>{{ r.data.get('name', '') }}</td>
+    <td class="small">{{ r.data.get('website', '') }} {{ r.data.get('instagram', '') }}</td>
+    <td class="small">{% if r.status != 'new' %}{{ r.message }}{% endif %}
+      {% if r.possible_duplicates %}<span class="badge warn">similar to {{ r.possible_duplicates|join('; ') }}</span>{% endif %}</td>
+  </tr>
+  {% endfor %}
+  </tbody>
+</table></div>
+{% endblock %}

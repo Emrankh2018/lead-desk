@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Duplicates{% endblock %}
+{% block content %}
+<h1>Possible duplicates</h1>
+<p class="muted">Exact matches (same website, Instagram handle or phone) are blocked automatically. These pairs only have similar names; nothing is merged until you choose.</p>
+{% for d in rows %}
+<div class="panel">
+  <div class="small muted">{{ d.reason }}</div>
+  <div class="grid" style="margin-block: 10px">
+    {% for b in [d.business, d.other] %}
+    <div>
+      <a href="/leads/{{ b.id }}"><strong>{{ b.name }}</strong></a> <span class="badge">{{ b.stage.name }}</span>
+      <div class="small">{{ b.domain or '—' }} · {{ '@' ~ b.instagram_handle if b.instagram_handle else '—' }} · {{ b.city or '—' }}</div>
+      <div class="small muted">{{ b.activities|length }} history entries · added {{ b.created_at|local_time }}</div>
+    </div>
+    {% endfor %}
+  </div>
+  <div class="row">
+    <form method="post" action="/duplicates/{{ d.id }}/merge"><input type="hidden" name="keep_id" value="{{ d.business.id }}"><button type="submit">Keep “{{ d.business.name }}”, merge the other into it</button></form>
+    <form method="post" action="/duplicates/{{ d.id }}/merge"><input type="hidden" name="keep_id" value="{{ d.other.id }}"><button type="submit">Keep “{{ d.other.name }}”, merge the other into it</button></form>
+    <form method="post" action="/duplicates/{{ d.id }}/dismiss"><button type="submit" class="secondary">Not a duplicate</button></form>
+  </div>
+</div>
+{% else %}
+<div class="panel">No open duplicate suggestions.</div>
+{% endfor %}
+{% endblock %}

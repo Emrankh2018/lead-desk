@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Import{% endblock %}
+{% block content %}
+<h1>Import a prospect list</h1>
+<form method="post" action="/import" enctype="multipart/form-data" class="panel row">
+  <label class="grow">CSV file (UTF-8, max 2 MB) <input type="file" name="file" accept=".csv,text/csv" required></label>
+  <label>Assign to profile
+    <select name="icp_id"><option value="">None</option>{% for i in icps %}<option value="{{ i.id }}">{{ i.name }}</option>{% endfor %}</select></label>
+  <button type="submit">Preview</button>
+</form>
+<div class="panel">
+  <h2 style="margin-top:0">Recognised column names</h2>
+  <p class="muted small">Headers are matched case-insensitively. Each row needs at least a name, website or Instagram handle. Nothing is saved until you confirm the preview.</p>
+  <div class="table-wrap"><table>
+    {% for field, names in aliases.items() %}<tr><th>{{ field }}</th><td class="small">{{ names|join(', ') }}</td></tr>{% endfor %}
+  </table></div>
+</div>
+{% endblock %}

@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% block title %}{{ lead.name }}{% endblock %}
+{% block content %}
+<div class="row" style="justify-content: space-between; margin-bottom: 12px;">
+  <div>
+    <h1 style="margin:0">{{ lead.name }}</h1>
+    <div class="muted small">
+      {% if lead.website %}<a href="{{ lead.website }}" target="_blank" rel="noopener noreferrer">{{ lead.domain }}</a>{% endif %}
+      {% if lead.instagram_handle %} · <a href="https://www.instagram.com/{{ lead.instagram_handle }}/" target="_blank" rel="noopener noreferrer">@{{ lead.instagram_handle }}</a>{% endif %}
+      {% if lead.linkedin_url %} · <a href="{{ lead.linkedin_url }}" target="_blank" rel="noopener noreferrer">LinkedIn</a>{% endif %}
+      · source: {{ lead.source }}{% if lead.source_ref %} ({{ lead.source_ref }}){% endif %}
+      · added {{ lead.created_at|local_time }}
+    </div>
+  </div>
+  <form method="post" action="/leads/{{ lead.id }}/stage" class="row">
+    <label>Stage
+      <select name="stage_id" data-autosubmit>
+        {% for s in stages %}<option value="{{ s.id }}" {{ 'selected' if s.id == lead.stage_id }}>{{ s.name }}</option>{% endfor %}
+      </select></label>
+    <noscript><button type="submit">Move</button></noscript>
+  </form>
+</div>
+
+{% if lead.do_not_contact %}<div class="flash error">Do not contact this business. Outreach logging is blocked.</div>{% endif %}
+{% for d in dupes %}
+  {% set other = d.other if d.business_id == lead.id else d.business %}
+  <div class="flash warn">Possible duplicate of <a href="/leads/{{ other.id }}">{{ other.name }}</a> ({{ d.reason }}). <a href="/duplicates">Review</a></div>
+{% endfor %}
+
+<div class="two-col">
+  <section>
+    <form method="post" action="/leads/{{ lead.id }}" class="panel">
+      <h2 style="margin-top:0">Details</h2>
+      {% set v = {'name': lead.name, 'website': lead.website or '', 'instagram': lead.instagram_handle or '',
+                  'linkedin_url': lead.linkedin_url or '', 'phone': lead.phone_e164 or '', 'email': lead.email_public or '',
+                  'email_source': lead.email_source_url or '', 'city': lead.city or '', 'country': lead.country or '',
+                  'industry': lead.industry or '', 'icp_id': lead.icp_id or '', 'deal_value': lead.deal_value if lead.deal_value is not none else '',
+                  'follow_up_on': lead.follow_up_on or ''} %}
+      {% include "_lead_fields.html" %}
+      <p><button type="submit">Save changes</button></p>
+    </form>
+
+    <div class="panel">
+      <h2 style="margin-top:0">Research &amp; score</h2>
+      <p class="muted">Not researched yet. Website research, evidence and explainable scoring arrive in the next milestone.</p>
+    </div>
+
+    <div class="panel row">
+      <form method="post" action="/leads/{{ lead.id }}/dnc">
+        <input type="hidden" name="value" value="{{ '0' if lead.do_not_contact else '1' }}">
+        <button type="submit" class="secondary">{{ 'Allow contact again' if lead.do_not_contact else 'Mark do-not-contact' }}</button>
+      </form>
+      <a class="btn secondary" href="/leads/{{ lead.id }}/delete">Delete…</a>
+    </div>
+  </section>
+
+  <section>
+    <form method="post" action="/leads/{{ lead.id }}/activity" class="panel">
+      <h2 style="margin-top:0">Log activity</h2>
+      <div class="row">
+        <label>Type <select name="kind">{% for k in kinds %}<option value="{{ k }}">{{ k|replace('_', ' ')|capitalize }}</option>{% endfor %}</select></label>
+        <label>Channel <select name="channel"><option value="">—</option>{% for c in channels %}<option value="{{ c }}">{{ c|replace('_', ' ')|capitalize }}</option>{% endfor %}</select></label>
+        <label>When (optional) <input type="datetime-local" name="occurred_at"></label>
+      </div>
+      <label style="margin-top:8px">What happened <textarea name="summary" required></textarea></label>
+      <div class="row" style="margin-top:8px">
+        <label>Set follow-up date <input type="date" name="follow_up_on"></label>
+        <button type="submit">Log</button>
+      </div>
+    </form>
+    <div class="panel">
+      <h2 style="margin-top:0">History</h2>
+      <ul class="timeline">
+        {% for a in lead.activities %}
+        <li><span class="badge">{{ a.kind|replace('_', ' ') }}</span>{% if a.channel %} <span class="badge">{{ a.channel }}</span>{% endif %}
+          <span class="small muted">{{ a.occurred_at|local_time }}</span>
+          <div style="white-space: pre-wrap">{{ a.summary }}</div></li>
+        {% endfor %}
+      </ul>
+    </div>
+  </section>
+</div>
+{% endblock %}

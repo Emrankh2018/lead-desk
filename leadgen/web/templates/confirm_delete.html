@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Delete {{ lead.name }}{% endblock %}
+{% block content %}
+<div class="panel" style="max-width: 560px">
+  <h1>Delete {{ lead.name }}?</h1>
+  <p>This permanently removes the lead and its {{ lead.activities|length }} history entries. The audit log keeps a record that it was deleted.
+     To stop contact but keep history, use <strong>Mark do-not-contact</strong> instead.</p>
+  <form method="post" action="/leads/{{ lead.id }}/delete" class="row">
+    <label class="grow">Type the business name to confirm <input type="text" name="confirm_name" autocomplete="off" required></label>
+    <button type="submit" class="danger">Delete permanently</button>
+    <a class="btn secondary" href="/leads/{{ lead.id }}">Cancel</a>
+  </form>
+</div>
+{% endblock %}

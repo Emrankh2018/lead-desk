@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Pipeline{% endblock %}
+{% block content %}
+<h1>Pipeline</h1>
+{% include "_filters.html" %}
+<div class="board">
+  {% for stage, cards in columns %}
+  <section class="column" aria-label="{{ stage.name }}">
+    <h3>{{ stage.name }} <span class="muted">{{ cards|length }}</span></h3>
+    {% for b in cards %}
+    <div class="card">
+      <a href="/leads/{{ b.id }}">{{ b.name }}</a>
+      <div class="small muted">{{ b.city or '' }}{% if b.industry %} · {{ b.industry }}{% endif %}</div>
+      {% if b.follow_up_on %}<div class="small"><span class="badge {{ 'warn' if b.follow_up_on <= today }}">follow up {{ b.follow_up_on }}</span></div>{% endif %}
+      <form method="post" action="/leads/{{ b.id }}/stage">
+        <input type="hidden" name="next" value="/pipeline">
+        <select name="stage_id" data-autosubmit aria-label="Move {{ b.name }}">
+          {% for s in stages %}<option value="{{ s.id }}" {{ 'selected' if s.id == b.stage_id }}>{{ s.name }}</option>{% endfor %}
+        </select>
+        <noscript><button type="submit">Move</button></noscript>
+      </form>
+    </div>
+    {% endfor %}
+  </section>
+  {% endfor %}
+</div>
+{% endblock %}

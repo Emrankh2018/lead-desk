@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block title %}Settings{% endblock %}
+{% block content %}
+<h1>Settings</h1>
+
+<h2>Customer profiles</h2>
+<div class="table-wrap"><table>
+  <thead><tr><th>Name</th><th>Countries</th><th>Cities</th><th>Industries</th><th>Active</th><th></th></tr></thead>
+  {% for i in icps %}
+  <tr><td>{{ i.name }}</td><td>{{ i.countries|join(', ') }}</td><td class="small">{{ i.cities|join(', ') }}</td>
+      <td class="small">{{ i.industries|join(', ') }}</td><td>{{ 'yes' if i.active else 'no' }}</td>
+      <td><a href="/settings?icp={{ i.id }}#icp-form">Edit</a></td></tr>
+  {% endfor %}
+</table></div>
+{% set e = edit_icp %}
+<form method="post" action="/settings/icps" class="panel" id="icp-form">
+  <h2 style="margin-top:0">{{ 'Edit “' ~ e.name ~ '”' if e else 'New profile' }}</h2>
+  {% if e %}<input type="hidden" name="id" value="{{ e.id }}">{% endif %}
+  <div class="grid">
+    <label>Name <input type="text" name="name" value="{{ e.name if e else '' }}" required></label>
+    <label>Countries (ISO codes, comma-separated) <input type="text" name="countries" value="{{ e.countries|join(', ') if e else '' }}"></label>
+    <label>Cities <input type="text" name="cities" value="{{ e.cities|join(', ') if e else '' }}"></label>
+    <label>Industries <input type="text" name="industries" value="{{ e.industries|join(', ') if e else '' }}"></label>
+    <label>Keywords <input type="text" name="keywords" value="{{ e.keywords|join(', ') if e else '' }}"></label>
+    <label class="inline"><input type="checkbox" name="active" value="1" {{ 'checked' if (not e or e.active) }}> Active</label>
+  </div>
+  <label style="margin-top:8px">Description <textarea name="description">{{ e.description if e else '' }}</textarea></label>
+  <label style="margin-top:8px">Size notes <textarea name="size_notes">{{ e.size_notes if e else '' }}</textarea></label>
+  <p><button type="submit">Save profile</button>{% if e %} <a class="btn secondary" href="/settings">New instead</a>{% endif %}</p>
+</form>
+
+<h2>Pipeline stages</h2>
+<div class="table-wrap"><table>
+  <thead><tr><th>Order</th><th>Name</th><th>Outcome</th><th>Leads</th><th></th></tr></thead>
+  {% for s in stages %}
+  <tr>
+    <td class="row">
+      <form method="post" action="/settings/stages/{{ s.id }}"><input type="hidden" name="action" value="up"><button class="secondary" type="submit" aria-label="Move {{ s.name }} up" {{ 'disabled' if loop.first }}>↑</button></form>
+      <form method="post" action="/settings/stages/{{ s.id }}"><input type="hidden" name="action" value="down"><button class="secondary" type="submit" aria-label="Move {{ s.name }} down" {{ 'disabled' if loop.last }}>↓</button></form>
+    </td>
+    <td><form method="post" action="/settings/stages/{{ s.id }}" class="row"><input type="hidden" name="action" value="rename">
+        <input type="text" name="name" value="{{ s.name }}" aria-label="Stage name"><button class="secondary" type="submit">Rename</button></form></td>
+    <td><form method="post" action="/settings/stages/{{ s.id }}"><input type="hidden" name="action" value="outcome">
+        <select name="outcome" data-autosubmit aria-label="Outcome for {{ s.name }}">
+          <option value="" {{ 'selected' if not s.outcome }}>open</option>
+          <option value="won" {{ 'selected' if s.outcome == 'won' }}>won</option>
+          <option value="lost" {{ 'selected' if s.outcome == 'lost' }}>lost</option>
+        </select></form></td>
+    <td>{{ stage_counts.get(s.id, 0) }}</td>
+    <td>{% if not stage_counts.get(s.id) %}<form method="post" action="/settings/stages/{{ s.id }}"><input type="hidden" name="action" value="delete"><button class="secondary" type="submit">Delete</button></form>{% endif %}</td>
+  </tr>
+  {% endfor %}
+</table></div>
+<form method="post" action="/settings/stages" class="panel row" style="margin-top:12px">
+  <label class="grow">New stage name <input type="text" name="name" required></label>
+  <button type="submit">Add stage</button>
+</form>
+
+<h2>Offers</h2>
+{% for o in offers %}
+<form method="post" action="/settings/offers" class="panel row">
+  <input type="hidden" name="id" value="{{ o.id }}">
+  <label>Name <input type="text" name="name" value="{{ o.name }}" required></label>
+  <label>Price <input type="text" name="price" value="{{ o.price if o.price is not none else '' }}" size="8" placeholder="quote"></label>
+  <label>Currency <input type="text" name="currency" value="{{ o.currency }}" size="4"></label>
+  <label class="grow">Description <input type="text" name="description" value="{{ o.description }}"></label>
+  <label class="inline"><input type="checkbox" name="active" value="1" {{ 'checked' if o.active }}> Active</label>
+  <button type="submit" class="secondary">Save</button>
+</form>
+{% endfor %}
+<form method="post" action="/settings/offers" class="panel row">
+  <label>New offer <input type="text" name="name" required></label>
+  <label>Price <input type="text" name="price" size="8"></label>
+  <label>Currency <input type="text" name="currency" value="QAR" size="4"></label>
+  <label class="grow">Description <input type="text" name="description"></label>
+  <input type="hidden" name="active" value="1">
+  <button type="submit">Add offer</button>
+</form>
+{% endblock %}

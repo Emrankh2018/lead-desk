@@ -1,0 +1,36 @@
+{
+ "qwen3:4b-instruct-2507-q4_K_M": [
+  {
+   "fixture": "ahmedalmaghribi.com",
+   "error": "HTTPStatusError: Server error '500 Internal Server Error' for url 'http://127.0.0.1:11434/api/chat'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/500"
+  },
+  {
+   "fixture": "alromaizan.com",
+   "error": "HTTPStatusError: Server error '500 Internal Server Error' for url 'http://127.0.0.1:11434/api/chat'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/500"
+  },
+  {
+   "fixture": "vperfumes.com",
+   "error": "HTTPStatusError: Server error '500 Internal Server Error' for url 'http://127.0.0.1:11434/api/chat'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/500"
+  },
+  {
+   "fixture": "zabarjadjewelry.com",
+   "error": "HTTPStatusError: Server error '500 Internal Server Error' for url 'http://127.0.0.1:11434/api/chat'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/500"
+  },
+  {
+   "fixture": "maisonroyaleqatar.com",
+   "error": "HTTPStatusError: Server error '500 Internal Server Error' for url 'http://127.0.0.1:11434/api/chat'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/500"
+  },
+  {
+   "fixture": "synthetic-empty",
+   "error": "HTTPStatusError: Server error '500 Internal Server Error' for url 'http://127.0.0.1:11434/api/chat'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/500"
+  },
+  {
+   "fixture": "synthetic-injection",
+   "error": "HTTPStatusError: Server error '500 Internal Server Error' for url 'http://127.0.0.1:11434/api/chat'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/500"
+  },
+  {
+   "fixture": "synthetic-arabic",
+   "error": "HTTPStatusError: Server error '500 Internal Server Error' for url 'http://127.0.0.1:11434/api/chat'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/500"
+  }
+ ]
+}

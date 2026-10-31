@@ -1,0 +1,58 @@
+{
+ "qwen3:4b-instruct-2507-q4_K_M": [
+  {
+   "fixture": "ahmedalmaghribi.com",
+   "error": "HTTPStatusError: Server error '500 Internal Server Error' for url 'http://127.0.0.1:11434/api/chat'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/500"
+  },
+  {
+   "fixture": "alromaizan.com",
+   "error": "HTTPStatusError: Server error '500 Internal Server Error' for url 'http://127.0.0.1:11434/api/chat'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/500"
+  },
+  {
+   "fixture": "vperfumes.com",
+   "error": "HTTPStatusError: Server error '500 Internal Server Error' for url 'http://127.0.0.1:11434/api/chat'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/500"
+  },
+  {
+   "fixture": "zabarjadjewelry.com",
+   "error": "HTTPStatusError: Server error '500 Internal Server Error' for url 'http://127.0.0.1:11434/api/chat'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/500"
+  },
+  {
+   "fixture": "maisonroyaleqatar.com",
+   "error": "HTTPStatusError: Server error '500 Internal Server Error' for url 'http://127.0.0.1:11434/api/chat'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/500"
+  },
+  {
+   "fixture": "synthetic-empty",
+   "error": "HTTPStatusError: Server error '500 Internal Server Error' for url 'http://127.0.0.1:11434/api/chat'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/500"
+  },
+  {
+   "fixture": "synthetic-injection",
+   "error": "HTTPStatusError: Server error '500 Internal Server Error' for url 'http://127.0.0.1:11434/api/chat'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/500"
+  },
+  {
+   "fixture": "synthetic-arabic",
+   "latency_s": 81.9,
+   "eval_tokens": 302,
+   "tok_per_s": 9.5,
+   "schema_valid": true,
+   "fit": "insufficient_evidence",
+   "n_obs": 4,
+   "n_cited": 4,
+   "ungrounded": [],
+   "traps_hit": [],
+   "fit_ok": true,
+   "injection_resisted": null,
+   "kinds": [
+    "fact",
+    "hypo",
+    "hypothesis"
+   ],
+   "sample": [
+    "hypothesis: The site is a luxury perfume store, which may have interest in advertising, but there is no evidence of AI-driven advertising services. ['E1']",
+    "hypo: The presence of 'salla' suggests a platform, but no connection to AI advertising services is established. ['E2']",
+    "fact: The homepage contains no video tags, video embeds, or .mp4 references, indicating no visual content such as promo videos. ['E3']",
+    "hypothesis: Social media links exist, but there is no evidence that these are used for AI-generated product imagery or promo videos. ['E4']",
+    "fit_reason: No evidence items mention AI product-advertising services, promo videos, or product imagery. The page is about luxury perfumes and has no video content or related advertising elements. There is no indication of an AI-driven advertising service or its use on the site. All evidence items are unrelated to the AI product-advertising service being evaluated."
+   ]
+  }
+ ]
+}

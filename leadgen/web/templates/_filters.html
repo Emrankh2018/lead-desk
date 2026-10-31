@@ -1,0 +1,27 @@
+<form method="get" class="panel row" role="search">
+  <label class="grow">Search <input type="search" name="q" value="{{ flt.q }}" placeholder="Name, website or Instagram"></label>
+  <label>Stage
+    <select name="stage_id"><option value="">All</option>
+      {% for s in stages %}<option value="{{ s.id }}" {{ 'selected' if flt.stage_id == s.id }}>{{ s.name }}</option>{% endfor %}
+    </select></label>
+  <label>Profile
+    <select name="icp_id"><option value="">All</option>
+      {% for i in icps %}<option value="{{ i.id }}" {{ 'selected' if flt.icp_id == i.id }}>{{ i.name }}</option>{% endfor %}
+    </select></label>
+  <label>City <input type="text" name="city" value="{{ flt.city }}" size="10"></label>
+  <label>Industry <input type="text" name="industry" value="{{ flt.industry }}" size="10"></label>
+  <label>Do-not-contact
+    <select name="dnc">
+      <option value="exclude" {{ 'selected' if flt.dnc == 'exclude' }}>Hide</option>
+      <option value="include" {{ 'selected' if flt.dnc == 'include' }}>Show</option>
+      <option value="only" {{ 'selected' if flt.dnc == 'only' }}>Only</option>
+    </select></label>
+  <label>Sort
+    <select name="sort">
+      {% for k, v in [('updated','Recently updated'),('created','Recently added'),('name','Name'),('follow_up','Follow-up date'),('score','Score')] %}
+      <option value="{{ k }}" {{ 'selected' if flt.sort == k }}>{{ v }}</option>{% endfor %}
+    </select></label>
+  <label class="inline"><input type="checkbox" name="due" value="1" {{ 'checked' if flt.follow_up_due }}> Follow-up due</label>
+  <button type="submit">Apply</button>
+  <a class="btn secondary" href="{{ request.url.path }}">Reset</a>
+</form>

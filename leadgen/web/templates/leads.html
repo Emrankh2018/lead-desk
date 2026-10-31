@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Leads{% endblock %}
+{% block content %}
+<div class="row" style="justify-content: space-between; margin-bottom: 12px;">
+  <h1 style="margin:0">Leads <span class="muted small">({{ leads|length }})</span></h1>
+  <div class="row">
+    {% if open_dupes %}<a class="btn secondary" href="/duplicates">{{ open_dupes }} possible duplicate{{ 's' if open_dupes != 1 }}</a>{% endif %}
+    <a class="btn secondary" href="/export?format=csv{{ '&' ~ export_query if export_query }}">Export CSV</a>
+    <a class="btn secondary" href="/export?format=xlsx{{ '&' ~ export_query if export_query }}">Export Excel</a>
+    <a class="btn" href="/leads/new">Add lead</a>
+  </div>
+</div>
+{% include "_filters.html" %}
+{% if leads %}
+<div class="table-wrap">
+<table>
+  <thead><tr><th>Business</th><th>Stage</th><th>Location</th><th>Industry</th><th>Contact on file</th><th>Follow-up</th><th>Score</th></tr></thead>
+  <tbody>
+  {% for b in leads %}
+    <tr>
+      <td><a href="/leads/{{ b.id }}">{{ b.name }}</a>
+        {% if b.do_not_contact %} <span class="badge err">do not contact</span>{% endif %}
+        <div class="small muted">{{ b.domain or '' }}{% if b.instagram_handle %} @{{ b.instagram_handle }}{% endif %}</div></td>
+      <td><span class="badge">{{ b.stage.name }}</span></td>
+      <td>{{ b.city or '' }}{% if b.country %} <span class="muted">{{ b.country }}</span>{% endif %}</td>
+      <td>{{ b.industry or '' }}</td>
+      <td class="small">{% if b.email_public %}✉ {{ b.email_public }}<br>{% endif %}{% if b.phone_e164 %}☎ {{ b.phone_e164 }}{% endif %}
+        {% if not b.email_public and not b.phone_e164 %}<span class="muted">none verified</span>{% endif %}</td>
+      <td>{% if b.follow_up_on %}<span class="badge {{ 'warn' if b.follow_up_on <= today }}">{{ b.follow_up_on }}</span>{% endif %}</td>
+      <td>{{ b.score if b.score is not none else '—' }}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+</div>
+{% else %}
+<div class="panel">No leads match. <a href="/leads/new">Add one</a> or <a href="/import">import a CSV</a>.</div>
+{% endif %}
+{% endblock %}

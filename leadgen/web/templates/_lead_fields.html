@@ -1,0 +1,20 @@
+{# expects `v` (mapping of current values), `icps` #}
+<div class="grid">
+  <label>Business name <input type="text" name="name" value="{{ v.get('name', '') }}" maxlength="200"></label>
+  <label>Website <input type="text" name="website" value="{{ v.get('website', '') }}" placeholder="example.qa"></label>
+  <label>Instagram <input type="text" name="instagram" value="{{ v.get('instagram', '') }}" placeholder="@handle or profile URL"></label>
+  <label>LinkedIn URL <input type="text" name="linkedin_url" value="{{ v.get('linkedin_url', '') }}"></label>
+  <label>Public phone <input type="text" name="phone" value="{{ v.get('phone', '') }}" placeholder="+974 …"></label>
+  <label>Public email <input type="text" name="email" value="{{ v.get('email', '') }}"></label>
+  <label>Where was this email published? <input type="text" name="email_source" value="{{ v.get('email_source', '') }}" placeholder="URL of the page that shows it"></label>
+  <label>City <input type="text" name="city" value="{{ v.get('city', '') }}"></label>
+  <label>Country (ISO code) <input type="text" name="country" value="{{ v.get('country', '') }}" maxlength="2" placeholder="QA"></label>
+  <label>Industry <input type="text" name="industry" value="{{ v.get('industry', '') }}" placeholder="perfume, skincare…"></label>
+  <label>Customer profile
+    <select name="icp_id"><option value="">None</option>
+      {% for i in icps %}<option value="{{ i.id }}" {{ 'selected' if v.get('icp_id')|string == i.id|string }}>{{ i.name }}</option>{% endfor %}
+    </select></label>
+  <label>Potential deal value (QAR) <input type="text" name="deal_value" value="{{ v.get('deal_value', '') }}" inputmode="decimal"></label>
+  <label>Follow-up date <input type="date" name="follow_up_on" value="{{ v.get('follow_up_on', '') }}"></label>
+</div>
+<p class="small muted">Only enter contact details the business published itself. Never guess an email address.</p>

@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Add lead{% endblock %}
+{% block content %}
+<h1>Add lead</h1>
+{% if error %}<div class="flash error" role="alert">{{ error }}</div>{% endif %}
+{% if duplicates %}
+<div class="panel"><strong>Already in your list:</strong>
+  <ul>{% for m in duplicates %}<li><a href="/leads/{{ m.business.id }}">{{ m.business.name }}</a> — {{ m.reason }}</li>{% endfor %}</ul>
+</div>
+{% endif %}
+<form method="post" action="/leads" class="panel">
+  {% set v = form %}
+  {% include "_lead_fields.html" %}
+  <label style="margin-top:12px">First note (optional) <textarea name="notes">{{ form.get('notes', '') }}</textarea></label>
+  <p><button type="submit">Save lead</button> <a class="btn secondary" href="/leads">Cancel</a></p>
+</form>
+{% endblock %}

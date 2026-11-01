@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% block title %}Leads{% endblock %} · Lead Desk</title>
   <link rel="stylesheet" href="/static/app.css">
+  {% block head %}{% endblock %}
 </head>
 <body>
 {% if user %}
@@ -15,6 +16,7 @@
     <a href="/leads" class="{{ 'active' if path.startswith('/leads') }}">Leads</a>
     <a href="/pipeline" class="{{ 'active' if path.startswith('/pipeline') }}">Pipeline</a>
     <a href="/research" class="{{ 'active' if path.startswith('/research') }}">Research</a>
+    <a href="/outreach" class="{{ 'active' if path.startswith('/outreach') }}">Outreach</a>
     <a href="/import" class="{{ 'active' if path.startswith('/import') }}">Import</a>
     <a href="/duplicates" class="{{ 'active' if path.startswith('/duplicates') }}">Duplicates</a>
     <a href="/settings" class="{{ 'active' if path.startswith('/settings') }}">Settings</a>
@@ -30,6 +32,11 @@
 <script>
   // Selects marked data-autosubmit submit their form on change (pipeline stage moves).
   document.querySelectorAll('select[data-autosubmit]').forEach(s => s.addEventListener('change', () => s.form.submit()));
+  // Copy buttons: data-copy points at the id of a textarea/input whose value is copied to the clipboard.
+  document.querySelectorAll('button[data-copy]').forEach(b => b.addEventListener('click', async () => {
+    const el = document.getElementById(b.dataset.copy);
+    try { await navigator.clipboard.writeText(el.value); b.textContent = 'Copied'; } catch { el.select(); }
+  }));
 </script>
 </body>
 </html>

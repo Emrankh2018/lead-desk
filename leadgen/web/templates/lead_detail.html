@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% block title %}{{ lead.name }}{% endblock %}
+{% block head %}{% if ai_pending %}<meta http-equiv="refresh" content="10">{% endif %}{% endblock %}
 {% block content %}
 <div class="row" style="justify-content: space-between; margin-bottom: 12px;">
   <div>
@@ -99,6 +100,82 @@
           <button type="submit" class="secondary">Add</button>
         </div>
       </form>
+    </div>
+
+    <div class="panel" id="ai">
+      <h2 style="margin-top:0">Opportunity ideas <span class="badge">AI · hypotheses</span></h2>
+      <p class="small muted">{{ ai_msg }}. The model only reads the evidence above; every idea must cite it, and anything citing missing evidence or numbers it didn't see is removed.</p>
+      {% if insight and insight.status == 'pending' %}
+        <p class="flash warn">Analysing… this page refreshes every 10 seconds.</p>
+      {% elif insight and insight.status == 'failed' %}
+        <p class="flash error">Last attempt failed: {{ insight.error }}</p>
+      {% elif insight %}
+        {% if insight.content.insufficient %}<p class="flash warn">The model judged the evidence too thin. Research the website or add your own observations first.</p>{% endif %}
+        <ul class="timeline">
+          {% for h in insight.content.hypotheses %}
+          <li>{{ h.text }} {% for eid in h.evidence_ids %}<a href="#ev-{{ eid }}">[E{{ eid }}]</a> {% endfor %}</li>
+          {% endfor %}
+        </ul>
+        {% if insight.content.angle %}<p><strong>Suggested angle:</strong> {{ insight.content.angle }}</p>{% endif %}
+        {% if insight.dropped %}<details class="small muted"><summary>{{ insight.dropped|length }} idea(s) removed by checks</summary>
+          <ul>{% for d in insight.dropped %}<li>“{{ d.text }}” — {{ d.reason }}</li>{% endfor %}</ul></details>{% endif %}
+        <p class="small muted">{{ insight.model }} · {{ (insight.latency_ms or 0) // 1000 }} s · {{ insight.created_at|local_time }}</p>
+      {% endif %}
+      <form method="post" action="/leads/{{ lead.id }}/insight"><button type="submit" class="secondary" {{ 'disabled' if not ai_ok or (insight and insight.status == 'pending') }}>{{ 'Regenerate ideas' if insight else 'Generate opportunity ideas' }}</button></form>
+
+      <h2 id="drafts">Outreach drafts</h2>
+      {% if lead.do_not_contact %}
+        <p class="muted">Do-not-contact: no drafts.</p>
+      {% else %}
+      {% if not sender_set %}<p class="flash warn">Add your name and studio in <a href="/settings#sender">Settings → Sender profile</a> so drafts can sign off properly.</p>{% endif %}
+      <form method="post" action="/leads/{{ lead.id }}/drafts" class="row">
+        <label>Channel <select name="channel">{% for c in draft_channels %}<option value="{{ c }}">{{ {'email': 'Email', 'instagram': 'Instagram DM', 'linkedin': 'LinkedIn', 'followup': 'Follow-up'}[c] }}</option>{% endfor %}</select></label>
+        <button type="submit" name="mode" value="ai" {{ 'disabled' if not ai_ok }}>Draft with AI</button>
+        <button type="submit" name="mode" value="template" class="secondary">Template draft (no AI)</button>
+      </form>
+      {% endif %}
+      {% for d in drafts %}
+      <div class="panel" id="draft-{{ d.id }}" style="margin-top:12px">
+        <div class="row" style="justify-content: space-between">
+          <strong>{{ d.channel|capitalize }} draft #{{ d.id }}</strong>
+          <span><span class="badge {{ {'approved': 'ok', 'sent': 'ok', 'failed': 'err', 'pending': 'warn'}.get(d.status, '') }}">{{ d.status }}</span>
+            <span class="small muted">{{ 'template' if d.source == 'template' else d.model }}</span></span>
+        </div>
+        {% if d.status == 'pending' %}<p class="muted">Writing… this page refreshes every 10 seconds.</p>
+        {% elif d.status == 'failed' %}<p class="flash error">{{ d.error }}</p>
+        {% else %}
+          {% for w in d.warnings %}<div class="flash warn small">{{ w }}</div>{% endfor %}
+          <form method="post" action="/drafts/{{ d.id }}">
+            {% if d.channel in ('email', 'followup') %}<label>Subject <input type="text" name="subject" id="subj-{{ d.id }}" value="{{ d.subject or '' }}" {{ 'readonly' if d.status == 'sent' }}></label>{% endif %}
+            <label>Message <textarea name="body" id="body-{{ d.id }}" rows="9" {{ 'readonly' if d.status == 'sent' }}>{{ d.body }}</textarea></label>
+            {% if d.status != 'sent' %}
+            <div class="row" style="margin-top:8px">
+              <button type="submit" name="action" value="save" class="secondary">Save edits</button>
+              {% if d.status == 'draft' %}<button type="submit" name="action" value="approve">Approve</button>{% endif %}
+              <button type="submit" name="action" value="discard" class="secondary">Discard</button>
+            </div>
+            {% endif %}
+          </form>
+          {% if d.status == 'approved' %}
+          <div class="row" style="margin-top:8px">
+            <button type="button" class="secondary" data-copy="body-{{ d.id }}">Copy message</button>
+            {% if d.channel in ('email', 'followup') and lead.email_public %}
+              <a class="btn secondary" href="mailto:{{ lead.email_public }}?subject={{ (d.subject or '')|urlencode }}&body={{ d.body|urlencode }}">Open in my email app</a>
+            {% endif %}
+            {% if d.channel == 'instagram' and lead.instagram_handle %}<a class="btn secondary" href="https://www.instagram.com/{{ lead.instagram_handle }}/" target="_blank" rel="noopener noreferrer">Open their Instagram</a>{% endif %}
+            {% if d.channel == 'linkedin' and lead.linkedin_url %}<a class="btn secondary" href="{{ lead.linkedin_url }}" target="_blank" rel="noopener noreferrer">Open their LinkedIn</a>{% endif %}
+          </div>
+          <form method="post" action="/drafts/{{ d.id }}" class="row" style="margin-top:8px">
+            <input type="hidden" name="action" value="sent">
+            <label>Sent via <select name="sent_channel">{% for c in channels %}<option value="{{ c }}" {{ 'selected' if c == (d.channel if d.channel != 'followup' else 'email') }}>{{ c|replace('_', ' ')|capitalize }}</option>{% endfor %}</select></label>
+            <label>Follow up on <input type="date" name="follow_up_on"></label>
+            <button type="submit">Mark as sent</button>
+          </form>
+          <p class="small muted">The app never sends messages. Send it yourself, then mark it as sent so it's logged.</p>
+          {% elif d.status == 'sent' %}<p class="small muted">Marked as sent {{ d.sent_at|local_time }}.</p>{% endif %}
+        {% endif %}
+      </div>
+      {% endfor %}
     </div>
 
     <div class="panel row">

@@ -41,5 +41,33 @@
   lower them manually or via weights; JS-rendered stores may show "no store markers"; social activity is not checked
   automatically (use "Add your own observation").
 - Not visually verified by screenshot (pane hidden). Not committed.
+- **Owner decision 2026-11-01 (M4 scope):** free sources only. No Google Places and no billing account. Places is
+  deferred ("banked") until the owner has budget and approves it. M4 = OpenStreetMap + other no-cost, permitted sources.
 - Next (awaiting owner go-ahead): M3 — AI layer: provider interface (Ollama qwen3 4B default), labelled hypotheses
   grounded in evidence ids, outreach drafts (email/LinkedIn/Instagram/follow-up) with approval, eval harness.
+- M2 committed as b17e305.
+
+## 2026-11-01 — M3 AI ideas and outreach drafts (done, local)
+- Built: `leadgen/ai/` — replaceable provider (Ollama default, OpenAI-compatible, none), guards, tasks (insights,
+  drafts, template fallback), single background worker; routes for insight, drafts, approve / discard / mark-as-sent,
+  Outreach page, sender profile, AI status in Settings; `leadgen/evals.py` + `cli eval`; migration `0003` (new tables only).
+- Safety design: model sees only stored evidence (page quotes marked untrusted) and has no tools. Insights are dropped
+  unless they cite real evidence; numbers and budget/intent claims must appear in the software-written evidence
+  statement (quotes can't ground them). Drafts are checked for unknown contacts/links/phones, non-offer prices,
+  garbled prices, overclaims, placeholders, length, naming the business. Nothing is ever sent by the app.
+- Eval (qwen3 4B, CPU, 12 calls, reports in `evals/results/`):
+  - p1: 12/12 valid, 0 leaks, 3/7 drafts clean (4 didn't name the business), median 43 s.
+  - p2: names fixed (6/7 clean) but the "mention a fact" rule made the model invent one for an unresearched lead,
+    and 1 injection-marker hit.
+  - p3 (current): 12/12 valid, 0 leaks, thin evidence honest, 6/7 drafts clean, prices 7/7, median 21 s, max 53 s.
+- Fixed from eval/browser runs: numbers grounded by untrusted quotes, invented facts with no evidence, unsupported
+  intent claims, literal "\n", "QAR -450" (now repaired), empty email subject (default + warning), contradictory
+  "insufficient" flag, worker-thread race.
+- Tests: `uv run pytest -q` → 87 passed (fake provider; no model needed).
+- Browser run with the real model on Maison Royale: 5 evidence-linked ideas; AI email draft personalised, correct price,
+  signed; approve shows Copy (no mailto because no public email on record). Console clean.
+- Known limits: 4B wording is sometimes stiff ("Thank you for sharing…" on a first contact); LinkedIn drafts often
+  exceed the 300-char note limit (flagged); ideas are generic marketing hypotheses, not deep insight. Review every draft.
+- Not committed. Mark-as-sent tested in automated tests, not clicked in the browser on real data.
+- Next (awaiting owner go-ahead): M4 — free discovery only (OpenStreetMap search by country/city/category, website-link
+  suggestions, fast bulk add of Instagram handles/URLs). Google Places stays banked.

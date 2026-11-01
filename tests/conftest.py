@@ -7,6 +7,7 @@ from leadgen.db import Database
 from leadgen.migrate import upgrade
 from leadgen.services.seed import seed_defaults
 from leadgen.web.app import create_app
+from tests.ai_helpers import FakeProvider
 
 TEST_USER, TEST_PASSWORD = "owner", "test-password-123"
 
@@ -29,6 +30,7 @@ def session(settings):
 @pytest.fixture
 def client(settings):
     app = create_app(settings)
+    app.state.ai_provider_factory = lambda: FakeProvider(available=False)  # tests never call a real model
     with TestClient(app, base_url="http://testserver") as c:
         with app.state.db.sessionmaker() as s:
             set_password(s, TEST_USER, TEST_PASSWORD)

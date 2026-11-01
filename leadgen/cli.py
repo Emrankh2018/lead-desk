@@ -7,6 +7,7 @@
 """
 import argparse
 import getpass
+import json
 import sqlite3
 import sys
 from datetime import datetime
@@ -25,6 +26,8 @@ def main(argv: list[str] | None = None) -> int:
     pw.add_argument("username")
     sub.add_parser("backup")
     sub.add_parser("dev-user")
+    ev = sub.add_parser("eval")
+    ev.add_argument("--quick", action="store_true", help="3 cases, 1 draft each")
     args = parser.parse_args(argv)
     settings = get_settings()
 
@@ -33,6 +36,19 @@ def main(argv: list[str] | None = None) -> int:
         from leadgen.web.app import create_app
         # Bound to loopback only: exposing it on a network needs HTTPS and a deliberate decision.
         uvicorn.run(create_app(settings), host="127.0.0.1", port=args.port)
+        return 0
+
+    if args.cmd == "eval":
+        from leadgen import evals
+        from leadgen.ai.provider import make_provider
+        provider = make_provider(settings)
+        ok, msg = provider.status()
+        if not ok:
+            print(f"AI unavailable: {msg}", file=sys.stderr)
+            return 1
+        report = evals.run(provider, quick=args.quick)
+        print(json.dumps(report["summary"], indent=1))
+        print(f"Report: {report['path']}")
         return 0
 
     settings.data_dir.mkdir(parents=True, exist_ok=True)

@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Outreach{% endblock %}
+{% block head %}{% if ai_pending %}<meta http-equiv="refresh" content="15">{% endif %}{% endblock %}
+{% block content %}
+<h1>Outreach drafts</h1>
+<p class="small muted">{{ ai_msg }}{% if ai_pending %} · {{ ai_pending }} AI job(s) running or queued{% endif %}. Drafts are never sent by the app.</p>
+<div class="table-wrap"><table>
+  <thead><tr><th>Lead</th><th>Channel</th><th>Status</th><th>Checks</th><th>Preview</th></tr></thead>
+  {% for d in rows %}
+  <tr><td><a href="/leads/{{ d.business_id }}#draft-{{ d.id }}">{{ d.business.name }}</a></td>
+      <td>{{ d.channel }}</td>
+      <td><span class="badge {{ {'approved': 'ok', 'pending': 'warn'}.get(d.status, '') }}">{{ 'approved — send it' if d.status == 'approved' else d.status }}</span></td>
+      <td>{% if d.warnings %}<span class="badge warn">{{ d.warnings|length }} warning{{ 's' if d.warnings|length != 1 }}</span>{% elif d.status != 'pending' %}<span class="badge ok">ok</span>{% endif %}</td>
+      <td class="small">{{ d.body[:140] }}{{ '…' if d.body|length > 140 }}</td></tr>
+  {% else %}
+  <tr><td colspan="5" class="muted">No open drafts. Create one from a lead's page.</td></tr>
+  {% endfor %}
+</table></div>
+{% endblock %}

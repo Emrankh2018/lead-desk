@@ -8,6 +8,7 @@ from fastapi.responses import RedirectResponse, Response
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
+from leadgen.ai.tasks import get_sender
 from leadgen.models import AuditLog, Business, IcpProfile, Offer, PipelineStage
 from leadgen.research import scoring
 from leadgen.research.service import rescore_all
@@ -106,7 +107,8 @@ def settings_page(request: Request, session: Session = SessionDep, user: str = U
     counts = dict(session.execute(select(Business.stage_id, func.count()).group_by(Business.stage_id)).all())
     edit_icp = session.get(IcpProfile, _int_or_none(request.query_params.get("icp")) or 0)
     return render(request, "settings.html", stage_counts=counts, edit_icp=edit_icp, criteria=scoring.CRITERIA,
-                  weights_for=scoring.weights_for,
+                  weights_for=scoring.weights_for, sender=get_sender(session), ai_status=request.app.state.ai.status(),
+                  ai_settings=request.app.state.settings,
                   offers=list(session.scalars(select(Offer).order_by(Offer.id))), **_lookups(session))
 
 

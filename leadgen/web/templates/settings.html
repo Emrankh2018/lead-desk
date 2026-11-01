@@ -29,6 +29,28 @@
   <p><button type="submit">Save profile</button>{% if e %} <a class="btn secondary" href="/settings">New instead</a>{% endif %}</p>
 </form>
 
+<h2 id="sender">Sender profile</h2>
+<form method="post" action="/settings/sender" class="panel">
+  <p class="small muted">Used to sign drafts. Contact details here are the only ones drafts may contain besides the lead's own.</p>
+  <div class="grid">
+    <label>Your name <input type="text" name="your_name" value="{{ sender.your_name }}"></label>
+    <label>Studio / business name <input type="text" name="business_name" value="{{ sender.business_name }}"></label>
+    <label>Your email <input type="text" name="email" value="{{ sender.email }}"></label>
+    <label>Your phone / WhatsApp <input type="text" name="phone" value="{{ sender.phone }}"></label>
+    <label>Your Instagram <input type="text" name="instagram" value="{{ sender.instagram }}" placeholder="@handle"></label>
+    <label>Portfolio link <input type="text" name="portfolio_url" value="{{ sender.portfolio_url }}"></label>
+  </div>
+  <label style="margin-top:8px">Email signature <textarea name="signature">{{ sender.signature }}</textarea></label>
+  <p><button type="submit" class="secondary">Save sender profile</button></p>
+</form>
+
+<h2 id="ai-settings">AI model</h2>
+<div class="panel small">
+  <p><span class="badge {{ 'ok' if ai_status[0] else 'err' }}">{{ 'available' if ai_status[0] else 'unavailable' }}</span> {{ ai_status[1] }}</p>
+  <p class="muted">Provider: {{ ai_settings.ai_provider }} · model: {{ ai_settings.ai_model }} · GPU layers: {{ ai_settings.ai_num_gpu if ai_settings.ai_num_gpu is not none else 'auto' }}.
+    Change with LEADGEN_AI_PROVIDER / LEADGEN_AI_MODEL / LEADGEN_AI_NUM_GPU in .env and restart. Paid AI services stay off unless you decide otherwise.</p>
+</div>
+
 <h2 id="scoring">Scoring weights</h2>
 <p class="small muted">Each criterion adds points only when there is evidence for it. Set a weight to 0 to ignore a criterion. Saving rescores every lead (no websites are fetched).</p>
 {% for i in icps %}

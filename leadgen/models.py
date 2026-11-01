@@ -165,6 +165,53 @@ class Evidence(Base):
     created_by: Mapped[str] = mapped_column(String(20), default="research")  # research | user
 
 
+class AppSetting(Base):
+    """Small key/value store for user preferences such as the sender profile used in drafts."""
+    __tablename__ = "app_settings"
+    key: Mapped[str] = mapped_column(String(60), primary_key=True)
+    value: Mapped[dict] = mapped_column(JSON, default=dict)
+
+
+class AiInsight(Base):
+    """AI-written opportunity hypotheses for a lead. Every item cites evidence ids; uncited items are dropped."""
+    __tablename__ = "ai_insights"
+    id: Mapped[int] = mapped_column(primary_key=True)
+    business_id: Mapped[int] = mapped_column(ForeignKey("businesses.id", ondelete="CASCADE"), index=True)
+    status: Mapped[str] = mapped_column(String(12), default="pending")  # pending | ready | failed
+    content: Mapped[dict] = mapped_column(JSON, default=dict)  # {hypotheses: [{text, evidence_ids}], angle, insufficient}
+    dropped: Mapped[list] = mapped_column(JSON, default=list)  # items removed by validation, with the reason
+    error: Mapped[str | None] = mapped_column(Text)
+    provider: Mapped[str | None] = mapped_column(String(40))
+    model: Mapped[str | None] = mapped_column(String(120))
+    prompt_version: Mapped[str | None] = mapped_column(String(20))
+    latency_ms: Mapped[int | None] = mapped_column(Integer)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)
+
+
+class OutreachDraft(Base):
+    """A message prepared for the user's review. The app never sends it; the user sends it and marks it sent."""
+    __tablename__ = "outreach_drafts"
+    id: Mapped[int] = mapped_column(primary_key=True)
+    business_id: Mapped[int] = mapped_column(ForeignKey("businesses.id", ondelete="CASCADE"), index=True)
+    channel: Mapped[str] = mapped_column(String(20))  # email | linkedin | instagram | followup
+    status: Mapped[str] = mapped_column(String(12), default="pending")  # pending | draft | approved | sent | discarded | failed
+    subject: Mapped[str | None] = mapped_column(String(200))
+    body: Mapped[str] = mapped_column(Text, default="")
+    warnings: Mapped[list] = mapped_column(JSON, default=list)
+    evidence_ids: Mapped[list] = mapped_column(JSON, default=list)
+    source: Mapped[str] = mapped_column(String(12), default="ai")  # ai | template
+    error: Mapped[str | None] = mapped_column(Text)
+    provider: Mapped[str | None] = mapped_column(String(40))
+    model: Mapped[str | None] = mapped_column(String(120))
+    prompt_version: Mapped[str | None] = mapped_column(String(20))
+    latency_ms: Mapped[int | None] = mapped_column(Integer)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)
+    approved_at: Mapped[datetime | None] = mapped_column(DateTime)
+    sent_at: Mapped[datetime | None] = mapped_column(DateTime)
+
+    business: Mapped[Business] = relationship()
+
+
 class AuditLog(Base):
     __tablename__ = "audit_log"
     __table_args__ = (Index("ix_audit_entity", "entity", "entity_id"),)

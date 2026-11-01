@@ -109,6 +109,70 @@ def test_batch_skips_recently_failed_sites(auth_client):
     assert "Nothing to research" in auth_client.post("/research/batch", data={"scope": "unresearched"}).text
 
 
+def _use_fake_ai(client, *responses):
+    from leadgen.ai.worker import AiWorker
+    from tests.ai_helpers import FakeProvider
+    fake = FakeProvider(*responses)
+    client.app.state.ai_provider_factory = lambda: fake
+    client.app.state.ai = AiWorker(client.app.state.db.sessionmaker, lambda: fake)
+    return fake
+
+
+def test_ai_insight_and_draft_approval_flow(auth_client):
+    url = auth_client.post("/leads", data={"name": "Oud Noir", "website": "oudnoir.qa", "email": "info@oudnoir.qa"},
+                           follow_redirects=False).headers["location"]
+    lead_id = url.rsplit("/", 1)[1]
+    auth_client.post(f"{url}/evidence", data={"text": "No reels on Instagram since August", "source_url": "https://www.instagram.com/oudnoir/"})
+    _use_fake_ai(auth_client,
+                 {"hypotheses": [{"text": "May benefit from short reels.", "evidence_ids": [1]}], "angle": "Reel idea.", "insufficient_evidence": False},
+                 {"subject": "A reel idea for Oud Noir", "body": "Hi Oud Noir team, my pilot is QAR 450. Want an example?"})
+    auth_client.post(f"{url}/insight")
+    auth_client.app.state.ai.drain()
+    page = auth_client.get(url).text
+    assert "May benefit from short reels." in page and 'href="#ev-1"' in page
+    auth_client.post(f"{url}/drafts", data={"channel": "email", "mode": "ai"})
+    auth_client.app.state.ai.drain()
+    page = auth_client.get(url).text
+    assert "A reel idea for Oud Noir" in page and "Approve" in page
+    draft_id = page.split('id="draft-')[1].split('"')[0]
+    assert "Approve the draft" in auth_client.post(f"/drafts/{draft_id}", data={"action": "sent"}).text
+    approved = auth_client.post(f"/drafts/{draft_id}", data={"action": "approve", "subject": "A reel idea for Oud Noir",
+                                                             "body": "Hi Oud Noir team, my pilot is QAR 450. Want an example?"}).text
+    assert "Open in my email app" in approved and "mailto:info@oudnoir.qa" in approved
+    sent = auth_client.post(f"/drafts/{draft_id}", data={"action": "sent", "sent_channel": "email", "follow_up_on": "2026-11-08"}).text
+    assert "Logged as sent; follow-up set for 2026-11-08" in sent
+    assert "Discovered → Contacted" in sent and "Sent email message (draft #" in sent
+    assert "draft.sent_manually" in auth_client.get("/audit").text
+    assert lead_id
+
+
+def test_editing_approved_draft_requires_new_approval(auth_client):
+    url = auth_client.post("/leads", data={"name": "Rose Atelier", "instagram": "roseatelier"}, follow_redirects=False).headers["location"]
+    page = auth_client.post(f"{url}/drafts", data={"channel": "instagram", "mode": "template"}).text
+    draft_id = page.split('id="draft-')[1].split('"')[0]
+    auth_client.post(f"/drafts/{draft_id}", data={"action": "approve"})
+    page = auth_client.post(f"/drafts/{draft_id}", data={"action": "save", "body": "Hi Rose Atelier, changed text"}).text
+    assert "Draft saved and re-checked" in page
+    assert f'id="draft-{draft_id}"' in page and page.split(f'id="draft-{draft_id}"')[1].split("</strong>")[1].count("approved") == 0
+
+
+def test_ai_unavailable_falls_back_and_dnc_blocks_drafts(auth_client):
+    url = auth_client.post("/leads", data={"name": "Brand X", "website": "brandx.qa"}, follow_redirects=False).headers["location"]
+    page = auth_client.post(f"{url}/drafts", data={"channel": "email", "mode": "ai"}).text
+    assert "AI unavailable" in page and "Template draft" in page
+    assert "Template draft ready" in auth_client.post(f"{url}/drafts", data={"channel": "email", "mode": "template"}).text
+    auth_client.post(f"{url}/dnc", data={"value": "1"})
+    assert "no drafts are prepared" in auth_client.post(f"{url}/drafts", data={"channel": "email", "mode": "template"}).text
+
+
+def test_sender_profile_and_outreach_page(auth_client):
+    auth_client.post("/settings/sender", data={"your_name": "Emran", "business_name": "Frame Studio"})
+    assert 'value="Emran"' in auth_client.get("/settings").text
+    url = auth_client.post("/leads", data={"name": "Gold Co"}, follow_redirects=False).headers["location"]
+    auth_client.post(f"{url}/drafts", data={"channel": "instagram", "mode": "template"})
+    assert "Gold Co" in auth_client.get("/outreach").text
+
+
 def test_manual_evidence_form(auth_client):
     url = auth_client.post("/leads", data={"name": "Insta Brand", "instagram": "instabrand"}, follow_redirects=False).headers["location"]
     page = auth_client.post(f"{url}/evidence", data={"text": "Posts weekly, no reels", "source_url": "https://www.instagram.com/instabrand/"}).text

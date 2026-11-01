@@ -6,7 +6,8 @@ from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
 from leadgen.auth import authenticate
-from leadgen.models import Business, DuplicateCandidate, IcpProfile, PipelineStage, ResearchRun
+from leadgen.ai import tasks as ai_tasks
+from leadgen.models import AiInsight, Business, DuplicateCandidate, IcpProfile, OutreachDraft, PipelineStage, ResearchRun
 from leadgen.research import service as research
 from leadgen.services import audit, leads
 from leadgen.services.leads import DuplicateLead, LeadError, LeadFilter, LeadInput
@@ -145,7 +146,15 @@ def lead_detail(lead_id: int, request: Request, session: Session = SessionDep, u
     last_run = session.scalars(select(ResearchRun).where(ResearchRun.business_id == biz.id)
                                .order_by(ResearchRun.id.desc())).first()
     evidence = biz.evidence
+    insight = session.scalars(select(AiInsight).where(AiInsight.business_id == biz.id).order_by(AiInsight.id.desc())).first()
+    drafts = list(session.scalars(select(OutreachDraft).where(OutreachDraft.business_id == biz.id,
+                                                              OutreachDraft.status != "discarded")
+                                  .order_by(OutreachDraft.id.desc())))
+    ai_ok, ai_msg = request.app.state.ai.status()
     return render(request, "lead_detail.html", lead=biz, dupes=dupes, channels=leads.CHANNELS,
+                  insight=insight, drafts=drafts, ai_ok=ai_ok, ai_msg=ai_msg, draft_channels=ai_tasks.CHANNELS,
+                  ai_pending=any(d.status == "pending" for d in drafts) or (insight is not None and insight.status == "pending"),
+                  sender_set=bool(ai_tasks.get_sender(session)["your_name"]),
                   kinds=leads.ACTIVITY_KINDS, today=today_local(), last_run=last_run,
                   facts=[e for e in evidence if e.verified and e.kind != "fetch_issue"],
                   limits=[e for e in evidence if not e.verified],

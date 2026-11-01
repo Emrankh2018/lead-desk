@@ -3,8 +3,8 @@
 Local-first, single-user app for finding, researching, qualifying and tracking B2B prospects. The first use is
 an AI product-advertising service in Qatar; target profiles, stages and offers are configurable for other markets.
 
-**Status:** M1 (CRM core) and M2 (website research, evidence, explainable scoring) done. AI drafts (M3), discovery
-connectors (M4) and analytics (M5) are next. See `PROGRESS.md` and `docs/M0-feasibility-report.md`.
+**Status:** M1 (CRM core), M2 (website research, evidence, explainable scoring) and M3 (AI ideas + outreach drafts with
+approval) done. Free discovery connectors (M4) and workflow/analytics/benchmark (M5) are next. See `PROGRESS.md` and `docs/M0-feasibility-report.md`.
 
 ## Principles
 - Facts come from code and stored sources; AI output (from M3) is labelled hypothesis/draft and never auto-sent.
@@ -48,6 +48,23 @@ Configuration via environment or `.env` (git-ignored), prefix `LEADGEN_`: `DATA_
   means under-researched, not a bad lead. Weights are editable per profile (Settings → Scoring weights).
 - The score measures fit and visible opportunity, not intent to buy, and does not judge company size.
 - Add your own observations (e.g. from Instagram) with the page you checked; they appear as evidence.
+
+## AI ideas and outreach drafts (M3)
+- **Opportunity ideas:** the model reads only the stored evidence and returns up to 5 hypotheses, each citing evidence
+  ids. Code then removes any idea that cites nothing, cites evidence that doesn't exist, or contains a number that is not
+  in the software-written evidence (quoted page text can't ground a number). Removed ideas are listed with the reason.
+- **Drafts:** email, Instagram DM, LinkedIn and follow-up. Every draft is checked for: contact details or links not in
+  your sender profile or the lead's record, prices that aren't your offer prices, promises of results, placeholders,
+  channel length (incl. the 300-character LinkedIn note), and whether it names the business. Warnings are shown; you edit.
+- **Approval:** draft → Approve → you send it yourself (Copy / Open in my email app / Open their Instagram or LinkedIn)
+  → **Mark as sent**, which logs the outreach, sets an optional follow-up and moves early-stage leads to Contacted.
+  Editing an approved draft needs a fresh approval. Do-not-contact leads get no drafts. The app never sends anything.
+- **No AI needed:** "Template draft" builds an honest generic message from your offer and sender profile.
+- **Model:** local `qwen3:4b-instruct` via Ollama on CPU (about 1 minute per call; jobs run in the background and the page
+  refreshes itself). Switch with `LEADGEN_AI_PROVIDER` (`ollama` | `openai_compatible` | `none`), `LEADGEN_AI_MODEL`,
+  `LEADGEN_AI_NUM_GPU`, `LEADGEN_AI_BASE_URL`, `LEADGEN_AI_API_KEY`. Paid services stay off unless you decide.
+- **Evaluate a model:** `uv run python -m leadgen.cli eval` (or `--quick`) writes a report to `evals/results/`.
+  Set your name and studio in Settings → Sender profile first so drafts sign off correctly.
 
 ## Security notes
 Binds to 127.0.0.1 only. scrypt password hashes, login throttling (5 failures → 60 s), signed HttpOnly SameSite=Strict

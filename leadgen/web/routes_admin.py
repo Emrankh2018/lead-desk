@@ -1,6 +1,7 @@
 import json
 import re
 import secrets
+import time
 from decimal import Decimal, InvalidOperation
 
 from fastapi import APIRouter, HTTPException, Request
@@ -18,6 +19,7 @@ from leadgen.web.routes_leads import _int_or_none, _lookups, filter_from_query
 
 router = APIRouter()
 _TOKEN_RE = re.compile(r"^[A-Za-z0-9_-]{20,64}$")
+PREVIEW_TTL_SECONDS = 24 * 3600
 
 
 def _see_other(url: str) -> RedirectResponse:
@@ -35,6 +37,14 @@ def _import_path(request: Request, token: str):
         raise HTTPException(400, "Invalid import reference")
     folder = request.app.state.settings.data_dir / "imports"
     folder.mkdir(parents=True, exist_ok=True)
+    # Previews the user never confirmed would otherwise pile up (they hold copies of imported contact data).
+    cutoff = time.time() - PREVIEW_TTL_SECONDS
+    for old in folder.glob("*.json"):
+        try:
+            if old.stat().st_mtime < cutoff:
+                old.unlink()
+        except OSError:
+            pass
     return folder / f"{token}.json"
 
 

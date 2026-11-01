@@ -126,16 +126,22 @@ class OpenAICompatibleProvider:
 class DisabledProvider:
     name, model = "none", "none"
 
+    def __init__(self, reason: str = "AI is switched off (LEADGEN_AI_PROVIDER=none)"):
+        self.reason = reason
+
     def status(self) -> tuple[bool, str]:
-        return False, "AI is switched off (LEADGEN_AI_PROVIDER=none); template drafts are still available"
+        return False, f"{self.reason}; template drafts are still available"
 
     def complete_json(self, system: str, user: str, schema: dict) -> Completion:
-        raise ProviderError("AI is switched off")
+        raise ProviderError(self.reason)
 
 
 def make_provider(settings: Settings) -> Provider:
-    if settings.ai_provider == "ollama":
-        return OllamaProvider(settings)
-    if settings.ai_provider == "openai_compatible":
-        return OpenAICompatibleProvider(settings)
+    try:
+        if settings.ai_provider == "ollama":
+            return OllamaProvider(settings)
+        if settings.ai_provider == "openai_compatible":
+            return OpenAICompatibleProvider(settings)
+    except ProviderError as exc:  # misconfiguration must not take the whole app down
+        return DisabledProvider(f"AI is misconfigured: {exc}")
     return DisabledProvider()

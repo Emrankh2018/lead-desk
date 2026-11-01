@@ -95,3 +95,54 @@
 - Not committed.
 - Next (awaiting owner go-ahead): M5 — Today/follow-up view, funnel + per-source analytics from recorded events,
   time/cost log, second ICP to prove re-targeting, Docker file, runbook, 20-prospect benchmark with source breakdown.
+- M4 committed as d3a9e73.
+
+## 2026-11-01 — M5 workflow, analytics, re-targeting, benchmark (done, local)
+- Done, uncommitted: Today view (`/today`, now the home page), Analytics (funnel + by source + effort/cost log,
+  migration `0005`), benchmark runner (`cli benchmark`, `leadgen/benchmark.py`), Dockerfile (not built: needs owner OK to
+  pull base image), `docs/RUNBOOK.md`, Overpass backoff on 502/503/504. Tests: 117 passed.
+- Browser-verified: Today, Analytics, effort log, second profile "UAE jewellery & watches" → live Dubai search
+  (192 listings → 160 businesses, 25 with website; preview only, nothing added); all pages fit 375 px.
+- **Benchmark result** (`docs/benchmark/2026-11-01-1343-qa.md`, isolated DB, cached OSM data): **8 of the 20-prospect
+  target (NOT MET)**; 6 are independent brands. Funnel: 160 listings → 112 businesses → 4 services excluded → 108
+  relevant → 99 name-only → 9 contactable → 1 excluded (website redirects to a UAE store) → 8. Blocker: free OSM data
+  for Qatar rarely includes contact details. Closing the gap needs the paste-a-list import (Instagram brands, owner's
+  own research) or a paid source (Google Places, banked until there is budget).
+- M5 complete (resumed after the usage pause).
+
+## 2026-11-01 — Full audit of the app (single-operator self-review, not an independent review)
+Method: list every route and boundary, write a failing test for each suspected defect, fix at the source, re-run.
+Regression tests: `tests/test_audit.py`.
+
+Confirmed and fixed:
+1. Non-web link schemes (e.g. `ftp://`, and any scheme slipping through) accepted as websites; LinkedIn URL and
+   observation source stored raw and rendered as clickable links (stored-XSS risk). Now only http(s) is stored, LinkedIn
+   must be linkedin.com, and templates render any non-http(s) stored link as an inert `#` (defence in depth).
+2. Open redirect after login via `next=/\evil.example` (browsers treat `\` as `/`). Backslashes, encoded backslashes and
+   control characters are now rejected.
+3. Activity "When" time entered in Doha time was stored as UTC, so it showed 3 hours late and skewed "no reply" days.
+4. `openai_compatible` provider without a base URL crashed every page that shows AI status; now degrades to
+   "AI misconfigured" with templates still available.
+5. A new HTTP client was created (and never closed) on every AI status check/job; now one provider per app.
+6. Lead/Outreach pages auto-refreshed with `<meta refresh>` while AI jobs ran, discarding text being typed in a draft;
+   now a script refreshes only when nothing has been typed or focused.
+7. Merging duplicates silently deleted the removed record's outreach drafts (incl. approved) and unlinked effort
+   entries; both now move to the kept record.
+8. Today's "best not-yet-contacted" ranked under-researched leads first (94 at 59% coverage above 90 at 100%); now
+   ordered by score discounted for missing evidence.
+9. Abandoned import/discovery previews (copies of contact data) piled up in `data/imports`; now deleted after 24 h.
+10. Benchmark/score wording ("a AE storefront").
+
+Checked and found sound: every non-login route requires a session; same-origin check on all POSTs plus SameSite=Strict
+cookie; Jinja autoescaping (no `|safe`); export formula-injection guard; import token path validation; login throttle;
+deleting a lead removes all related rows (evidence, runs, ideas, drafts, history, duplicate pairs); all 13 pages have
+labelled form fields, no empty buttons/links, no duplicate ids, a title and an h1; no page scrolls sideways at 375 px.
+
+Known, not fixed (low risk for a local single-user app; fix before any server deployment): the fetcher checks that a
+host resolves to a public address and then connects separately, so a hostile domain could switch addresses in between
+(DNS rebinding). Login throttling is per process and resets on restart.
+
+- Tests: `uv run pytest -q` → 139 passed. Quick AI eval after the provider change: 5/5 valid, 0 injection leaks, thin
+  evidence honest; one draft wrote "QAR 0450", which the price guard flagged as intended (left as a warning).
+- Browser re-check after fixes: all 13 pages load; real links intact; unsafe link schemes refused via the forms;
+  Today ranks well-researched leads first.

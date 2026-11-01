@@ -164,9 +164,11 @@ def add_manual_evidence(session: Session, biz: Business, *, text: str, source_ur
     text = text.strip()
     if not text:
         raise ValueError("observation text is required")
-    url = source_url.strip() or None
-    if url and not normalize.domain_of(url) and not normalize.is_social_url(url):
-        raise ValueError("source must be a web address")
+    url = None
+    if source_url.strip():
+        url = normalize.http_url(source_url)  # rendered as a link, so only http(s) is allowed
+        if not url:
+            raise ValueError("source must be a web address (http or https)")
     ev = Evidence(business_id=biz.id, kind="manual_observation", value={}, text=text, verified=True,
                   source_url=url, created_by="user")
     session.add(ev)

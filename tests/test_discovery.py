@@ -63,9 +63,24 @@ def test_search_caches_and_reports_rate_limit(tmp_path):
     places, cached = osm.search("QA", ["perfumery"], None, cache_dir=tmp_path, client=client)
     again, cached2 = osm.search("QA", ["perfumery"], None, cache_dir=tmp_path, client=client)
     assert len(places) == len(again) == 3 and (cached, cached2) == (False, True) and len(calls) == 1
-    busy = httpx.Client(transport=httpx.MockTransport(lambda r: httpx.Response(429)))
+    limited = []
+    busy = httpx.Client(transport=httpx.MockTransport(lambda r: limited.append(1) or httpx.Response(429)))
     with pytest.raises(osm.OsmError, match="busy or rate-limiting"):
         osm.search("QA", ["jewelry"], None, cache_dir=tmp_path, client=busy)
+    assert len(limited) == 1  # rate-limited: never retried
+
+
+def test_search_backs_off_when_server_at_capacity(tmp_path, monkeypatch):
+    """Seen live 2026-11-01: overpass-api.de answered 502 'at capacity', asking clients to back off and retry."""
+    waits, statuses = [], [502, 503, 200]
+    monkeypatch.setattr(osm, "sleep", waits.append)
+    client = httpx.Client(transport=httpx.MockTransport(
+        lambda r: httpx.Response(statuses.pop(0), json={"elements": ELEMENTS[:2]})))
+    places, _ = osm.search("QA", ["watches"], None, cache_dir=tmp_path, client=client)
+    assert len(places) == 2 and waits == [5, 15]
+    always_busy = httpx.Client(transport=httpx.MockTransport(lambda r: httpx.Response(502)))
+    with pytest.raises(osm.OsmError, match="HTTP 502"):
+        osm.search("QA", ["bag"], None, cache_dir=tmp_path, client=always_busy)
 
 
 # --- grouping, classification, adding -----------------------------------------------------------------------

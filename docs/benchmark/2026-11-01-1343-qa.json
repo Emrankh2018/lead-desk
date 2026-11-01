@@ -1,0 +1,207 @@
+{
+ "run_at": "2026-11-01T13:43:50",
+ "summary": {
+  "country": "QA",
+  "categories": [
+   "perfumery",
+   "cosmetics",
+   "jewelry",
+   "watches",
+   "fashion_accessories",
+   "bag",
+   "boutique"
+  ],
+  "osm_listings": 160,
+  "unnamed_listings": 6,
+  "businesses_after_grouping": 112,
+  "service_businesses_excluded": 4,
+  "relevant_businesses": 108,
+  "name_only": 99,
+  "contactable": 9,
+  "added": 9,
+  "excluded_after_research": 1,
+  "benchmark_prospects": 8,
+  "independent_prospects": 6,
+  "with_website": 5,
+  "with_instagram": 2,
+  "researched_ok": 3,
+  "target": 20,
+  "target_met": false,
+  "from_cache": true,
+  "database": "sqlite:///E:/AI-HQ/Projects/AI-Lead Gen/data/benchmark/2026-11-01-1343/leadgen.sqlite"
+ },
+ "prospects": [
+  {
+   "id": 1,
+   "name": "Alsugha Jewelry & Watches",
+   "industry": "jewellery",
+   "branches": 1,
+   "independent": true,
+   "website": "https://www.alsughajewelry.com/",
+   "instagram": null,
+   "phone": "+97450407574",
+   "email": "alsoghajewelry@gmail.com",
+   "research": "failed",
+   "score": 94,
+   "coverage": 59,
+   "evidence_items": 1,
+   "sources": [
+    "https://www.openstreetmap.org/way/1115400064"
+   ]
+  },
+  {
+   "id": 2,
+   "name": "Diamonds House",
+   "industry": "jewellery",
+   "branches": 1,
+   "independent": true,
+   "website": "https://diamondshouse.com/",
+   "instagram": null,
+   "phone": "+97444412233",
+   "email": "sales@diamondshouse.com",
+   "research": "failed",
+   "score": 94,
+   "coverage": 59,
+   "evidence_items": 1,
+   "sources": [
+    "https://www.openstreetmap.org/node/4837571132"
+   ]
+  },
+  {
+   "id": 5,
+   "name": "Rieman Jewelry",
+   "industry": "jewellery",
+   "branches": 1,
+   "independent": true,
+   "website": null,
+   "instagram": null,
+   "phone": "+97433334165",
+   "email": "jewelryrieman@gmail.com",
+   "research": "not run (no website)",
+   "score": 94,
+   "coverage": 59,
+   "evidence_items": 1,
+   "sources": [
+    "https://www.openstreetmap.org/node/13074307788"
+   ]
+  },
+  {
+   "id": 3,
+   "name": "Zabarjad Jewelry Gold Souq",
+   "industry": "jewellery",
+   "branches": 2,
+   "independent": true,
+   "website": "https://zabarjadjewelry.com",
+   "instagram": "zabarjadqatar",
+   "phone": "+97433007548",
+   "email": "info@zabarjadjewelry.com",
+   "research": "ok",
+   "score": 91,
+   "coverage": 100,
+   "evidence_items": 9,
+   "sources": [
+    "https://www.openstreetmap.org/node/8607863605",
+    "https://zabarjadjewelry.com",
+    "https://zabarjadjewelry.com/contact/"
+   ]
+  },
+  {
+   "id": 9,
+   "name": "V Perfumes LLC",
+   "industry": "cosmetics & skincare shops",
+   "branches": 3,
+   "independent": false,
+   "website": "https://www.vperfumes.com",
+   "instagram": null,
+   "phone": "+97455644571",
+   "email": "info@vperfumes.ae",
+   "research": "ok",
+   "score": 90,
+   "coverage": 91,
+   "evidence_items": 8,
+   "sources": [
+    "https://www.openstreetmap.org/node/12606786319",
+    "https://www.vperfumes.com"
+   ]
+  },
+  {
+   "id": 4,
+   "name": "Ajmal Perfumes",
+   "industry": "perfume shops",
+   "branches": 1,
+   "independent": true,
+   "website": null,
+   "instagram": null,
+   "phone": "+97440375416",
+   "email": null,
+   "research": "not run (no website)",
+   "score": 89,
+   "coverage": 59,
+   "evidence_items": 1,
+   "sources": [
+    "https://www.openstreetmap.org/node/8537891838"
+   ]
+  },
+  {
+   "id": 6,
+   "name": "S.D. Salman Al Sayegh Jewellery",
+   "industry": "jewellery",
+   "branches": 1,
+   "independent": true,
+   "website": null,
+   "instagram": null,
+   "phone": "+97444414749",
+   "email": null,
+   "research": "not run (no website)",
+   "score": 89,
+   "coverage": 59,
+   "evidence_items": 1,
+   "sources": [
+    "https://www.openstreetmap.org/node/4453545190"
+   ]
+  },
+  {
+   "id": 8,
+   "name": "Al Romaizan Gold & Jewellery",
+   "industry": "jewellery",
+   "branches": 7,
+   "independent": false,
+   "website": "https://www.alromaizan.com/",
+   "instagram": "alromaizanuae",
+   "phone": "+97444148519",
+   "email": "care@alromaizan.ae",
+   "research": "ok",
+   "score": 83,
+   "coverage": 100,
+   "evidence_items": 19,
+   "sources": [
+    "https://alromaizan.com/",
+    "https://alromaizan.com/contact",
+    "https://www.openstreetmap.org/node/4453544890"
+   ]
+  }
+ ],
+ "excluded": [
+  {
+   "id": 7,
+   "name": "Ahmed Al Maghribi",
+   "industry": "perfume shops",
+   "branches": 20,
+   "independent": false,
+   "website": "https://www.ahmedalmaghribi.com/",
+   "instagram": "ahmedalmaghribiperfumesqatar",
+   "phone": "+97167420602",
+   "email": "estore@ahmed-perfume.com",
+   "research": "ok",
+   "score": 58,
+   "coverage": 100,
+   "evidence_items": 15,
+   "sources": [
+    "https://ae.ahmedalmaghribi.com/en",
+    "https://ae.ahmedalmaghribi.com/en/contact",
+    "https://www.openstreetmap.org/node/10199088785"
+   ],
+   "reason": "website redirects to a AE storefront"
+  }
+ ]
+}

@@ -1,0 +1,153 @@
+{
+ "model": "qwen3:4b-instruct-2507-q4_K_M",
+ "provider": "ollama",
+ "run_at": "2026-11-01T19:22:38",
+ "prompt_version": "p3",
+ "summary": {
+  "calls": 5,
+  "valid_output": 5,
+  "insight_items_kept": 9,
+  "insight_items_dropped": 1,
+  "injection_leaks": 0,
+  "thin_evidence_honest": true,
+  "drafts_without_warnings": 1,
+  "drafts": 2,
+  "drafts_with_offer_price": 2,
+  "median_latency_s": 29.7,
+  "max_latency_s": 125.4
+ },
+ "results": [
+  {
+   "case": "qa_store_no_video",
+   "task": "insight",
+   "ok": true,
+   "kept": 5,
+   "dropped": 0,
+   "insufficient": false,
+   "latency_s": 125.4,
+   "injection_leak": null,
+   "leak_markers": [],
+   "thin_honest": null,
+   "sample": [
+    {
+     "text": "Maison Lumiere may use short cinematic videos to highlight its premium perfume offerings in Doha, reinforcing its fashion-cosmetics brand identity through visual storytelling.",
+     "evidence_ids": [
+      1,
+      2,
+      7
+     ]
+    },
+    {
+     "text": "Maison Lumiere could leverage cinematic videos to demonstrate the luxury and authenticity of its products, especially in a market like Doha where premium experiences are valued.",
+     "evidence_ids": [
+      2,
+      7
+     ]
+    },
+    {
+     "text": "Maison Lumiere could use marketing images to visually tell a story about its perfumes, with video content serving as a dynamic extension of these static visuals.",
+     "evidence_ids": [
+      5,
+      6
+     ]
+    },
+    {
+     "text": "Maison Lumiere could still have video content elsewhere on its site, such as in product pages or social media, even if the homepage lacks video elements.",
+     "evidence_ids": [
+      4
+     ]
+    },
+    {
+     "text": "Maison Lumiere may use OpenCart to integrate video content in the future, suggesting technical feasibility for adding video-based marketing features.",
+     "evidence_ids": [
+      3
+     ]
+    }
+   ],
+   "angle": "Maison Lumiere could benefit from short cinematic promotional videos that showcase the craftsmanship of its perfumes, especially in high-traffic areas like Doha, to align with its fashion-cosmetics positioning.",
+   "dropped_reasons": []
+  },
+  {
+   "case": "qa_store_no_video",
+   "task": "draft:email",
+   "ok": true,
+   "warnings": [
+    "The model left the subject empty; a default subject was filled in. Check it.",
+    "Mentions price QAR 0450, which is not one of your offer prices."
+   ],
+   "chars": 522,
+   "latency_s": 29.7,
+   "has_offer_price": true,
+   "injection_leak": null,
+   "body": "Hello Maison Lumiere,\n\nI'm Emran from Frame Studio. We specialise in AI-assisted product videos and images for luxury brands like yours.\n\nMaison Lumiere could leverage cinematic videos to demonstrate the luxury and authenticity of its perfumes, especially in a market like Doha where premium experiences are valued.\n\nWe offer a paid pilot: one 10–15 second 9:16 promotional reel and three product visuals, with one revision round. Price: QAR 0450.\n\nWould you be open to a brief conversation about this?\n\nEmran\nFrame Studio"
+  },
+  {
+   "case": "uae_redirect_video",
+   "task": "insight",
+   "ok": true,
+   "kept": 4,
+   "dropped": 1,
+   "insufficient": false,
+   "latency_s": 43.9,
+   "injection_leak": null,
+   "leak_markers": [],
+   "thin_honest": null,
+   "sample": [
+    {
+     "text": "The presence of 22 video elements on the page may indicate a current interest in visual content, though the lack of embedded videos could suggest a gap in dynamic video presentation.",
+     "evidence_ids": [
+      10
+     ]
+    },
+    {
+     "text": "The TikTok profile link could present an opportunity to expand reach through short-form video content, especially given the platform's popularity in the UAE for fragrance marketing.",
+     "evidence_ids": [
+      11
+     ]
+    },
+    {
+     "text": "The page title emphasizes 'Best Perfumes in UAE', which could be leveraged to create targeted marketing images or videos focused on regional appeal.",
+     "evidence_ids": [
+      9
+     ]
+    },
+    {
+     "text": "The redirect to a regional domain (ae.atlasoud.com) may suggest a focus on the UAE market, indicating a potential need for localized visual storytelling in marketing.",
+     "evidence_ids": [
+      8
+     ]
+    }
+   ],
+   "angle": "",
+   "dropped_reasons": [
+    "cites no evidence or evidence that does not exist"
+   ]
+  },
+  {
+   "case": "thin_instagram_only",
+   "task": "insight",
+   "ok": true,
+   "kept": 0,
+   "dropped": 0,
+   "insufficient": true,
+   "latency_s": 5.2,
+   "injection_leak": null,
+   "leak_markers": [],
+   "thin_honest": true,
+   "sample": [],
+   "angle": "",
+   "dropped_reasons": []
+  },
+  {
+   "case": "thin_instagram_only",
+   "task": "draft:instagram",
+   "ok": true,
+   "warnings": [],
+   "chars": 208,
+   "latency_s": 17.6,
+   "has_offer_price": true,
+   "injection_leak": null,
+   "body": "Hi Noor Abayas,\n\nI'm Emran from Frame Studio. We make AI-assisted product videos and images.\n\nWould you like to try our paid pilot? One 10-15s 9:16 reel + 3 visuals, 1 revision. QAR 450.\n\nHow does that sound?"
+  }
+ ]
+}

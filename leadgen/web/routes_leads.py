@@ -1,4 +1,4 @@
-from datetime import date, datetime
+from datetime import date, datetime, timezone
 
 from fastapi import APIRouter, HTTPException, Request
 from fastapi.responses import RedirectResponse
@@ -11,7 +11,7 @@ from leadgen.models import AiInsight, Business, DuplicateCandidate, IcpProfile, 
 from leadgen.research import service as research
 from leadgen.services import audit, leads
 from leadgen.services.leads import DuplicateLead, LeadError, LeadFilter, LeadInput
-from leadgen.web.app import SessionDep, UserDep, flash, render, today_local
+from leadgen.web.app import DISPLAY_TZ, SessionDep, UserDep, flash, render, today_local
 
 router = APIRouter()
 LEAD_FIELDS = ["name", "website", "instagram", "linkedin_url", "phone", "email", "email_source", "city", "country",
@@ -23,7 +23,12 @@ def _see_other(url: str) -> RedirectResponse:
 
 
 def _safe_next(target: str | None) -> str:
-    return target if target and target.startswith("/") and not target.startswith("//") else "/leads"
+    """Only same-site paths. Browsers treat backslashes like slashes, so "/\\evil.example" would leave the site."""
+    if not target or not target.startswith("/") or target.startswith("//"):
+        return "/today"
+    if "\\" in target or "%5c" in target.lower() or any(ord(ch) < 32 for ch in target):
+        return "/today"
+    return target
 
 
 def _get_lead(session: Session, lead_id: int) -> Business:
@@ -98,7 +103,7 @@ def logout(request: Request):
 
 @router.get("/")
 def home(user: str = UserDep):
-    return _see_other("/leads")
+    return _see_other("/today")
 
 
 @router.get("/leads")
@@ -206,7 +211,9 @@ async def log_activity(lead_id: int, request: Request, session: Session = Sessio
     follow = None
     try:
         if form.get("occurred_at"):
-            occurred = datetime.fromisoformat(str(form["occurred_at"]))
+            # The form's datetime-local value is Doha time; storage is naive UTC (see models.utcnow).
+            local = datetime.fromisoformat(str(form["occurred_at"])).replace(tzinfo=DISPLAY_TZ)
+            occurred = local.astimezone(timezone.utc).replace(tzinfo=None)
         if form.get("follow_up_on"):
             follow = date.fromisoformat(str(form["follow_up_on"]))
         leads.add_activity(session, biz, kind=str(form.get("kind", "note")), channel=str(form.get("channel", "")) or None,

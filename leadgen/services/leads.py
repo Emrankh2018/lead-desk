@@ -3,11 +3,11 @@ from dataclasses import dataclass, field
 from datetime import date
 from decimal import Decimal, InvalidOperation
 
-from sqlalchemy import Select, or_, select
+from sqlalchemy import Select, or_, select, update
 from sqlalchemy.orm import Session
 
 from leadgen import normalize
-from leadgen.models import Activity, Business, DuplicateCandidate, PipelineStage, utcnow
+from leadgen.models import Activity, Business, DuplicateCandidate, EffortLog, OutreachDraft, PipelineStage, utcnow
 from leadgen.services import audit
 from leadgen.services.dedupe import Match, exact_matches, fuzzy_matches
 
@@ -61,6 +61,9 @@ class LeadInput:
         site = normalize.website_url(website)
         if website and not site:
             errors.append(f"website '{website}' is not a valid URL")
+        linkedin = normalize.linkedin_url(self.linkedin_url) if self.linkedin_url.strip() else None
+        if self.linkedin_url.strip() and not linkedin:
+            errors.append(f"LinkedIn '{self.linkedin_url}' must be a linkedin.com address")
         if self.instagram.strip() and not handle:
             errors.append(f"Instagram '{self.instagram}' is not a valid handle")
         country = (self.country.strip().upper() or default_region)[:2]
@@ -92,7 +95,7 @@ class LeadInput:
             raise LeadError("; ".join(errors))
         return {
             "name": name[:200], "name_key": normalize.name_key(name), "website": site, "domain": normalize.domain_of(site),
-            "instagram_handle": handle, "linkedin_url": self.linkedin_url.strip() or None, "phone_e164": phone,
+            "instagram_handle": handle, "linkedin_url": linkedin, "phone_e164": phone,
             "email_public": mail, "email_source_url": (self.email_source.strip() or None) if mail else None,
             "city": self.city.strip() or None, "country": country or None, "industry": self.industry.strip() or None,
             "icp_id": self.icp_id, "deal_value": deal, "follow_up_on": follow,
@@ -195,6 +198,9 @@ def merge(session: Session, keep: Business, remove: Business, *, actor: str) -> 
         setattr(keep, f, v)
     for act in list(remove.activities):
         act.business_id = keep.id
+    # The user's own work moves too; only evidence and AI ideas (tied to the removed record's research) are discarded.
+    session.execute(update(OutreachDraft).where(OutreachDraft.business_id == remove.id).values(business_id=keep.id))
+    session.execute(update(EffortLog).where(EffortLog.business_id == remove.id).values(business_id=keep.id))
     for cand in session.scalars(select(DuplicateCandidate).where(
             or_(DuplicateCandidate.business_id == remove.id, DuplicateCandidate.other_id == remove.id))):
         session.delete(cand)

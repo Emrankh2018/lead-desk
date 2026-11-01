@@ -13,6 +13,7 @@
   <div class="brand">Lead Desk</div>
   {% set path = request.url.path %}
   <nav aria-label="Main">
+    <a href="/today" class="{{ 'active' if path.startswith('/today') }}">Today</a>
     <a href="/leads" class="{{ 'active' if path.startswith('/leads') }}">Leads</a>
     <a href="/pipeline" class="{{ 'active' if path.startswith('/pipeline') }}">Pipeline</a>
     <a href="/discover" class="{{ 'active' if path.startswith('/discover') }}">Discover</a>
@@ -20,6 +21,7 @@
     <a href="/outreach" class="{{ 'active' if path.startswith('/outreach') }}">Outreach</a>
     <a href="/import" class="{{ 'active' if path.startswith('/import') }}">Import</a>
     <a href="/duplicates" class="{{ 'active' if path.startswith('/duplicates') }}">Duplicates</a>
+    <a href="/analytics" class="{{ 'active' if path.startswith('/analytics') }}">Analytics</a>
     <a href="/settings" class="{{ 'active' if path.startswith('/settings') }}">Settings</a>
     <a href="/audit" class="{{ 'active' if path.startswith('/audit') }}">Audit log</a>
   </nav>
@@ -33,6 +35,16 @@
 <script>
   // Selects marked data-autosubmit submit their form on change (pipeline stage moves).
   document.querySelectorAll('select[data-autosubmit]').forEach(s => s.addEventListener('change', () => s.form.submit()));
+  // While AI jobs run, refresh to show results, but never while the user is typing or has unsaved edits.
+  const auto = document.querySelector('meta[data-autorefresh]');
+  if (auto) {
+    let dirty = false;
+    document.addEventListener('input', () => { dirty = true; });
+    setInterval(() => {
+      const typing = document.activeElement && ['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement.tagName);
+      if (!dirty && !typing) location.reload();
+    }, Number(auto.content) * 1000);
+  }
   // Copy buttons: data-copy points at the id of a textarea/input whose value is copied to the clipboard.
   document.querySelectorAll('button[data-copy]').forEach(b => b.addEventListener('click', async () => {
     const el = document.getElementById(b.dataset.copy);

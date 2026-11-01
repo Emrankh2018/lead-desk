@@ -179,6 +179,20 @@ class DiscoveryRun(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)
 
 
+class EffortLog(Base):
+    """Time and money the owner spent acquiring leads, entered by hand. Analytics never estimates these."""
+    __tablename__ = "effort_log"
+    id: Mapped[int] = mapped_column(primary_key=True)
+    day: Mapped[date] = mapped_column(Date, index=True)
+    minutes: Mapped[int] = mapped_column(Integer, default=0)
+    cost: Mapped[Decimal | None] = mapped_column(Numeric(12, 2))
+    currency: Mapped[str] = mapped_column(String(3), default="QAR")
+    category: Mapped[str] = mapped_column(String(30))  # research | outreach | follow_up | meetings | tools | other
+    note: Mapped[str] = mapped_column(Text, default="")
+    business_id: Mapped[int | None] = mapped_column(ForeignKey("businesses.id", ondelete="SET NULL"))
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)
+
+
 class AppSetting(Base):
     """Small key/value store for user preferences such as the sender profile used in drafts."""
     __tablename__ = "app_settings"

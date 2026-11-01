@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block title %}Outreach{% endblock %}
-{% block head %}{% if ai_pending %}<meta http-equiv="refresh" content="15">{% endif %}{% endblock %}
+{% block head %}{% if ai_pending %}<meta name="leaddesk-autorefresh" content="15" data-autorefresh>{% endif %}{% endblock %}
 {% block content %}
 <h1>Outreach drafts</h1>
 <p class="small muted">{{ ai_msg }}{% if ai_pending %} · {{ ai_pending }} AI job(s) running or queued{% endif %}. Drafts are never sent by the app.</p>

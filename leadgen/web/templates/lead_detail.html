@@ -1,14 +1,14 @@
 {% extends "base.html" %}
 {% block title %}{{ lead.name }}{% endblock %}
-{% block head %}{% if ai_pending %}<meta http-equiv="refresh" content="10">{% endif %}{% endblock %}
+{% block head %}{% if ai_pending %}<meta name="leaddesk-autorefresh" content="10" data-autorefresh>{% endif %}{% endblock %}
 {% block content %}
 <div class="row" style="justify-content: space-between; margin-bottom: 12px;">
   <div>
     <h1 style="margin:0">{{ lead.name }}</h1>
     <div class="muted small">
-      {% if lead.website %}<a href="{{ lead.website }}" target="_blank" rel="noopener noreferrer">{{ lead.domain }}</a>{% endif %}
+      {% if lead.website %}<a href="{{ lead.website|safe_href }}" target="_blank" rel="noopener noreferrer">{{ lead.domain }}</a>{% endif %}
       {% if lead.instagram_handle %} · <a href="https://www.instagram.com/{{ lead.instagram_handle }}/" target="_blank" rel="noopener noreferrer">@{{ lead.instagram_handle }}</a>{% endif %}
-      {% if lead.linkedin_url %} · <a href="{{ lead.linkedin_url }}" target="_blank" rel="noopener noreferrer">LinkedIn</a>{% endif %}
+      {% if lead.linkedin_url %} · <a href="{{ lead.linkedin_url|safe_href }}" target="_blank" rel="noopener noreferrer">LinkedIn</a>{% endif %}
       · source: {{ lead.source }}{% if lead.source_ref %} ({{ lead.source_ref }}){% endif %}
       · added {{ lead.created_at|local_time }}
     </div>
@@ -81,7 +81,7 @@
         {% for e in facts %}
         <li id="ev-{{ e.id }}"><span class="badge">E{{ e.id }}</span> {{ e.text }}
           <div class="small muted">{% if e.created_by == 'user' %}your observation{% else %}observed {{ e.observed_at|local_time }}{% endif %}
-            {% if e.source_url %} · <a href="{{ e.source_url }}" target="_blank" rel="noopener noreferrer">source</a>{% endif %}</div>
+            {% if e.source_url %} · <a href="{{ e.source_url|safe_href }}" target="_blank" rel="noopener noreferrer">source</a>{% endif %}</div>
           {% if e.snippet %}<div class="small" style="background:#fafbfc; padding:4px 6px; border-radius:4px">“{{ e.snippet }}”</div>{% endif %}</li>
         {% endfor %}
       </ul>
@@ -174,7 +174,7 @@
               <a class="btn secondary" href="mailto:{{ lead.email_public }}?subject={{ (d.subject or '')|urlencode }}&body={{ d.body|urlencode }}">Open in my email app</a>
             {% endif %}
             {% if d.channel == 'instagram' and lead.instagram_handle %}<a class="btn secondary" href="https://www.instagram.com/{{ lead.instagram_handle }}/" target="_blank" rel="noopener noreferrer">Open their Instagram</a>{% endif %}
-            {% if d.channel == 'linkedin' and lead.linkedin_url %}<a class="btn secondary" href="{{ lead.linkedin_url }}" target="_blank" rel="noopener noreferrer">Open their LinkedIn</a>{% endif %}
+            {% if d.channel == 'linkedin' and lead.linkedin_url %}<a class="btn secondary" href="{{ lead.linkedin_url|safe_href }}" target="_blank" rel="noopener noreferrer">Open their LinkedIn</a>{% endif %}
           </div>
           <form method="post" action="/drafts/{{ d.id }}" class="row" style="margin-top:8px">
             <input type="hidden" name="action" value="sent">

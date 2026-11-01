@@ -16,7 +16,8 @@ def _host_and_path(raw: str) -> tuple[str, str]:
     value = raw.strip()
     if "://" not in value:
         value = "https://" + value
-    m = re.match(r"^[a-zA-Z][a-zA-Z0-9+.-]*://([^/?#]+)([^?#]*)", value)
+    # Only web addresses: anything else (javascript:, data:, ftp:...) must never become a stored, clickable link.
+    m = re.match(r"^https?://([^/?#\s\"'<>]+)([^?#\s\"'<>]*)", value, flags=re.I)
     if not m:
         return "", ""
     host = m.group(1).rsplit("@", 1)[-1].split(":")[0].lower().rstrip(".")
@@ -83,10 +84,29 @@ def name_key(name: str) -> str:
     return " ".join(words) or text.strip()
 
 
-def website_url(value: str | None) -> str | None:
-    """Canonical https URL for a website field, or None if it is empty, invalid or a social profile."""
-    d = domain_of(value)
-    if not d:
+def http_url(value: str | None) -> str | None:
+    """A safe absolute http(s) URL for links shown in the UI, or None. Adds https:// when no scheme is given."""
+    if not value or not value.strip():
         return None
     v = value.strip()
-    return v if "://" in v else "https://" + v
+    if "://" not in v:
+        if re.match(r"^[a-z][a-z0-9+.-]*:", v, flags=re.I) and not re.match(r"^[^:/]+\.[^:/]+:\d", v):
+            return None  # some other scheme such as javascript: or mailto:
+        v = "https://" + v
+    host, _ = _host_and_path(v)
+    if not host or "." not in host or re.search(r"[\s\"'<>`]", v):
+        return None
+    return v
+
+
+def linkedin_url(value: str | None) -> str | None:
+    url = http_url(value)
+    if not url:
+        return None
+    host, _ = _host_and_path(url)
+    return url if host == "linkedin.com" or host.endswith(".linkedin.com") else None
+
+
+def website_url(value: str | None) -> str | None:
+    """Canonical https URL for a website field, or None if it is empty, invalid or a social profile."""
+    return http_url(value) if domain_of(value) else None

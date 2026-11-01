@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block title %}Analytics{% endblock %}
+{% block content %}
+<div class="row" style="justify-content: space-between">
+  <h1 style="margin:0">Analytics</h1>
+  <form method="get" class="row">
+    <label>Leads added <select name="period" data-autosubmit>
+      {% for k, label in [('30', 'last 30 days'), ('90', 'last 90 days'), ('all', 'all time')] %}<option value="{{ k }}" {{ 'selected' if period == k }}>{{ label }}</option>{% endfor %}
+    </select></label>
+  </form>
+</div>
+<p class="small muted">Counts only what you recorded: outreach you marked as sent, replies/meetings/proposals you logged, stages you set.
+  Nothing is estimated. The cohort is the leads added {{ 'since ' ~ since if since else 'at any time' }} and what has happened to them since.</p>
+
+{% set f = total %}
+<div class="grid" style="margin-block: 12px">
+  {% for label, value in [('Leads found', f.leads), ('Qualified', f.qualified), ('Contacted', f.contacted), ('Responded', f.responded),
+                          ('Meetings', f.meetings), ('Proposals', f.proposals), ('Won', f.won), ('Lost', f.lost)] %}
+  <div class="panel" style="margin:0"><div class="small muted">{{ label }}</div><div style="font-size:1.8rem; font-weight:700">{{ value }}</div></div>
+  {% endfor %}
+  <div class="panel" style="margin:0"><div class="small muted">Response rate</div><div style="font-size:1.8rem; font-weight:700">{{ f.response_rate ~ '%' if f.response_rate is not none else '—' }}</div>
+    <div class="small muted">{{ f.responded }} of {{ f.contacted }} contacted</div></div>
+  <div class="panel" style="margin:0"><div class="small muted">Revenue from won deals</div><div style="font-size:1.4rem; font-weight:700">
+    {% for cur, amount in f.revenue.items() %}{{ cur }} {{ '{:,.0f}'.format(amount) }}<br>{% else %}—{% endfor %}</div>
+    {% if f.won_without_value %}<div class="small muted">{{ f.won_without_value }} won deal(s) have no value entered</div>{% endif %}</div>
+</div>
+<p class="small muted">{{ sent }} outreach message(s) logged in this period. "Qualified" = reached the Qualified stage or later, or was contacted.</p>
+
+<h2>By source</h2>
+<div class="table-wrap"><table>
+  <thead><tr><th>Source</th><th>Leads</th><th>Qualified</th><th>Contacted</th><th>Responded</th><th>Meetings</th><th>Won</th><th>Response rate</th></tr></thead>
+  {% for src, s in by_source.items() %}
+  <tr><td>{{ src }}</td><td>{{ s.leads }}</td><td>{{ s.qualified }}</td><td>{{ s.contacted }}</td><td>{{ s.responded }}</td><td>{{ s.meetings }}</td><td>{{ s.won }}</td>
+      <td>{{ s.response_rate ~ '%' if s.response_rate is not none else '—' }}</td></tr>
+  {% else %}<tr><td colspan="8" class="muted">No leads in this period.</td></tr>{% endfor %}
+</table></div>
+
+<h2 id="effort">Time and cost</h2>
+<div class="grid">
+  <div class="panel" style="margin:0"><div class="small muted">Time logged</div><div style="font-size:1.6rem; font-weight:700">{{ (eff.minutes / 60)|round(1) }} h</div></div>
+  <div class="panel" style="margin:0"><div class="small muted">Money spent</div><div style="font-size:1.6rem; font-weight:700">
+    {% for cur, amount in eff.cost.items() %}{{ cur }} {{ '{:,.2f}'.format(amount) }}<br>{% else %}QAR 0{% endfor %}</div>
+    <div class="small muted">Local AI and OpenStreetMap cost nothing; enter anything you paid for.</div></div>
+  {% for label, p in [('per qualified lead', per_qualified), ('per contacted lead', per_contacted), ('per won deal', per_won)] %}
+  <div class="panel" style="margin:0"><div class="small muted">Effort {{ label }}</div>
+    <div style="font-size:1.2rem; font-weight:700">{{ p.minutes ~ ' min' if p.minutes is not none else '—' }}{{ ' · QAR ' ~ p.cost if p.cost is not none else '' }}</div></div>
+  {% endfor %}
+</div>
+<form method="post" action="/effort" class="panel row" style="margin-top:12px">
+  <label>Date <input type="date" name="day" value="{{ today }}"></label>
+  <label>Minutes <input type="number" name="minutes" min="0" max="1440" step="5" style="width:7em"></label>
+  <label>Cost <input type="text" name="cost" inputmode="decimal" style="width:7em"></label>
+  <label>Currency <input type="text" name="currency" value="QAR" size="4"></label>
+  <label>Activity <select name="category">{% for c in categories %}<option value="{{ c }}">{{ c|replace('_', ' ')|capitalize }}</option>{% endfor %}</select></label>
+  <label class="grow">Note <input type="text" name="note" maxlength="500"></label>
+  <button type="submit">Log</button>
+</form>
+{% if eff.entries %}
+<div class="table-wrap"><table>
+  <thead><tr><th>Date</th><th>Activity</th><th>Minutes</th><th>Cost</th><th>Note</th><th></th></tr></thead>
+  {% for e in eff.entries[:50] %}
+  <tr><td>{{ e.day }}</td><td>{{ e.category|replace('_', ' ') }}</td><td>{{ e.minutes }}</td><td>{{ (e.currency ~ ' ' ~ e.cost) if e.cost is not none else '' }}</td><td class="small">{{ e.note }}</td>
+      <td><form method="post" action="/effort/{{ e.id }}/delete"><button type="submit" class="secondary">Remove</button></form></td></tr>
+  {% endfor %}
+</table></div>
+{% endif %}
+{% endblock %}

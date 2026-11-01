@@ -3,9 +3,14 @@
 Local-first, single-user app for finding, researching, qualifying and tracking B2B prospects. The first use is
 an AI product-advertising service in Qatar; target profiles, stages and offers are configurable for other markets.
 
-**Status:** M1 (CRM core), M2 (website research, evidence, explainable scoring), M3 (AI ideas + outreach drafts with
-approval) and M4 (free discovery: OpenStreetMap + pasted lists) done. Workflow/analytics/benchmark (M5) is next.
-No paid services are used; Google Places is deliberately not connected. See `PROGRESS.md` and `docs/M0-feasibility-report.md`.
+**Status:** MVP complete (M0–M5) and audited. CRM core, website research with evidence and explainable scoring, AI
+ideas and approval-gated outreach drafts, free discovery (OpenStreetMap + pasted lists), Today view, analytics with a
+time/cost log, and a prospect benchmark. No paid services are used; Google Places is deliberately not connected.
+Day-to-day use and maintenance: `docs/RUNBOOK.md`. Latest benchmark: `docs/benchmark/`.
+
+**Benchmark (Qatar, free sources only):** 8 of the 20-prospect target — OpenStreetMap lists 108 relevant product
+businesses but 99 have no website, phone, email or Instagram. The paste-a-list import (Instagram brands) is the free
+way to close the gap; a paid directory such as Google Places is the other. See `PROGRESS.md` and `docs/M0-feasibility-report.md`.
 
 ## Principles
 - Facts come from code and stored sources; AI output (from M3) is labelled hypothesis/draft and never auto-sent.
@@ -61,6 +66,14 @@ Configuration via environment or `.env` (git-ignored), prefix `LEADGEN_`: `DATA_
 - **Linked sites:** research lists other websites a lead links to (stockists, partner brands); "Add as lead" pre-fills
   the form. You check them first.
 - Expect OSM to give names and locations but rarely websites or Instagram for Qatar shops.
+
+## Today and analytics (M5)
+- **Today** (home page): replies waiting for you, follow-ups due or overdue, approved drafts not yet sent, contacts with
+  no reply after 3+ days, the coming week, and the best not-yet-contacted leads (score discounted for missing evidence).
+- **Analytics:** funnel (found → qualified → contacted → responded → meetings → proposals → won/lost), response rate,
+  revenue from won deals' entered values, the same by source (osm, paste, csv, manual), and a hand-entered time/cost
+  log with effort per qualified / contacted / won lead. Only recorded events count; nothing is estimated.
+- **Another market:** add a customer profile (e.g. "UAE jewellery & watches", AE) in Settings; Discover pre-fills from it.
 
 ## AI ideas and outreach drafts (M3)
 - **Opportunity ideas:** the model reads only the stored evidence and returns up to 5 hypotheses, each citing evidence

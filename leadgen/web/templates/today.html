@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block title %}Today{% endblock %}
+{% block content %}
+<h1>Today <span class="muted small">{{ today }}</span></h1>
+{% if batch.running or ai_pending %}<p class="small muted">
+  {% if batch.running %}Research batch running ({{ batch.done }}/{{ batch.total }}). {% endif %}
+  {% if ai_pending %}{{ ai_pending }} AI job(s) in progress.{% endif %}</p>{% endif %}
+
+{% macro lead_link(b) %}<a href="/leads/{{ b.id }}">{{ b.name }}</a> <span class="badge">{{ b.stage.name }}</span>{% endmacro %}
+
+<div class="grid" style="grid-template-columns: repeat(auto-fill, minmax(320px, 1fr))">
+  <section class="panel">
+    <h2 style="margin-top:0">They replied — your move <span class="badge {{ 'warn' if v.replied }}">{{ v.replied|length }}</span></h2>
+    <ul class="timeline">
+      {% for b, a in v.replied %}<li>{{ lead_link(b) }}<div class="small muted">{{ a.occurred_at|local_time }} · {{ a.summary[:140] }}</div></li>
+      {% else %}<li class="muted small">No unanswered replies.</li>{% endfor %}
+    </ul>
+  </section>
+
+  <section class="panel">
+    <h2 style="margin-top:0">Follow-ups due <span class="badge {{ 'warn' if v.due }}">{{ v.due|length }}</span></h2>
+    <ul class="timeline">
+      {% for b in v.due %}<li>{{ lead_link(b) }} <span class="badge {{ 'err' if b.follow_up_on < today else 'warn' }}">{{ 'overdue since ' if b.follow_up_on < today else 'due ' }}{{ b.follow_up_on }}</span></li>
+      {% else %}<li class="muted small">Nothing due.</li>{% endfor %}
+    </ul>
+  </section>
+
+  <section class="panel">
+    <h2 style="margin-top:0">Approved, not yet sent <span class="badge">{{ v.approved_drafts|length }}</span></h2>
+    <ul class="timeline">
+      {% for d in v.approved_drafts %}<li><a href="/leads/{{ d.business_id }}#draft-{{ d.id }}">{{ d.business.name }}</a> <span class="badge">{{ d.channel }}</span>
+        <div class="small muted">{{ d.body[:100] }}…</div></li>
+      {% else %}<li class="muted small">No approved drafts waiting.</li>{% endfor %}
+    </ul>
+  </section>
+
+  <section class="panel">
+    <h2 style="margin-top:0">No reply after {{ await_days }}+ days <span class="badge">{{ v.awaiting|length }}</span></h2>
+    <p class="small muted">Contacted, no reply logged and no follow-up date set. Consider one polite follow-up.</p>
+    <ul class="timeline">
+      {% for b, a, days in v.awaiting %}<li>{{ lead_link(b) }} <span class="small muted">{{ days }} days via {{ a.channel or 'unknown' }}</span></li>
+      {% else %}<li class="muted small">None.</li>{% endfor %}
+    </ul>
+  </section>
+
+  <section class="panel">
+    <h2 style="margin-top:0">Coming up (7 days) <span class="badge">{{ v.upcoming|length }}</span></h2>
+    <ul class="timeline">
+      {% for b in v.upcoming %}<li>{{ lead_link(b) }} <span class="small muted">{{ b.follow_up_on }}</span></li>
+      {% else %}<li class="muted small">Nothing scheduled.</li>{% endfor %}
+    </ul>
+  </section>
+
+  <section class="panel">
+    <h2 style="margin-top:0">Best not-yet-contacted</h2>
+    <p class="small muted">Highest fit score among leads with no outreach logged. Low coverage means research them first.</p>
+    <ul class="timeline">
+      {% for b in v.top_uncontacted %}<li>{{ lead_link(b) }} <strong>{{ b.score }}</strong> <span class="small muted">{{ b.score_coverage }}% cov.</span></li>
+      {% else %}<li class="muted small">No scored, uncontacted leads.</li>{% endfor %}
+    </ul>
+  </section>
+</div>
+{% endblock %}

@@ -1,7 +1,8 @@
 """OpenStreetMap discovery through the public Overpass API (free, ODbL-licensed data).
 
 Usage-policy safeguards: one query at a time, identified User-Agent, server-side timeout, results cached on disk
-for 24 hours so repeating a search does not hit the server, and 429/504 answers are reported instead of retried.
+for 24 hours so repeating a search does not hit the server, at most two backed-off retries when the server says it is
+at capacity (502/503/504), and an immediate stop on 429 (rate-limited).
 Data © OpenStreetMap contributors (ODbL); each lead keeps a link to its OSM object for attribution.
 """
 import hashlib
@@ -19,6 +20,9 @@ from leadgen import normalize
 OVERPASS_URL = "https://overpass-api.de/api/interpreter"
 USER_AGENT = "LeadDesk/0.4 (personal B2B research; contact via project owner)"
 CACHE_TTL_SECONDS = 24 * 3600
+BUSY_STATUSES = (502, 503, 504)
+BUSY_BACKOFF_SECONDS = (5, 15)  # two polite retries when the server reports it is at capacity
+sleep = time.sleep  # tests replace this
 _LOCK = threading.Lock()  # Overpass asks clients not to run parallel queries
 
 # Shop categories offered in the UI: OSM tag value -> label. "beauty" is mostly salons (services), so it is opt-in.
@@ -126,7 +130,13 @@ def search(country: str, shop_types: list[str], city: str | None, *, cache_dir: 
     client = client or httpx.Client(headers={"User-Agent": USER_AGENT}, timeout=120)
     try:
         with _LOCK:
-            resp = client.post(OVERPASS_URL, data={"data": query})
+            for attempt, wait in enumerate(BUSY_BACKOFF_SECONDS + (None,)):
+                resp = client.post(OVERPASS_URL, data={"data": query})
+                # 502/503/504 mean "at capacity"; Overpass asks clients to back off and retry. 429 means we
+                # are being rate-limited, so we stop at once.
+                if resp.status_code not in BUSY_STATUSES or wait is None:
+                    break
+                sleep(wait)
     except httpx.TimeoutException as exc:
         raise OsmError("OpenStreetMap did not answer in time; try again later or narrow the search") from exc
     except httpx.HTTPError as exc:
@@ -134,7 +144,7 @@ def search(country: str, shop_types: list[str], city: str | None, *, cache_dir: 
     finally:
         if own:
             client.close()
-    if resp.status_code in (429, 504):
+    if resp.status_code == 429 or resp.status_code in BUSY_STATUSES:
         raise OsmError("OpenStreetMap's free server is busy or rate-limiting (HTTP %d); wait a few minutes" % resp.status_code)
     if resp.status_code != 200:
         raise OsmError(f"OpenStreetMap returned HTTP {resp.status_code}")

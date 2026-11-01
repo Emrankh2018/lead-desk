@@ -26,6 +26,9 @@ def main(argv: list[str] | None = None) -> int:
     pw.add_argument("username")
     sub.add_parser("backup")
     sub.add_parser("dev-user")
+    bm = sub.add_parser("benchmark")
+    bm.add_argument("--country", default="QA")
+    bm.add_argument("--no-research", action="store_true", help="skip fetching websites")
     ev = sub.add_parser("eval")
     ev.add_argument("--quick", action="store_true", help="3 cases, 1 draft each")
     args = parser.parse_args(argv)
@@ -36,6 +39,18 @@ def main(argv: list[str] | None = None) -> int:
         from leadgen.web.app import create_app
         # Bound to loopback only: exposing it on a network needs HTTPS and a deliberate decision.
         uvicorn.run(create_app(settings), host="127.0.0.1", port=args.port)
+        return 0
+
+    if args.cmd == "benchmark":
+        from leadgen import benchmark
+        from leadgen.discovery.osm import OsmError
+        try:
+            report = benchmark.run(settings, country=args.country.upper(), do_research=not args.no_research)
+        except OsmError as exc:
+            print(f"Benchmark could not run: {exc}", file=sys.stderr)
+            return 1
+        print(json.dumps(report["summary"], indent=1))
+        print(f"Report: {report['path']}")
         return 0
 
     if args.cmd == "eval":

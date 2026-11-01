@@ -42,6 +42,11 @@ def local_time(value: datetime | None, fmt: str = "%Y-%m-%d %H:%M") -> str:
     return value.replace(tzinfo=ZoneInfo("UTC")).astimezone(DISPLAY_TZ).strftime(fmt)
 
 
+def safe_href(url: str | None) -> str:
+    """Last line of defence for stored external links: anything but http(s) becomes an inert '#'."""
+    return url if url and urlsplit(url.strip()).scheme.lower() in ("http", "https") else "#"
+
+
 def today_local() -> date:
     return datetime.now(DISPLAY_TZ).date()
 
@@ -81,11 +86,14 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.state.fetcher_factory = Fetcher  # tests replace this with an offline fetcher
     app.state.osm_search = osm_search  # tests replace this with canned OpenStreetMap results
     app.state.batch = BatchRunner(db.sessionmaker, lambda: app.state.fetcher_factory())
-    app.state.ai_provider_factory = lambda: make_provider(settings)  # tests replace this with a scripted provider
+    # One provider for the app's lifetime: creating one per call leaked an open HTTP client each time.
+    provider = make_provider(settings)
+    app.state.ai_provider_factory = lambda: provider  # tests replace this with a scripted provider
     app.state.ai = AiWorker(db.sessionmaker, lambda: app.state.ai_provider_factory())
 
     env = jinja2.Environment(loader=jinja2.FileSystemLoader(WEB_DIR / "templates"), autoescape=True)
     env.filters["local_time"] = local_time
+    env.filters["safe_href"] = safe_href
     env.globals.update(ui_lang=settings.ui_lang, ui_dir=settings.ui_dir)
     app.state.templates = Jinja2Templates(env=env)
 
@@ -98,7 +106,8 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     async def _login_redirect(request: Request, _exc: LoginRequired):
         return RedirectResponse(f"/login?next={request.url.path}", status_code=303)
 
-    from leadgen.web import routes_admin, routes_ai, routes_discovery, routes_leads, routes_research
+    from leadgen.web import routes_admin, routes_ai, routes_discovery, routes_insights, routes_leads, routes_research
+    app.include_router(routes_insights.router)
     app.include_router(routes_leads.router)
     app.include_router(routes_admin.router)
     app.include_router(routes_research.router)

@@ -22,7 +22,7 @@ def test_login_rejects_wrong_password_and_throttles(client):
 def test_login_ignores_offsite_next(client):
     r = client.post("/login", data={"username": TEST_USER, "password": TEST_PASSWORD, "next": "//evil.example"},
                     follow_redirects=False)
-    assert r.headers["location"] == "/leads"
+    assert r.headers["location"] == "/today"
 
 
 def test_cross_origin_post_is_blocked(auth_client):
@@ -209,6 +209,21 @@ def test_paste_list_preview_and_commit(auth_client):
 def test_add_as_lead_prefill(auth_client):
     page = auth_client.get("/leads/new?website=giftsdoha.qa&notes=Linked%20from%20Oud%20Noir&evil=x").text
     assert 'value="giftsdoha.qa"' in page and "Linked from Oud Noir" in page and "evil" not in page
+
+
+def test_today_and_analytics_pages(auth_client):
+    url = auth_client.post("/leads", data={"name": "Due Co", "follow_up_on": "2020-01-01"}, follow_redirects=False).headers["location"]
+    assert auth_client.get("/", follow_redirects=False).headers["location"] == "/today"
+    today = auth_client.get("/today").text
+    assert "Follow-ups due" in today and "Due Co" in today and "overdue since 2020-01-01" in today
+    auth_client.post(f"{url}/activity", data={"kind": "outreach", "channel": "email", "summary": "hello"})
+    page = auth_client.get("/analytics?period=30").text
+    assert "Contacted" in page and "Nothing is estimated" in page and "manual" in page
+    assert "Logged." in auth_client.post("/effort", data={"minutes": "45", "category": "research", "note": "OSM review"}).text
+    page = auth_client.get("/analytics").text
+    assert "0.8 h" in page and "OSM review" in page and "45 min" in page  # 45 minutes per 1 contacted lead
+    assert "Enter minutes or a cost" in auth_client.post("/effort", data={"category": "research"}).text
+    assert "check the category" in auth_client.post("/effort", data={"minutes": "5000", "category": "research"}).text
 
 
 def test_manual_evidence_form(auth_client):

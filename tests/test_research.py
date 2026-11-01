@@ -106,7 +106,7 @@ def biz(**kw):
 
 def test_score_without_evidence_is_unknown_not_zero():
     value, coverage, rows = scoring.score(biz(), [], ICP)
-    assert value == 0 and coverage == 10  # only "reachable" is decidable (no contact route → 0)
+    assert value == 0 and coverage == 9  # only "reachable" (10 of 110) is decidable: no contact route → 0
     assert all(r["fraction"] is None for r in rows if r["id"] != "reachable")
 
 
@@ -118,7 +118,7 @@ def test_score_explains_each_criterion_with_evidence_ids():
           scoring.Ev(5, "social_link", {"network": "instagram"}, True, "ig"),
           scoring.Ev(6, "published_email", {"email": "info@x.qa"}, True, "email")]
     value, coverage, rows = scoring.score(biz(), ev, ICP)
-    assert value == 100 and coverage == 100
+    assert value == 100 and coverage == 91  # "independent" unknown without a directory listing
     by = {r["id"]: r for r in rows}
     assert by["industry_fit"]["evidence_ids"] == [1] and "oud" in by["industry_fit"]["explanation"]
     assert by["video_gap"]["evidence_ids"] == [3]
@@ -130,6 +130,25 @@ def test_score_penalises_other_country_redirect_and_existing_video():
     _, _, rows = scoring.score(biz(country="QA"), ev, ICP)
     by = {r["id"]: r for r in rows}
     assert by["location_fit"]["fraction"] == 0.3 and by["video_gap"]["fraction"] == 0.3
+
+
+@pytest.mark.parametrize("value,fraction", [
+    ({"branches": 1, "wikidata_brand": False}, 1.0), ({"branches": 2, "wikidata_brand": False}, 0.6),
+    ({"branches": 20, "wikidata_brand": False}, 0.2), ({"branches": 1, "wikidata_brand": True}, 0.2),
+])
+def test_independent_brand_criterion(value, fraction):
+    _, _, rows = scoring.score(biz(), [scoring.Ev(1, "directory_listing", value, True, "listing")], ICP)
+    row = next(r for r in rows if r["id"] == "independent")
+    assert row["fraction"] == fraction and row["evidence_ids"] == [1]
+
+
+def test_industry_fit_handles_british_spelling_seen_in_osm_labels():
+    icp = SimpleNamespace(**(vars(ICP) | {"industries": ["jewelry"], "keywords": []}))
+    _, _, rows = scoring.score(biz(industry="jewellery"), [], icp)
+    assert next(r for r in rows if r["id"] == "industry_fit")["fraction"] == 1.0
+    ev = [scoring.Ev(5, "directory_listing", {"branches": 1}, True, "OpenStreetMap lists 1 location(s); category: jewelry")]
+    _, _, rows = scoring.score(biz(), ev, icp)
+    assert next(r for r in rows if r["id"] == "industry_fit")["evidence_ids"] == [5]
 
 
 def test_zero_weight_disables_criterion():
@@ -161,7 +180,7 @@ def test_research_lead_stores_evidence_fills_contacts_and_scores(session):
     assert b.email_public == "info@oudnoir.qa" and b.email_source_url.rstrip("/") == "https://oudnoir.qa"
     assert b.instagram_handle == "oudnoir.qa"
     assert b.phone_e164 == "+97455551234"  # from the contact page's tel: link
-    assert b.score is not None and b.score >= 85 and b.score_coverage == 100
+    assert b.score is not None and b.score >= 85 and b.score_coverage == 91
     # injected instructions on the contact page are not turned into evidence
     assert not any("50,000" in e.text for e in ev)
 
@@ -191,9 +210,9 @@ def test_no_website_is_skipped_but_scored_from_known_details(session):
     run = service.research_lead(session, b, actor="t", fetcher=make_fetcher({}))
     assert run.status == "skipped"
     by = {r["id"]: r for r in b.score_breakdown}
-    # website-only criteria stay unknown (35% of default weight), so coverage shows it is under-researched
+    # website-only criteria and chain size stay unknown, so coverage shows it is under-researched (65 of 110)
     assert by["video_gap"]["fraction"] is None and by["sells_online"]["fraction"] is None
-    assert b.score_coverage == 65
+    assert b.score_coverage == 59
 
 
 def test_manual_observation_requires_text_and_web_source(session):

@@ -113,7 +113,8 @@ def create_lead(session: Session, data: LeadInput, *, actor: str, source: str, s
     exact = exact_matches(session, domain=fields["domain"], handle=fields["instagram_handle"], phone=fields["phone_e164"])
     if exact:
         raise DuplicateLead(exact)
-    fuzzy = fuzzy_matches(session, name_key=fields["name_key"], city=fields["city"])
+    fuzzy = fuzzy_matches(session, name_key=fields["name_key"], city=fields["city"], domain=fields["domain"],
+                          handle=fields["instagram_handle"])
     biz = Business(**fields, source=source, source_ref=source_ref, stage=first_stage(session))
     session.add(biz)
     session.flush()

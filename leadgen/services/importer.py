@@ -9,6 +9,7 @@ from dataclasses import asdict, dataclass, field
 
 from sqlalchemy.orm import Session
 
+from leadgen import normalize
 from leadgen.services.dedupe import exact_matches, fuzzy_matches
 from leadgen.services.leads import DuplicateLead, LeadError, LeadInput, create_lead
 
@@ -77,6 +78,33 @@ def parse(content: bytes) -> tuple[dict[str, str], list[dict]]:
     return mapping, rows
 
 
+MAX_PASTE_LINES = 500
+
+
+def parse_lines(text: str) -> list[dict]:
+    """Turn a pasted list into rows. Each line may be a website, an Instagram handle/URL, or "Name, website-or-handle"."""
+    rows = []
+    for line in text.splitlines()[:MAX_PASTE_LINES]:
+        line = line.strip().strip("•-*").strip()
+        if not line:
+            continue
+        name, ident = "", line
+        if "," in line or "\t" in line:
+            name, _, ident = line.replace("\t", ",").partition(",")
+            name, ident = name.strip(), ident.strip()
+        row = {"name": name}
+        if ident.startswith("@") or "instagram.com" in ident.lower():
+            row["instagram"] = ident
+        elif normalize.domain_of(ident) and " " not in ident:
+            row["website"] = ident
+        elif not name:
+            row["name"] = ident  # a bare name
+        else:
+            row["name"] = f"{name} {ident}".strip()
+        rows.append(row)
+    return rows
+
+
 def preview(session: Session, rows: list[dict], *, icp_id: int | None, default_region: str) -> list[PreviewRow]:
     out: list[PreviewRow] = []
     seen: dict[str, int] = {}
@@ -100,13 +128,14 @@ def preview(session: Session, rows: list[dict], *, icp_id: int | None, default_r
         if exact:
             out.append(PreviewRow(line, data, "duplicate", "; ".join(f"{m.reason} as #{m.business.id} {m.business.name}" for m in exact)))
             continue
-        fuzzy = fuzzy_matches(session, name_key=fields["name_key"], city=fields["city"])
+        fuzzy = fuzzy_matches(session, name_key=fields["name_key"], city=fields["city"], domain=fields["domain"],
+                              handle=fields["instagram_handle"])
         out.append(PreviewRow(line, data, "new", fields["name"], [f"#{m.business.id} {m.business.name} ({m.reason})" for m in fuzzy[:3]]))
     return out
 
 
 def commit(session: Session, rows: list[PreviewRow], *, filename: str, icp_id: int | None, actor: str,
-           default_region: str) -> dict:
+           default_region: str, source: str = "csv") -> dict:
     created, skipped = 0, 0
     for row in rows:
         if row.status != "new":
@@ -116,7 +145,7 @@ def commit(session: Session, rows: list[PreviewRow], *, filename: str, icp_id: i
         if data.get("email"):
             data["email_source"] = f"imported from {filename}"
         try:
-            create_lead(session, LeadInput(**data, icp_id=icp_id), actor=actor, source="csv",
+            create_lead(session, LeadInput(**data, icp_id=icp_id), actor=actor, source=source,
                         source_ref=f"{filename}:{row.line}", default_region=default_region)
             created += 1
         except (DuplicateLead, LeadError):

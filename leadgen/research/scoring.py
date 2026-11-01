@@ -8,7 +8,7 @@ The score measures fit with the ideal customer profile and visible opportunity, 
 from collections.abc import Callable
 from dataclasses import asdict, dataclass
 
-RUBRIC_VERSION = "rubric-v1"
+RUBRIC_VERSION = "rubric-v2"  # v2 adds "independent" (chain size from directory listings)
 
 
 @dataclass
@@ -47,13 +47,27 @@ def _of(evidence: list[Ev], kind: str) -> list[Ev]:
     return [e for e in evidence if e.kind == kind]
 
 
+# British/American and common variant spellings, so "Jewellery" (OpenStreetMap label) matches a "jewelry" profile.
+_SPELLING = {"jewellery": "jewelry", "jewelery": "jewelry", "jewellers": "jewelers", "jeweller": "jeweler",
+             "perfumery": "perfume", "perfumes": "perfume", "fragrances": "fragrance", "colour": "color",
+             "accessories": "accessory", "cosmetic": "cosmetics"}
+
+
+def _norm(text: str) -> str:
+    text = text.lower()
+    for variant, canonical in _SPELLING.items():
+        text = text.replace(variant, canonical)
+    return text
+
+
 def _industry_fit(biz, evidence, icp):
-    terms = [t.lower() for t in (icp.industries + icp.keywords)] if icp else []
+    terms = [_norm(t) for t in (icp.industries + icp.keywords)] if icp else []
     if not terms:
         return None, "Profile lists no industries or keywords", []
-    sources = [(None, biz.industry or "")] + [(e.id, e.text) for e in evidence if e.kind in ("page_title", "meta_description")]
-    hits = sorted({t for _, text in sources for t in terms if t and t in text.lower()})
-    ids = [i for i, text in sources if i and any(t in text.lower() for t in hits)]
+    sources = [(None, _norm(biz.industry or ""))] + [(e.id, _norm(e.text)) for e in evidence
+                                                       if e.kind in ("page_title", "meta_description", "directory_listing")]
+    hits = sorted({t for _, text in sources for t in terms if t and t in text})
+    ids = [i for i, text in sources if i and any(t in text for t in hits)]
     if hits:
         return 1.0, f"Matches profile terms: {', '.join(hits[:5])}", ids
     if any(text for _, text in sources):
@@ -132,6 +146,19 @@ def _reachable(biz, evidence, icp):
     return 0.0, "No public contact route on record", []
 
 
+def _independent(biz, evidence, icp):
+    listings = _of(evidence, "directory_listing")
+    if not listings:
+        return None, "Size unknown (no directory listing with location count)", []
+    best = max(listings, key=lambda e: e.value.get("branches", 1))
+    n = best.value.get("branches", 1)
+    if best.value.get("wikidata_brand") or n >= 3:
+        return 0.2, f"Chain or recognised brand ({n} locations listed); likely has in-house or agency marketing", [best.id]
+    if n == 2:
+        return 0.6, "Two locations listed: small multi-branch business", [best.id]
+    return 1.0, "Single location listed: independent business, the core pilot customer", [best.id]
+
+
 CRITERIA = [
     Criterion("industry_fit", "Industry fit", 25, "Business sells something in the profile's industries/keywords", _industry_fit),
     Criterion("location_fit", "Location fit", 20, "Operates in the profile's target country", _location_fit),
@@ -139,6 +166,7 @@ CRITERIA = [
     Criterion("sells_online", "Sells online", 15, "Has an online store or catalogue that benefits from better visuals", _sells_online),
     Criterion("social_presence", "Visual social presence", 10, "Uses Instagram/TikTok etc., where short ads are used", _social_presence),
     Criterion("reachable", "Reachable", 10, "Has a public, appropriate contact route", _reachable),
+    Criterion("independent", "Independent brand", 10, "Single-location or small brand rather than a large chain", _independent),
 ]
 CRITERIA_BY_ID = {c.id: c for c in CRITERIA}
 

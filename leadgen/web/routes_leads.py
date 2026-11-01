@@ -112,7 +112,9 @@ def list_leads(request: Request, session: Session = SessionDep, user: str = User
 
 @router.get("/leads/new")
 def new_lead(request: Request, session: Session = SessionDep, user: str = UserDep):
-    return render(request, "lead_new.html", form={}, **_lookups(session))
+    # Pre-fill from links such as "Add as lead" on a researched site's outbound links.
+    prefill = {k: v[:500] for k, v in request.query_params.items() if k in LEAD_FIELDS}
+    return render(request, "lead_new.html", form=prefill, **_lookups(session))
 
 
 @router.post("/leads")

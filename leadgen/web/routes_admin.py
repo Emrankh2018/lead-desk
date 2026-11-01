@@ -74,7 +74,8 @@ async def import_commit(request: Request, session: Session = SessionDep, user: s
         return _see_other("/import")
     payload = json.loads(path.read_text(encoding="utf-8"))
     result = importer.commit(session, importer.rows_from_json(payload["rows"]), filename=payload["filename"],
-                             icp_id=payload["icp_id"], actor=user, default_region=request.app.state.settings.default_country)
+                             icp_id=payload["icp_id"], actor=user, default_region=request.app.state.settings.default_country,
+                             source=payload.get("source", "csv"))
     audit.record(session, user, "import.commit", "import", None, filename=payload["filename"], **result)
     session.flush()
     rescore_all(session)

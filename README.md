@@ -3,8 +3,9 @@
 Local-first, single-user app for finding, researching, qualifying and tracking B2B prospects. The first use is
 an AI product-advertising service in Qatar; target profiles, stages and offers are configurable for other markets.
 
-**Status:** M1 (CRM core), M2 (website research, evidence, explainable scoring) and M3 (AI ideas + outreach drafts with
-approval) done. Free discovery connectors (M4) and workflow/analytics/benchmark (M5) are next. See `PROGRESS.md` and `docs/M0-feasibility-report.md`.
+**Status:** M1 (CRM core), M2 (website research, evidence, explainable scoring), M3 (AI ideas + outreach drafts with
+approval) and M4 (free discovery: OpenStreetMap + pasted lists) done. Workflow/analytics/benchmark (M5) is next.
+No paid services are used; Google Places is deliberately not connected. See `PROGRESS.md` and `docs/M0-feasibility-report.md`.
 
 ## Principles
 - Facts come from code and stored sources; AI output (from M3) is labelled hypothesis/draft and never auto-sent.
@@ -48,6 +49,18 @@ Configuration via environment or `.env` (git-ignored), prefix `LEADGEN_`: `DATA_
   means under-researched, not a bad lead. Weights are editable per profile (Settings → Scoring weights).
 - The score measures fit and visible opportunity, not intent to buy, and does not judge company size.
 - Add your own observations (e.g. from Instagram) with the page you checked; they appear as evidence.
+
+## Discovery (M4, free sources only)
+- **Discover → OpenStreetMap:** pick country, optional city (e.g. Doha, Al Rayyan) and shop categories (pre-selected
+  from the customer profile). Branches of one business are grouped into one lead with a location count. The preview
+  marks new / possible duplicate / already in list; chains, salons and name-only listings are shown but not pre-selected.
+  Add selected leads and optionally research those with a website. Results are cached 24 h; data © OpenStreetMap
+  contributors (ODbL), each lead links back to its OSM listing.
+- **Import → Paste a list:** fastest way to add Instagram-only brands: one website, @handle, Instagram link or
+  "Name, site" per line, with the same duplicate preview as CSV import.
+- **Linked sites:** research lists other websites a lead links to (stockists, partner brands); "Add as lead" pre-fills
+  the form. You check them first.
+- Expect OSM to give names and locations but rarely websites or Instagram for Qatar shops.
 
 ## AI ideas and outreach drafts (M3)
 - **Opportunity ideas:** the model reads only the stored evidence and returns up to 5 hypotheses, each citing evidence

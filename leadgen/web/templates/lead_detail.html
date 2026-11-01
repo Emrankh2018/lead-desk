@@ -86,6 +86,17 @@
         {% endfor %}
       </ul>
       {% endif %}
+      {% set outbound = facts|selectattr('kind', 'equalto', 'outbound_links')|list %}
+      {% if outbound %}
+      <h2>Other sites this website links to</h2>
+      <p class="small muted">Possible stockists, partner brands or sister businesses. Check before adding.</p>
+      <ul class="timeline">
+        {% for d in outbound[0].value.domains %}
+        <li class="row" style="justify-content: space-between"><span>{{ d }}</span>
+          <a class="btn secondary" href="/leads/new?website={{ d|urlencode }}&notes={{ ('Linked from the website of ' ~ lead.name)|urlencode }}">Add as lead</a></li>
+        {% endfor %}
+      </ul>
+      {% endif %}
       {% if limits %}
       <h2>Not verified</h2>
       <ul class="timeline">{% for e in limits %}<li id="ev-{{ e.id }}" class="small"><span class="badge warn">E{{ e.id }}</span> {{ e.text }}</li>{% endfor %}</ul>

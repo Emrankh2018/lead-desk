@@ -2,6 +2,16 @@
 {% block title %}Import{% endblock %}
 {% block content %}
 <h1>Import a prospect list</h1>
+<form method="post" action="/import/paste" class="panel" id="paste">
+  <h2 style="margin-top:0">Paste a list</h2>
+  <p class="small muted">One per line: a website (<code>brand.qa</code>), an Instagram handle or link (<code>@brand.qa</code>), or <code>Name, website-or-handle</code>. Up to 500 lines.</p>
+  <label>List <textarea name="text" rows="8" required placeholder="@noorabayas.qa&#10;Oud Noir, oudnoir.qa&#10;https://www.instagram.com/rose.atelier/"></textarea></label>
+  <div class="row" style="margin-top:8px">
+    <label>Assign to profile <select name="icp_id"><option value="">None</option>{% for i in icps %}<option value="{{ i.id }}">{{ i.name }}</option>{% endfor %}</select></label>
+    <button type="submit">Preview</button>
+  </div>
+</form>
+<h2>Or upload a CSV</h2>
 <form method="post" action="/import" enctype="multipart/form-data" class="panel row">
   <label class="grow">CSV file (UTF-8, max 2 MB) <input type="file" name="file" accept=".csv,text/csv" required></label>
   <label>Assign to profile

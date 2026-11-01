@@ -71,3 +71,27 @@
 - Not committed. Mark-as-sent tested in automated tests, not clicked in the browser on real data.
 - Next (awaiting owner go-ahead): M4 — free discovery only (OpenStreetMap search by country/city/category, website-link
   suggestions, fast bulk add of Instagram handles/URLs). Google Places stays banked.
+- M3 committed as 7043440.
+
+## 2026-11-01 — M4 free discovery (done, local)
+- Built: `leadgen/discovery/` — Overpass client (country + optional city area + shop categories, identified UA,
+  one query at a time, 24 h disk cache, 429/504 reported not retried, ODbL attribution + OSM link per lead), branch
+  grouping (same name / website / brand / Instagram → one lead with a location count), classification against the
+  list, preview with checkboxes, add + optional research batch. Discover page, recent-search log (`discovery_runs`,
+  migration `0004`). Import page: paste a list (websites, @handles, Instagram links, "Name, site"). Research now
+  records outbound links; lead page offers "Add as lead" for them. Scoring rubric-v2 adds "Independent brand"
+  (single location 1.0, two 0.6, chain 3+ or Wikidata brand 0.2; weight 10).
+- Live Qatar run (perfume, cosmetics, jewellery, watches, accessories, bags, boutiques; 29 s, then cached):
+  160 listings → 112 businesses (6 unnamed skipped); chains grouped (Ahmed Al Maghribi ×20, Al Romaizan ×7,
+  Al Sulaiman ×5, Sky ×4, V Perfumes ×3); 5 already in list; 1 possible duplicate caught (Alsugha website = existing
+  lead's Instagram handle). Only ~5% of new businesses list any website/phone/Instagram; 3 were pre-selected and added
+  (Ajmal Perfumes 89, Rieman Jewelry 94, S.D. Salman Al Sayegh Jewellery 89; all 59% coverage, no website).
+- Fixed from the live run: missed duplicate (spacing / website-vs-Instagram), ~100 name-only listings pre-selected,
+  service businesses tagged as shops (salon/spa/massage) pre-selected, "jewellery" vs "jewelry" scoring 0 on industry.
+- Tests: `uv run pytest -q` → 111 passed (canned OSM data; no live network in tests).
+- Known limits / follow-ups: OSM rarely has websites or Instagram, so most Qatar prospects still need the paste list;
+  discovery does not enrich leads already in the list (e.g. Al Romaizan, a 7-branch chain imported earlier, has no
+  location count so still scores 90); "clothes" category is noisy (general fashion retail).
+- Not committed.
+- Next (awaiting owner go-ahead): M5 — Today/follow-up view, funnel + per-source analytics from recorded events,
+  time/cost log, second ICP to prove re-targeting, Docker file, runbook, 20-prospect benchmark with source breakdown.

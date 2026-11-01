@@ -35,6 +35,13 @@ STORE_TEXT_MARKERS = ["add to cart", "add to bag", "add to basket", "buy now", "
 QATAR_MARKERS = [("QAR", r"\bQAR\b"), ("ر.ق", r"ر\.ق"), ("Doha", r"\bDoha\b"), ("Qatar", r"\bQatar\b"),
                  ("الدوحة", r"الدوحة"), ("قطر", r"قطر"), ("+974", r"\+974")]
 CONTACT_LINK_WORDS = ["contact", "about", "تواصل", "اتصل", "من نحن"]
+# Outbound links to these are infrastructure (payments, platforms, maps, credits), never prospects.
+SERVICE_HOSTS = ("google.", "apple.com", "shopify.com", "myshopify.com", "wordpress.", "woocommerce.com", "wix.com",
+                 "squarespace.com", "salla.", "zid.", "paypal.", "stripe.", "tap.company", "myfatoorah.", "visa.",
+                 "mastercard.", "cloudflare.", "w3.org", "schema.org", "gstatic.", "jquery.", "bootstrapcdn.",
+                 "fonts.", "cdn.", "maps.", "goo.gl", "bit.ly", "linktr.ee", "whatsapp.com", "t.me", "telegram.",
+                 "expandcart.", "trustpilot.", "tamara.co", "tabby.ai", "aramex.", "dhl.", "fedex.")
+MAX_OUTBOUND = 10
 SNIPPET_LEN = 240
 
 
@@ -87,6 +94,7 @@ def extract_page(html: str, page_url: str, *, site_domain: str | None) -> tuple[
 
     socials: dict[str, str] = {}
     contact_pages: list[str] = []
+    outbound: list[str] = []
     mailtos, tels = set(), set()
     for a in tree.css("a[href]"):
         href = (a.attributes.get("href") or "").strip()
@@ -108,6 +116,11 @@ def extract_page(html: str, page_url: str, *, site_domain: str | None) -> tuple[
             label = (a.text(strip=True) + " " + low).lower()
             if any(w in label for w in CONTACT_LINK_WORDS) and absolute not in contact_pages:
                 contact_pages.append(absolute.split("#")[0])
+        elif (d := normalize.domain_of(absolute)) and d != site_domain and not any(s in d for s in SERVICE_HOSTS) \
+                and d not in outbound and len(outbound) < MAX_OUTBOUND:
+            outbound.append(d)
+    if outbound:
+        signals.append(Signal("outbound_links", f"Links to other websites: {', '.join(outbound)}", {"domains": outbound}))
     for net, url in socials.items():
         value = {"network": net, "url": url}
         if net == "instagram" and (h := normalize.instagram_handle(url)):

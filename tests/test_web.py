@@ -93,7 +93,7 @@ def test_research_button_shows_score_and_evidence(auth_client):
     page = auth_client.post(f"{url}/research").text
     assert "Research finished with some pages unavailable" in page
     assert "Public Shopify catalogue lists 4 products" in page and "robots.txt does not allow" in page
-    assert "Industry fit" in page and "100%" in page
+    assert "Industry fit" in page and "91%" in page  # all but "independent brand" (needs a directory listing)
     assert "Oud Noir" in auth_client.get("/research").text
     weights = {"industry_fit": "0", "location_fit": "20", "video_gap": "20", "sells_online": "15", "social_presence": "10", "reachable": "10"}
     assert "rescored" in auth_client.post("/settings/scoring/1", data=weights).text
@@ -171,6 +171,44 @@ def test_sender_profile_and_outreach_page(auth_client):
     url = auth_client.post("/leads", data={"name": "Gold Co"}, follow_redirects=False).headers["location"]
     auth_client.post(f"{url}/drafts", data={"channel": "instagram", "mode": "template"})
     assert "Gold Co" in auth_client.get("/outreach").text
+
+
+def test_discover_search_preview_and_add(auth_client):
+    from leadgen.discovery import osm
+    from tests.test_discovery import ELEMENTS
+    auth_client.app.state.osm_search = lambda country, types, city, cache_dir: (osm.parse(ELEMENTS), False)
+    form = auth_client.get("/discover").text
+    assert 'value="perfumery" checked' in form and 'value="QA"' in form and "OpenStreetMap contributors" in form
+    preview = auth_client.post("/discover", data={"country": "QA", "types": ["perfumery", "jewelry"], "icp_id": "1"}).text
+    assert "27 listings → 5 businesses" in preview and "2 listings without a name skipped" in preview
+    token = preview.split('name="token" value="')[1].split('"')[0]
+    oud_key = preview.split('value="node/')[1].split('"')[0]  # first row is a small shop (chains sort last)
+    done = auth_client.post("/discover/add", data={"token": token, "keys": [f"node/{oud_key}"]}).text
+    assert "Added 1 leads from OpenStreetMap" in done
+    assert "osm" in auth_client.get("/audit").text and "1</td></tr>" in auth_client.get("/discover").text.replace(" ", "")
+
+
+def test_discover_reports_osm_errors(auth_client):
+    from leadgen.discovery import osm
+
+    def busy(*a, **k):
+        raise osm.OsmError("OpenStreetMap's free server is busy or rate-limiting (HTTP 429); wait a few minutes")
+    auth_client.app.state.osm_search = busy
+    r = auth_client.post("/discover", data={"country": "QA", "types": ["perfumery"]})
+    assert r.status_code == 502 and "busy or rate-limiting" in r.text and "Nothing was added" in r.text
+
+
+def test_paste_list_preview_and_commit(auth_client):
+    preview = auth_client.post("/import/paste", data={"text": "@noorabayas.qa\nOud Noir, oudnoir.qa\n@noorabayas.qa"}).text
+    assert "2 new" in preview and "1 repeated in file" in preview
+    token = preview.split('name="token" value="')[1].split('"')[0]
+    assert "Imported 2 new leads" in auth_client.post("/import/commit", data={"token": token}).text
+    assert "source: paste" in auth_client.get("/leads/1").text
+
+
+def test_add_as_lead_prefill(auth_client):
+    page = auth_client.get("/leads/new?website=giftsdoha.qa&notes=Linked%20from%20Oud%20Noir&evil=x").text
+    assert 'value="giftsdoha.qa"' in page and "Linked from Oud Noir" in page and "evil" not in page
 
 
 def test_manual_evidence_form(auth_client):

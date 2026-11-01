@@ -165,6 +165,20 @@ class Evidence(Base):
     created_by: Mapped[str] = mapped_column(String(20), default="research")  # research | user
 
 
+class DiscoveryRun(Base):
+    """One search of a discovery source, with what it found and what the user added (feeds per-source metrics)."""
+    __tablename__ = "discovery_runs"
+    id: Mapped[int] = mapped_column(primary_key=True)
+    source: Mapped[str] = mapped_column(String(20))  # osm | paste
+    params: Mapped[dict] = mapped_column(JSON, default=dict)
+    places_found: Mapped[int] = mapped_column(Integer, default=0)
+    candidates: Mapped[int] = mapped_column(Integer, default=0)
+    new_candidates: Mapped[int] = mapped_column(Integer, default=0)
+    added: Mapped[int] = mapped_column(Integer, default=0)
+    from_cache: Mapped[bool] = mapped_column(Boolean, default=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)
+
+
 class AppSetting(Base):
     """Small key/value store for user preferences such as the sender profile used in drafts."""
     __tablename__ = "app_settings"

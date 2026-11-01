@@ -18,6 +18,7 @@ from starlette.middleware.sessions import SessionMiddleware
 from leadgen.ai.provider import make_provider
 from leadgen.ai.worker import AiWorker, fail_interrupted
 from leadgen.auth import LoginThrottle
+from leadgen.discovery.osm import search as osm_search
 from leadgen.config import Settings, get_settings
 from leadgen.db import Database
 from leadgen.migrate import upgrade
@@ -78,6 +79,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.state.db = db
     app.state.throttle = LoginThrottle()
     app.state.fetcher_factory = Fetcher  # tests replace this with an offline fetcher
+    app.state.osm_search = osm_search  # tests replace this with canned OpenStreetMap results
     app.state.batch = BatchRunner(db.sessionmaker, lambda: app.state.fetcher_factory())
     app.state.ai_provider_factory = lambda: make_provider(settings)  # tests replace this with a scripted provider
     app.state.ai = AiWorker(db.sessionmaker, lambda: app.state.ai_provider_factory())
@@ -96,11 +98,12 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     async def _login_redirect(request: Request, _exc: LoginRequired):
         return RedirectResponse(f"/login?next={request.url.path}", status_code=303)
 
-    from leadgen.web import routes_admin, routes_ai, routes_leads, routes_research
+    from leadgen.web import routes_admin, routes_ai, routes_discovery, routes_leads, routes_research
     app.include_router(routes_leads.router)
     app.include_router(routes_admin.router)
     app.include_router(routes_research.router)
     app.include_router(routes_ai.router)
+    app.include_router(routes_discovery.router)
     return app
 
 

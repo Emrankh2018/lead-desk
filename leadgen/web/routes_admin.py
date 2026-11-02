@@ -11,6 +11,7 @@ from sqlalchemy.orm import Session
 
 from leadgen.ai.tasks import get_sender
 from leadgen.models import AuditLog, Business, IcpProfile, Offer, PipelineStage
+from leadgen.offerings import SERVICES, services_of
 from leadgen.research import scoring
 from leadgen.research.service import rescore_all
 from leadgen.services import audit, exporter, importer, leads
@@ -118,6 +119,7 @@ def settings_page(request: Request, session: Session = SessionDep, user: str = U
     counts = dict(session.execute(select(Business.stage_id, func.count()).group_by(Business.stage_id)).all())
     edit_icp = session.get(IcpProfile, _int_or_none(request.query_params.get("icp")) or 0)
     return render(request, "settings.html", stage_counts=counts, edit_icp=edit_icp, criteria=scoring.CRITERIA,
+                  applies=scoring.applies, services_of=services_of, all_services=SERVICES,
                   weights_for=scoring.weights_for, sender=get_sender(session), ai_status=request.app.state.ai.status(),
                   ai_settings=request.app.state.settings,
                   offers=list(session.scalars(select(Offer).order_by(Offer.id))), **_lookups(session))
@@ -193,6 +195,10 @@ async def save_icp(request: Request, session: Session = SessionDep, user: str = 
     icp.industries = _csv_list(form.get("industries"))
     icp.keywords = _csv_list(form.get("keywords"))
     icp.size_notes = str(form.get("size_notes", "")).strip()
+    icp.services = [s for s in SERVICES if s in form.getlist("services")]
+    if not icp.services:
+        flash(request, "Choose at least one service for the profile.", "error")
+        return _see_other(f"/settings?icp={icp.id}#icp-form" if icp.id else "/settings#icp-form")
     icp.active = form.get("active") == "1"
     session.add(icp)
     session.flush()
@@ -219,6 +225,7 @@ async def save_offer(request: Request, session: Session = SessionDep, user: str 
     offer.name, offer.price = name, price
     offer.currency = (str(form.get("currency", "QAR")).strip().upper() or "QAR")[:3]
     offer.description = str(form.get("description", "")).strip()
+    offer.service = str(form.get("service")) if form.get("service") in SERVICES else offer.service
     offer.active = form.get("active") == "1"
     session.add(offer)
     session.flush()

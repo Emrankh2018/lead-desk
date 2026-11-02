@@ -234,6 +234,7 @@ def test_manual_evidence_form(auth_client):
 
 def test_settings_add_stage_and_icp(auth_client):
     auth_client.post("/settings/stages", data={"name": "Negotiation"})
-    auth_client.post("/settings/icps", data={"name": "UAE jewelry", "countries": "ae", "industries": "jewelry, watches", "active": "1"})
+    auth_client.post("/settings/icps", data={"name": "UAE jewelry", "countries": "ae", "industries": "jewelry, watches", "active": "1",
+                                              "services": "product_ads"})
     page = auth_client.get("/settings").text
     assert "Negotiation" in page and "UAE jewelry" in page and "AE" in page

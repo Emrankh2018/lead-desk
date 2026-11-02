@@ -8,6 +8,7 @@ from sqlalchemy.orm import Session
 
 from leadgen.ai import tasks
 from leadgen.models import AiInsight, OutreachDraft, PipelineStage, utcnow
+from leadgen.offerings import SERVICES
 from leadgen.services import audit, leads
 from leadgen.services.leads import LeadError
 from leadgen.web.app import SessionDep, UserDep, flash, render
@@ -46,7 +47,10 @@ async def request_draft(lead_id: int, request: Request, session: Session = Sessi
     if biz.do_not_contact:
         flash(request, "This business is marked do-not-contact; no drafts are prepared.", "error")
         return _see_other(f"/leads/{lead_id}#ai")
-    draft = OutreachDraft(business_id=biz.id, channel=channel)
+    service = str(form.get("service", "")) or None
+    if service and service not in SERVICES:
+        raise HTTPException(422, "Unknown service")
+    draft = OutreachDraft(business_id=biz.id, channel=channel, service=service)
     session.add(draft)
     if form.get("mode") == "template":
         tasks.template_draft(session, draft)
@@ -62,7 +66,8 @@ async def request_draft(lead_id: int, request: Request, session: Session = Sessi
         return _see_other(f"/leads/{lead_id}#ai")
     session.commit()
     request.app.state.ai.submit("draft", draft.id, user)
-    label = {"email": "an email", "instagram": "an Instagram", "linkedin": "a LinkedIn", "followup": "a follow-up"}[channel]
+    label = {"whatsapp": "a WhatsApp", "email": "an email", "instagram": "an Instagram", "linkedin": "a LinkedIn",
+             "followup": "a follow-up"}[channel]
     flash(request, f"Writing {label} draft with the local model (usually under a minute). This page refreshes itself.")
     return _see_other(f"/leads/{lead_id}#ai")
 

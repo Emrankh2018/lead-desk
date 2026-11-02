@@ -20,6 +20,7 @@ from leadgen.services.dedupe import exact_matches
 
 log = logging.getLogger("leadgen.research")
 MAX_EXTRA_PAGES = 2
+POSITIVE_WINS = {"chat_widget", "whatsapp_automation", "online_booking"}
 
 
 def research_lead(session: Session, biz: Business, *, actor: str, fetcher: Fetcher | None = None) -> ResearchRun:
@@ -35,6 +36,9 @@ def research_lead(session: Session, biz: Business, *, actor: str, fetcher: Fetch
             run.status = "skipped"
             issues.append("No website on record; only Instagram/LinkedIn/manual information can be used. "
                           "Website research needs a website URL.")
+        elif host := normalize.listing_host(biz.website):
+            run.status = "skipped"
+            issues.append(f"The website on record is a page on {host}, not the business's own site, so it was not fetched.")
         else:
             home = fetcher.get(biz.website)
             if not home.ok:
@@ -56,7 +60,8 @@ def research_lead(session: Session, biz: Business, *, actor: str, fetcher: Fetch
                     more, _ = extract.extract_page(page.text, page.final_url, site_domain=biz.domain)
                     # From secondary pages keep only contact and social facts; the homepage describes the business.
                     signals += [(s, page.final_url, page.sha256) for s in more
-                                if s.kind in ("published_email", "published_phone", "social_link", "qatar_mentions")]
+                                if s.kind in ("published_email", "published_phone", "social_link", "qatar_mentions")
+                                or (s.kind in ("chat_widget", "whatsapp_automation", "online_booking") and s.verified)]
                 if any(s.kind == "platform" and "Shopify" in s.value.get("platforms", []) for s, _, _ in signals):
                     base = (home.final_url or biz.website).split("/", 3)[:3]
                     catalog_url = "/".join(base) + "/products.json?limit=250"
@@ -71,6 +76,10 @@ def research_lead(session: Session, biz: Business, *, actor: str, fetcher: Fetch
                         issues.append(f"Product catalogue: {cat.issue}")
             if run.pages_fetched == 0:
                 run.status = "failed"
+                if home.ok is False and _looks_down(home.issue):
+                    down = issues[0] if issues else f"Homepage {biz.website} did not load"
+                    signals.append((extract.Signal("website_down", f"Website did not load when checked: {down}",
+                                                   {"issue": home.issue}, verified=False), biz.website, None))
             else:
                 run.status = "partial" if issues else "ok"
     except Exception as exc:  # never leave a run "running"; record what happened
@@ -81,7 +90,7 @@ def research_lead(session: Session, biz: Business, *, actor: str, fetcher: Fetch
         if own_fetcher:
             fetcher.close()
 
-    if run.pages_fetched:
+    if run.pages_fetched or signals:
         session.execute(update(Evidence).where(Evidence.business_id == biz.id, Evidence.created_by == "research",
                                                Evidence.is_current.is_(True)).values(is_current=False))
         seen = set()
@@ -94,7 +103,8 @@ def research_lead(session: Session, biz: Business, *, actor: str, fetcher: Fetch
                                  verified=sig.verified, source_url=url, snippet=sig.snippet, content_hash=digest))
         for issue in issues:
             session.add(Evidence(business_id=biz.id, run_id=run.id, kind="fetch_issue", value={}, text=issue, verified=False))
-        biz.researched_at = utcnow()
+        if run.pages_fetched:  # a dead site was checked, not researched; it stays in "never researched" lists
+            biz.researched_at = utcnow()
         _suggest_contacts(biz, signals)
     run.issues = issues
     run.finished_at = utcnow()
@@ -106,11 +116,23 @@ def research_lead(session: Session, biz: Business, *, actor: str, fetcher: Fetch
     return run
 
 
+def _looks_down(issue: str | None) -> bool:
+    """A dead site is a website lead; a site that only refused us (robots.txt, rate limit, bot wall) is not."""
+    issue = (issue or "").lower()
+    return any(w in issue for w in ("could not connect", "did not respond", "http 5", "http 404", "http 410",
+                                    "too many redirects")) and "rate-limited" not in issue
+
+
 def _dedupe(signals):
-    """Keep one video/image count per page type: the homepage's (first) values win."""
-    once = {"video_presence", "image_count", "page_title", "meta_description", "language", "platform"}
+    """Keep one video/image count per page type: the homepage's (first) values win. For tools (chat, WhatsApp
+    automation, booking) a positive find on a contact page replaces the homepage's "none found"."""
+    found = {s.kind for s, _, _ in signals if s.kind in POSITIVE_WINS and s.verified}
+    once = {"video_presence", "image_count", "page_title", "meta_description", "language", "platform", "mobile_viewport",
+            "https", "chat_widget", "whatsapp_automation", "online_booking"}
     seen_once = set()
     for sig, url, digest in signals:
+        if sig.kind in found and not sig.verified:
+            continue
         if sig.kind in once:
             if sig.kind in seen_once:
                 continue

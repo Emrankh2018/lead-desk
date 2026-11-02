@@ -24,6 +24,8 @@ from leadgen.db import Database
 from leadgen.migrate import upgrade
 from leadgen.research.fetcher import Fetcher
 from leadgen.research.service import BatchRunner, rescore_all
+from leadgen import normalize, offerings
+from leadgen.research.scoring import best_service
 from leadgen.services.seed import seed_defaults
 
 log = logging.getLogger("leadgen")
@@ -107,7 +109,8 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     env.filters["local_time"] = local_time
     env.filters["safe_href"] = safe_href
     env.filters["num"] = num
-    env.globals.update(ui_lang=settings.ui_lang, ui_dir=settings.ui_dir)
+    env.globals.update(ui_lang=settings.ui_lang, ui_dir=settings.ui_dir, service_label=offerings.label, listing_host=normalize.listing_host,
+                       best_service=lambda biz: best_service(biz.score_breakdown, biz.icp))
     app.state.templates = Jinja2Templates(env=env)
 
     app.add_middleware(SameOriginMiddleware)

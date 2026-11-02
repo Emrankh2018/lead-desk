@@ -8,7 +8,7 @@ from dataclasses import asdict, dataclass, field
 from sqlalchemy.orm import Session
 
 from leadgen import normalize
-from leadgen.discovery.osm import SHOP_TYPES, Place
+from leadgen.discovery.osm import Place, label_of
 from leadgen.models import DiscoveryRun, Evidence
 from leadgen.research.service import rescore
 from leadgen.services import audit
@@ -90,8 +90,16 @@ def group_places(places: list[Place], city: str | None) -> tuple[list[Candidate]
     return sorted(candidates, key=lambda c: (c.branches > 2, c.website is None, c.name.lower())), len(places) - len(named)
 
 
-def classify(session: Session, candidates: list[Candidate], default_region: str) -> None:
+def classify(session: Session, candidates: list[Candidate], default_region: str, services: list[str] | None = None) -> None:
+    """services: what the chosen profile sells. Salons are poor product-ad prospects but good bot and website ones."""
+    product_ads = not services or services == ["product_ads"]
     for c in candidates:
+        if not product_ads:
+            c.notes = [n for n in c.notes if not n.startswith("beauty salon")]
+            if not c.website:
+                c.notes.append("no website listed")
+            elif host := normalize.listing_host(c.website):
+                c.notes.append(f"'website' is a {host} page, not their own site")
         phone = normalize.phone_e164(c.phone, default_region) if c.phone else None
         exact = exact_matches(session, domain=normalize.domain_of(c.website), handle=c.instagram, phone=phone)
         if exact:
@@ -108,7 +116,12 @@ def classify(session: Session, candidates: list[Candidate], default_region: str)
         if not (c.website or c.instagram or c.phone or c.email):
             # Live Qatar search: ~95% of listings were name-only. Pre-selecting them would flood the list.
             c.selected = False
-            c.notes.append("name only on OpenStreetMap: find their website or Instagram first")
+            c.notes.append("name only on OpenStreetMap: find their website or Instagram first" if product_ads
+                           else "name only on OpenStreetMap: no phone or social to reach them yet")
+    if not product_ads:
+        # Best first: reachable businesses with no site of their own, then reachable ones with a site; chains last.
+        candidates.sort(key=lambda c: (c.branches > 2, not (c.phone or c.instagram or c.email),
+                                       bool(c.website) and not normalize.listing_host(c.website), c.name.lower()))
 
 
 def add_candidates(session: Session, candidates: list[Candidate], keys: set[str], *, run: DiscoveryRun, country: str,
@@ -117,7 +130,7 @@ def add_candidates(session: Session, candidates: list[Candidate], keys: set[str]
     for c in candidates:
         if c.key not in keys or c.status == "in_list":
             continue
-        industry = ", ".join(SHOP_TYPES.get(t, t).lower() for t in c.shop_types)[:120]
+        industry = ", ".join(label_of(t).lower() for t in c.shop_types)[:120]
         data = LeadInput(name=c.name, website=c.website or "", instagram=c.instagram or "", phone=c.phone or "",
                          email=c.email or "", email_source=c.osm_urls[0] if c.email else "", city=c.city or "",
                          country=country, industry=industry, icp_id=icp_id,

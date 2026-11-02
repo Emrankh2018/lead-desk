@@ -70,7 +70,7 @@
       <h2>Best not yet contacted</h2>
       <p class="why">Leads with no outreach logged, ranked by fit discounted for missing evidence, so a well-researched 90 can rank above a thinly researched 94. An amber bar means research them first.</p>
       <ul class="list">
-        {% for b in v.top_uncontacted %}<li><div class="item-top">{{ lead_link(b) }} <span class="push">{{ ui.score(b) }}</span></div></li>
+        {% for b in v.top_uncontacted %}<li><div class="item-top">{{ lead_link(b) }} <span class="push">{{ ui.score(b) }}</span></div>{% set p = best_service(b) %}{% if p %}<div class="detail">pitch: {{ service_label(p) }}</div>{% endif %}</li>
         {% else %}<li class="none">No scored, uncontacted leads. <a href="/research">Research some leads</a> to score them.</li>{% endfor %}
       </ul>
     </section>

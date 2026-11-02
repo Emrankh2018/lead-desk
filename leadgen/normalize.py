@@ -6,6 +6,10 @@ import phonenumbers
 
 SOCIAL_HOSTS = {"instagram.com", "facebook.com", "tiktok.com", "linkedin.com", "x.com", "twitter.com",
                 "snapchat.com", "youtube.com", "wa.me", "linktr.ee"}
+# Pages on someone else's platform: a business whose only "website" is one of these has no site of its own.
+LISTING_HOSTS = ("business.site", "zomato.com", "talabat.com", "snoonu.com", "deliveroo.", "trycarriage.com", "tripadvisor.",
+                 "hotels.com", "booking.com", "google.com", "goo.gl", "g.page", "bit.do", "bit.ly", "linktr.ee",
+                 "wixsite.com", "blogspot.com", "wordpress.com", "facebook.com", "instagram.com")
 _HANDLE_RE = re.compile(r"^[a-z0-9._]{1,30}$")
 _EMAIL_RE = re.compile(r"^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$")
 # Legal suffixes that differ between listings of the same business. Product words are kept on purpose.
@@ -13,7 +17,7 @@ _LEGAL_SUFFIXES = {"llc", "wll", "w.l.l", "co", "company", "est", "establishment
 
 
 def _host_and_path(raw: str) -> tuple[str, str]:
-    value = raw.strip()
+    value = raw.strip().replace("\\", "/")  # "facebook.com\page" is a typo seen in OpenStreetMap data
     if "://" not in value:
         value = "https://" + value
     # Only web addresses: anything else (javascript:, data:, ftp:...) must never become a stored, clickable link.
@@ -39,6 +43,12 @@ def is_social_url(url: str | None) -> bool:
         return False
     host, _ = _host_and_path(url)
     return host in SOCIAL_HOSTS
+
+
+def listing_host(url: str | None) -> str | None:
+    """The platform name when a 'website' is really a page on a directory, delivery app or free site builder."""
+    host, _ = _host_and_path(url or "")
+    return next((h.rstrip(".") for h in LISTING_HOSTS if host == h or host.endswith("." + h) or h.endswith(".") and h in host), None)
 
 
 def instagram_handle(value: str | None) -> str | None:

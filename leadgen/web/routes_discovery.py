@@ -8,9 +8,11 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 from starlette.concurrency import run_in_threadpool
 
+from leadgen import normalize
 from leadgen.discovery import osm
 from leadgen.discovery import service as discovery
 from leadgen.models import Business, DiscoveryRun, IcpProfile
+from leadgen.offerings import services_of
 from leadgen.services import audit, importer
 from leadgen.web.app import SessionDep, UserDep, flash, render
 from leadgen.web.routes_admin import _import_path
@@ -27,10 +29,10 @@ def _discover_form(request: Request, session: Session, **ctx):
     icps = list(session.scalars(select(IcpProfile).where(IcpProfile.active.is_(True)).order_by(IcpProfile.id)))
     icp = ctx.pop("icp", None) or (icps[0] if icps else None)
     defaults = {"country": (icp.countries[0] if icp and icp.countries else request.app.state.settings.default_country),
-                "city": "", "types": osm.categories_for(icp.industries, icp.keywords) if icp else ["perfumery"],
+                "city": "", "types": osm.categories_for(icp.industries, icp.keywords, services_of(icp)) if icp else ["perfumery"],
                 "icp_id": icp.id if icp else None}
     runs = list(session.scalars(select(DiscoveryRun).order_by(DiscoveryRun.id.desc()).limit(15)))
-    return render(request, "discover.html", icps=icps, shop_types=osm.SHOP_TYPES, form=defaults | ctx.pop("form", {}),
+    return render(request, "discover.html", icps=icps, groups=osm.CATEGORY_GROUPS, label_of=osm.label_of, form=defaults | ctx.pop("form", {}),
                   runs=runs, **ctx)
 
 
@@ -56,7 +58,8 @@ async def discover_search(request: Request, session: Session = SessionDep, user:
     except osm.OsmError as exc:
         return render(request, "discover_error.html", status_code=502, error=str(exc), form=entered)
     candidates, unnamed = discovery.group_places(places, city)
-    discovery.classify(session, candidates, settings.default_country)
+    icp = session.get(IcpProfile, icp_id or 0)
+    discovery.classify(session, candidates, settings.default_country, services_of(icp) if icp else None)
     run = DiscoveryRun(source="osm", params=entered, places_found=len(places), candidates=len(candidates),
                        new_candidates=sum(1 for c in candidates if c.status == "new"), from_cache=cached)
     session.add(run)
@@ -69,7 +72,8 @@ async def discover_search(request: Request, session: Session = SessionDep, user:
         ensure_ascii=False), encoding="utf-8")
     counts = {s: sum(1 for c in candidates if c.status == s) for s in ("new", "possible_duplicate", "in_list")}
     return render(request, "discover_preview.html", candidates=candidates, counts=counts, token=token, run=run,
-                  unnamed=unnamed, cached=cached, shop_types=osm.SHOP_TYPES, params=entered)
+                  unnamed=unnamed, cached=cached, label_of=osm.label_of, params=entered,
+                  product_ads=not icp or services_of(icp) == ["product_ads"])
 
 
 @router.post("/discover/add")
@@ -92,7 +96,8 @@ async def discover_add(request: Request, session: Session = SessionDep, user: st
     path.unlink(missing_ok=True)
     message = f"Added {result['created']} leads from OpenStreetMap" + (f"; skipped {result['skipped']}" if result["skipped"] else "") + "."
     if form.get("research") == "1":
-        with_site = list(session.scalars(select(Business.id).where(Business.id.in_(result["ids"]), Business.website.is_not(None))))
+        with_site = [b.id for b in session.scalars(select(Business).where(Business.id.in_(result["ids"]), Business.website.is_not(None)))
+                     if not normalize.listing_host(b.website)]  # a Zomato or Google page is not their site
         if with_site and request.app.state.batch.start(with_site[:25], user):
             message += f" Researching the {min(len(with_site), 25)} with a website in the background."
         elif with_site:

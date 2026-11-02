@@ -8,7 +8,9 @@ from sqlalchemy.orm import Session
 from leadgen.auth import authenticate
 from leadgen.ai import tasks as ai_tasks
 from leadgen.models import AiInsight, Business, DuplicateCandidate, IcpProfile, OutreachDraft, PipelineStage, ResearchRun
+from leadgen.offerings import services_of
 from leadgen.research import service as research
+from leadgen.research.scoring import service_fits
 from leadgen.services import audit, leads
 from leadgen.services.leads import DuplicateLead, LeadError, LeadFilter, LeadInput
 from leadgen.web.app import DISPLAY_TZ, SessionDep, UserDep, flash, render, today_local
@@ -166,7 +168,8 @@ def lead_detail(lead_id: int, request: Request, session: Session = SessionDep, u
                   facts=[e for e in evidence if e.verified and e.kind != "fetch_issue"],
                   limits=[e for e in evidence if not e.verified],
                   evidence_by_id={e.id: e for e in evidence}, batch_running=request.app.state.batch.state["running"],
-                  **_lookups(session))
+                  fits=service_fits(biz.score_breakdown, biz.icp), services=services_of(biz.icp),
+                  pitch=ai_tasks.pick_service(biz), **_lookups(session))
 
 
 @router.post("/leads/{lead_id}")

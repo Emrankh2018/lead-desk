@@ -5,6 +5,7 @@ from fastapi.responses import RedirectResponse
 from sqlalchemy import exists, select
 from sqlalchemy.orm import Session
 
+from leadgen import normalize
 from leadgen.models import Business, IcpProfile, ResearchRun, utcnow
 from leadgen.research import scoring, service
 from leadgen.services import audit
@@ -31,6 +32,8 @@ def research_one(lead_id: int, request: Request, session: Session = SessionDep, 
     messages = {"ok": ("Research finished.", "ok"), "partial": ("Research finished with some pages unavailable.", "warn"),
                 "failed": ("Research could not read the website. Nothing was verified; see the issues below.", "error"),
                 "skipped": ("No website on record, so nothing was fetched. Score uses the details you entered.", "warn")}
+    if run.status == "skipped" and biz.website:  # a directory or delivery-app page: say so instead of "no website"
+        messages["skipped"] = (run.issues[0], "warn")
     flash(request, *messages[run.status])
     return _see_other(f"/leads/{lead_id}#research")
 
@@ -63,10 +66,12 @@ def _batch_targets(session: Session, scope: str) -> list[int]:
     excludes a lead, so batches never hammer a site that just refused us; use the lead's own button to retry."""
     cutoff = utcnow() - timedelta(days=STALE_DAYS)
     recent_attempt = exists().where(ResearchRun.business_id == Business.id, ResearchRun.started_at >= cutoff)
-    stmt = select(Business.id).where(Business.website.is_not(None), Business.do_not_contact.is_(False), ~recent_attempt)
+    stmt = select(Business.id, Business.website).where(Business.website.is_not(None), Business.do_not_contact.is_(False),
+                                                       ~recent_attempt)
     if scope != "stale":
         stmt = stmt.where(Business.researched_at.is_(None))
-    return list(session.scalars(stmt.order_by(Business.id)))
+    # A Zomato, Facebook or free Google page is not the business's site; there is nothing of theirs to research.
+    return [i for i, site in session.execute(stmt.order_by(Business.id)) if not normalize.listing_host(site)]
 
 
 @router.post("/research/batch")

@@ -112,6 +112,13 @@ textarea { min-height: 80px; resize: vertical; line-height: 1.5; }
 .w-xs { width: 5em !important; flex: none; }
 fieldset { border: 1px solid var(--line); border-radius: var(--r); padding: 12px 14px 14px; margin: 16px 0 0; min-width: 0; }
 legend { font-size: .87rem; font-weight: 500; color: var(--ink-soft); padding-inline: 4px; }
+.cat-group { margin-top: 10px; padding: 8px 12px 10px; }
+.cat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 6px 14px; }
+.pitch { display: inline-flex; flex-wrap: wrap; gap: 4px; }
+.fit-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.fit-list li { display: grid; grid-template-columns: 9.5em 1fr; gap: 10px; align-items: baseline; }
+.fit-list .fit-bar { display: block; height: 6px; border-radius: 3px; background: var(--line); overflow: hidden; margin-top: 4px; }
+.fit-list .fit-bar i { display: block; height: 100%; background: var(--maroon); }
 .form-foot { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-top: 16px; }
 
 /* ---------- Buttons ---------- */

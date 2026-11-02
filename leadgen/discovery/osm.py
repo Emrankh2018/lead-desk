@@ -25,13 +25,48 @@ BUSY_BACKOFF_SECONDS = (5, 15)  # two polite retries when the server reports it 
 sleep = time.sleep  # tests replace this
 _LOCK = threading.Lock()  # Overpass asks clients not to run parallel queries
 
-# Shop categories offered in the UI: OSM tag value -> label. "beauty" is mostly salons (services), so it is opt-in.
-SHOP_TYPES = {
-    "perfumery": "Perfume shops", "cosmetics": "Cosmetics & skincare shops", "jewelry": "Jewellery", "watches": "Watches",
-    "fashion_accessories": "Fashion accessories", "bag": "Bags", "clothes": "Clothing & abayas", "gift": "Gift shops",
-    "chocolate": "Chocolates & sweets", "confectionery": "Confectionery", "beauty": "Beauty salons (services)",
-    "boutique": "Boutiques", "shoes": "Shoes",
+# Categories offered in the UI, grouped for the Discover form. A bare key is an OSM shop=* value (the original
+# product-brand categories); "tag=value" covers other kinds of business. "beauty" under shops is mostly salons.
+CATEGORY_GROUPS = {
+    "Product shops": {
+        "perfumery": "Perfume shops", "cosmetics": "Cosmetics & skincare shops", "jewelry": "Jewellery", "watches": "Watches",
+        "fashion_accessories": "Fashion accessories", "bag": "Bags", "clothes": "Clothing & abayas", "gift": "Gift shops",
+        "chocolate": "Chocolates & sweets", "confectionery": "Confectionery", "boutique": "Boutiques", "shoes": "Shoes",
+    },
+    "Food & drink": {
+        "amenity=restaurant": "Restaurants", "amenity=cafe": "Cafés", "amenity=fast_food": "Fast food & takeaway",
+        "bakery": "Bakeries", "pastry": "Pastry & dessert shops", "amenity=ice_cream": "Ice cream",
+    },
+    "Health": {
+        "amenity=clinic": "Clinics & medical centres", "amenity=dentist": "Dentists", "amenity=doctors": "Doctors",
+        "amenity=pharmacy": "Pharmacies", "amenity=veterinary": "Vets", "optician": "Opticians",
+        "healthcare=physiotherapist": "Physiotherapy",
+    },
+    "Beauty & fitness": {
+        "beauty": "Beauty salons", "hairdresser": "Hair salons & barbers", "massage": "Massage & spa",
+        "leisure=fitness_centre": "Gyms & fitness studios",
+    },
+    "Cars": {
+        "car": "Car dealers", "car_repair": "Garages & car repair", "car_parts": "Car parts", "tyres": "Tyres",
+        "amenity=car_wash": "Car wash & detailing",
+    },
+    "Services & offices": {
+        "office=estate_agent": "Real estate agents", "travel_agency": "Travel agencies", "office=lawyer": "Lawyers",
+        "office=accountant": "Accountants", "office=insurance": "Insurance", "office=company": "Company offices",
+        "laundry": "Laundry & dry cleaning", "tailor": "Tailors",
+    },
+    "Education": {
+        "amenity=language_school": "Language schools", "amenity=driving_school": "Driving schools",
+        "amenity=music_school": "Music schools", "amenity=training": "Training centres",
+    },
+    "Stores": {
+        "furniture": "Furniture", "electronics": "Electronics", "mobile_phone": "Mobile phone shops", "florist": "Florists",
+        "toys": "Toys", "supermarket": "Supermarkets", "hardware": "Hardware",
+    },
+    "Hotels": {"tourism=hotel": "Hotels", "tourism=guest_house": "Guest houses & apartments"},
 }
+SHOP_TYPES = {k: v for group in CATEGORY_GROUPS.values() for k, v in group.items()}  # every category, flat
+TAG_KEYS = ("shop", "amenity", "leisure", "office", "tourism", "healthcare")
 # ICP industry/keyword words -> shop types, used to pre-select categories from the customer profile.
 INDUSTRY_HINTS = {
     "perfume": ["perfumery"], "fragrance": ["perfumery"], "oud": ["perfumery"], "skincare": ["cosmetics"],
@@ -39,6 +74,22 @@ INDUSTRY_HINTS = {
     "accessor": ["fashion_accessories", "bag"], "abaya": ["clothes", "boutique"], "fashion": ["clothes", "boutique"],
     "chocolate": ["chocolate", "confectionery"], "gift": ["gift"],
 }
+# Pre-selected for profiles that sell websites and AI assistants: busy, customer-facing local businesses.
+SERVICE_DEFAULTS = ["amenity=restaurant", "amenity=cafe", "amenity=clinic", "amenity=dentist", "beauty", "hairdresser",
+                    "leisure=fitness_centre", "car_repair", "amenity=car_wash"]
+
+
+def tag_of(category: str) -> tuple[str, str]:
+    """'amenity=restaurant' -> ('amenity', 'restaurant'); a bare value is a shop type."""
+    key, _, value = category.partition("=")
+    return (key, value) if value else ("shop", category)
+
+
+def label_of(category: str) -> str:
+    if category in SHOP_TYPES:
+        return SHOP_TYPES[category]
+    key, value = tag_of(category)
+    return SHOP_TYPES.get(f"{key}={value}") or SHOP_TYPES.get(value) or value.replace("_", " ")
 # Letters (any script), spaces, apostrophes and hyphens: all literal in Overpass regex and safe in its quoted strings.
 _PLACE_RE = re.compile(r"^[^\W\d_][^\W\d_ '\-]*(?:[ '\-][^\W\d_]+)*$")
 
@@ -82,9 +133,11 @@ class Place:
         return self.tags.get("brand") or self.tags.get("operator")
 
 
-def categories_for(industries: list[str], keywords: list[str]) -> list[str]:
+def categories_for(industries: list[str], keywords: list[str], services: list[str] | None = None) -> list[str]:
     words = " ".join(industries + keywords).lower()
     picked = {t for hint, types in INDUSTRY_HINTS.items() if hint in words for t in types}
+    if not picked and set(services or []) - {"product_ads"}:
+        picked = set(SERVICE_DEFAULTS)
     return [t for t in SHOP_TYPES if t in picked]
 
 
@@ -104,7 +157,13 @@ def build_query(country: str, shop_types: list[str], city: str | None) -> str:
         lines.append(f'area["boundary"="administrative"]["name"~"^{safe}$",i](area.country)->.city2;')
         lines.append("(.city; .city2;)->.place;")
         scope = "(area.place)"
-    lines.append(f'nwr["shop"~"^({"|".join(types)})$"]{scope};')
+    by_key: dict[str, list[str]] = {}
+    for t in types:
+        key, value = tag_of(t)
+        by_key.setdefault(key, []).append(value)
+    lines.append("(")
+    lines += [f'  nwr["{key}"~"^({"|".join(values)})$"]{scope};' for key, values in by_key.items()]
+    lines.append(");")
     lines.append("out center tags;")
     return "\n".join(lines)
 
@@ -114,7 +173,10 @@ def parse(elements: list[dict]) -> list[Place]:
     for e in elements:
         tags = e.get("tags") or {}
         name = (tags.get("name:en") or tags.get("name") or tags.get("brand") or "").strip()
-        places.append(Place(e.get("type", "node"), int(e.get("id", 0)), name, tags.get("shop", ""), tags))
+        # The category in our own notation: a bare shop value, or "amenity=restaurant" and the like.
+        key = next((k for k in TAG_KEYS if tags.get(k)), None)
+        category = "" if key is None else tags[key] if key == "shop" else f"{key}={tags[key]}"
+        places.append(Place(e.get("type", "node"), int(e.get("id", 0)), name, category, tags))
     return places
 
 

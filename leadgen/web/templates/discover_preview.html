@@ -22,7 +22,7 @@
       <span class="badge ok">{{ counts.new }} new</span>
       <span class="badge warn">{{ counts.possible_duplicate }} possible duplicate</span>
       <span class="badge">{{ counts.in_list }} already in list</span>
-      <span class="grow hint">Chains (3+ locations), salons and name-only listings are shown but not pre-selected.</span>
+      <span class="grow hint">{% if product_ads %}Chains (3+ locations), salons and name-only listings are shown but not pre-selected.{% else %}Reachable businesses without a website of their own come first. Chains (3+ locations) and name-only listings are shown but not pre-selected.{% endif %}</span>
     </div>
     <div class="row center" style="margin-top: 12px">
       <label class="inline grow"><input type="checkbox" name="research" value="1" checked> Research the ones with a website after adding</label>
@@ -39,7 +39,7 @@
       <td class="check"><input type="checkbox" name="keys" value="{{ c.key }}" aria-label="Add {{ c.name }}" {{ 'checked' if c.selected }} {{ 'disabled' if c.status == 'in_list' }}></td>
       <td><a class="lead-name" href="{{ c.osm_urls[0]|safe_href }}" target="_blank" rel="noopener noreferrer">{{ c.name }}</a>
         {% for n in c.notes %}<div class="sub-line">{{ n }}</div>{% endfor %}</td>
-      <td class="small">{% for t in c.shop_types %}{{ shop_types.get(t, t) }}{{ ', ' if not loop.last }}{% endfor %}</td>
+      <td class="small">{% for t in c.shop_types %}{{ label_of(t) }}{{ ', ' if not loop.last }}{% endfor %}</td>
       <td class="num">{{ c.branches }}</td>
       <td class="small">{{ c.website or '' }}{% if c.instagram %} @{{ c.instagram }}{% endif %}{% if not c.website and not c.instagram %}<span class="muted">none listed</span>{% endif %}</td>
       <td class="small">{{ c.phone or '' }}</td>

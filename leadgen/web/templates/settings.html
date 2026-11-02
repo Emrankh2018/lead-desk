@@ -12,10 +12,11 @@
 <h2 id="profiles">Customer profiles</h2>
 <p class="lede">Who you are looking for. Discover pre-fills from a profile, and scoring compares each lead against it.</p>
 <div class="table-wrap"><table>
-  <thead><tr><th>Name</th><th>Countries</th><th>Cities</th><th>Industries</th><th>Active</th><th><span hidden>Edit</span></th></tr></thead>
+  <thead><tr><th>Name</th><th>Looks for</th><th>Countries</th><th>Cities</th><th>Industries</th><th>Active</th><th><span hidden>Edit</span></th></tr></thead>
   <tbody>
   {% for i in icps %}
-  <tr><td><strong>{{ i.name }}</strong></td><td>{{ i.countries|join(', ') }}</td><td class="small">{{ i.cities|join(', ') }}</td>
+  <tr><td><strong>{{ i.name }}</strong></td>
+      <td class="small">{% for s in services_of(i) %}{{ service_label(s) }}{{ ', ' if not loop.last }}{% endfor %}</td><td>{{ i.countries|join(', ') }}</td><td class="small">{{ i.cities|join(', ') }}</td>
       <td class="small">{{ i.industries|join(', ') }}</td><td>{{ 'yes' if i.active else 'no' }}</td>
       <td><a href="/settings?icp={{ i.id }}#icp-form">Edit</a></td></tr>
   {% endfor %}
@@ -29,10 +30,20 @@
     <label>Name <input type="text" name="name" value="{{ e.name if e else '' }}" required></label>
     <label>Countries <span class="hint">2-letter codes, comma-separated</span><input type="text" name="countries" value="{{ e.countries|join(', ') if e else '' }}"></label>
     <label>Cities <input type="text" name="cities" value="{{ e.cities|join(', ') if e else '' }}"></label>
-    <label>Industries <input type="text" name="industries" value="{{ e.industries|join(', ') if e else '' }}"></label>
+    <label>Industries <span class="hint">leave empty for any business</span><input type="text" name="industries" value="{{ e.industries|join(', ') if e else '' }}"></label>
     <label>Keywords <input type="text" name="keywords" value="{{ e.keywords|join(', ') if e else '' }}"></label>
     <label class="inline" style="align-self: end; min-height: 38px"><input type="checkbox" name="active" value="1" {{ 'checked' if (not e or e.active) }}> Active</label>
   </div>
+  <fieldset>
+    <legend>Services this profile looks for</legend>
+    <div class="cat-grid">
+      {% set chosen = services_of(e) if e else ['website', 'whatsapp_bot', 'ai_chatbot'] %}
+      {% for key, svc in all_services.items() %}
+      <label class="inline"><input type="checkbox" name="services" value="{{ key }}" {{ 'checked' if key in chosen }}> {{ svc.label }}</label>
+      {% endfor %}
+    </div>
+    <p class="hint" style="margin: 6px 0 0">Decides which opportunities are scored and which service drafts pitch.</p>
+  </fieldset>
   <div class="grid" style="margin-top: 14px; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr))">
     <label>Description <textarea name="description">{{ e.description if e else '' }}</textarea></label>
     <label>Size notes <textarea name="size_notes">{{ e.size_notes if e else '' }}</textarea></label>
@@ -73,7 +84,7 @@
   <h3>{{ i.name }}</h3>
   {% set w = weights_for(i) %}
   <div class="grid" style="margin-top: 10px">
-    {% for c in criteria %}
+    {% for c in criteria if applies(c, i) %}
     <label>{{ c.label }} <input type="number" name="{{ c.id }}" min="0" max="100" value="{{ w[c.id] }}" class="w-sm"><span class="hint">{{ c.help }}</span></label>
     {% endfor %}
   </div>
@@ -111,13 +122,14 @@
 </form>
 
 <h2 id="offers">Offers</h2>
-<p class="lede">Drafts may only quote these prices.</p>
+<p class="lede">Drafts may only quote these prices. Each draft uses the active offer for the service it pitches; leave the price empty and drafts offer a quote instead.</p>
 {% for o in offers %}
 <form method="post" action="/settings/offers" class="panel tight row">
   <input type="hidden" name="id" value="{{ o.id }}">
   <label>Name <input type="text" name="name" value="{{ o.name }}" required></label>
   <label>Price <input type="text" name="price" value="{{ o.price if o.price is not none else '' }}" class="w-sm" placeholder="quote" inputmode="decimal"></label>
   <label>Currency <input type="text" name="currency" value="{{ o.currency }}" class="w-xs"></label>
+  <label>Service <select name="service">{% for key, svc in all_services.items() %}<option value="{{ key }}" {{ 'selected' if o.service == key }}>{{ svc.label }}</option>{% endfor %}</select></label>
   <label class="grow">Description <input type="text" name="description" value="{{ o.description }}"></label>
   <label class="inline" style="min-height: 38px"><input type="checkbox" name="active" value="1" {{ 'checked' if o.active }}> Active</label>
   <button type="submit" class="secondary">Save offer</button>
@@ -127,6 +139,7 @@
   <label>New offer <input type="text" name="name" required></label>
   <label>Price <input type="text" name="price" class="w-sm" inputmode="decimal"></label>
   <label>Currency <input type="text" name="currency" value="QAR" class="w-xs"></label>
+  <label>Service <select name="service">{% for key, svc in all_services.items() %}<option value="{{ key }}">{{ svc.label }}</option>{% endfor %}</select></label>
   <label class="grow">Description <input type="text" name="description"></label>
   <input type="hidden" name="active" value="1">
   <button type="submit" class="secondary">Add offer</button>

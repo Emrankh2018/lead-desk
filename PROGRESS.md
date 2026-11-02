@@ -167,3 +167,20 @@ host resolves to a public address and then connects separately, so a hostile dom
   375 px: all 13 signed-in pages checked, no horizontal page scroll at 375 px, no console errors; menu toggle,
   auto-submit select, copy button and discovery select-all exercised. Not covered: dark mode (not built), screen-reader
   pass beyond landmarks/labels, Safari/Firefox rendering (Bahnschrift falls back to system fonts off Windows).
+
+## 2026-11-02 — Leads for websites, WhatsApp bots and AI chatbots, any business (done, local, not committed)
+- Owner request: find any business that needs a website, a WhatsApp reply bot or other AI services, not only beauty/perfume brands.
+- Services (`leadgen/offerings.py`): website, WhatsApp reply bot, website AI chatbot, AI product ads. Profiles choose services;
+  offers and drafts carry a service. Migration 0006 backfills existing profiles/offers as product ads. Seed v2 adds the profile
+  "Qatar businesses needing websites & AI assistants" and three offers with no price (owner to set prices in Settings).
+- Research now records: phone-ready (viewport), https, chat tools, WhatsApp automation, online booking, dead sites.
+- Scoring rubric v3: website gap, WhatsApp-bot gap, chatbot gap (n/a without a site), customer questions; only the profile's
+  services count. A Zomato/Facebook/free Google page is treated as "no site of their own". Each lead shows "What to pitch".
+- Discover: 60+ categories in 9 groups (food, health, beauty & fitness, cars, offices, education, stores, hotels, product shops).
+  Service profiles list reachable businesses without a site first and keep salons selected.
+- Drafts: pick the service per draft (defaults to best fit); new WhatsApp channel with an "Open WhatsApp chat" link once approved.
+- Proof: 160/160 pytest (18 new in tests/test_services.py). Live Doha search: 1,087 listings → 948 businesses, 115 with a phone,
+  66 with a phone and no website; 5 added (ids 13–17) and checked in the browser at 1366 and 375 px; one template WhatsApp draft
+  created (#4, not sent). DB backed up first: data/backups/leadgen-before-services-2026-11-02.sqlite.
+- Real local model (qwen3 4B, prompt p4): one WhatsApp website draft (#5, 70 s, no warnings, not sent); it mentioned
+  "listed in OpenStreetMap", which reads oddly in a pitch. AI opportunity ideas with p4 not run live.

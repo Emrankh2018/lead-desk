@@ -37,6 +37,8 @@ class IcpProfile(Base):
     size_notes: Mapped[str] = mapped_column(Text, default="")
     # {criterion_id: weight}; criteria are defined in leadgen.research.scoring. Empty = defaults.
     scoring_weights: Mapped[dict] = mapped_column(JSON, default=dict)
+    # Keys from leadgen.offerings.SERVICES this profile looks for; empty means the original product-ads rubric.
+    services: Mapped[list[str]] = mapped_column(JSON, default=list)
     active: Mapped[bool] = mapped_column(Boolean, default=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)
 
@@ -48,6 +50,7 @@ class Offer(Base):
     price: Mapped[Decimal | None] = mapped_column(Numeric(12, 2))
     currency: Mapped[str] = mapped_column(String(3), default="QAR")
     description: Mapped[str] = mapped_column(Text, default="")
+    service: Mapped[str | None] = mapped_column(String(30))  # leadgen.offerings.SERVICES key this offer sells
     active: Mapped[bool] = mapped_column(Boolean, default=True)
 
 
@@ -221,7 +224,8 @@ class OutreachDraft(Base):
     __tablename__ = "outreach_drafts"
     id: Mapped[int] = mapped_column(primary_key=True)
     business_id: Mapped[int] = mapped_column(ForeignKey("businesses.id", ondelete="CASCADE"), index=True)
-    channel: Mapped[str] = mapped_column(String(20))  # email | linkedin | instagram | followup
+    channel: Mapped[str] = mapped_column(String(20))  # email | whatsapp | instagram | linkedin | followup
+    service: Mapped[str | None] = mapped_column(String(30))  # which service the draft pitches
     status: Mapped[str] = mapped_column(String(12), default="pending")  # pending | draft | approved | sent | discarded | failed
     subject: Mapped[str | None] = mapped_column(String(200))
     body: Mapped[str] = mapped_column(Text, default="")

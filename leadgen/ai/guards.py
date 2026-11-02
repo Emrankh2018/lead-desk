@@ -14,7 +14,7 @@ GARBLED_PRICE_RE = re.compile(r"(?:QAR|QR)\s*[-–]\s*\d", re.I)
 PLACEHOLDER_RE = re.compile(r"\[[A-Za-z _]{2,30}\]|\{[A-Za-z_ ]{2,30}\}|<[A-Za-z _]{2,30}>")
 OVERCLAIMS = ["guarantee", "guaranteed", "increase your sales", "double your sales", "boost your sales by",
               "% more sales", "#1 ", "number one", "best in qatar", "100% results", "viral"]
-CHANNEL_LIMITS = {"instagram": 1000, "linkedin": 1300, "email": 1800, "followup": 900}
+CHANNEL_LIMITS = {"whatsapp": 1000, "instagram": 1000, "linkedin": 1300, "email": 1800, "followup": 900}
 LINKEDIN_NOTE_LIMIT = 300
 # Claims about money or buying intent are exactly what injected page text tries to plant; they are kept only when
 # the software-written evidence itself contains the word.

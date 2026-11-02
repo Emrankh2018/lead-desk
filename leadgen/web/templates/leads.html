@@ -24,7 +24,7 @@
         {% if b.do_not_contact %} <span class="badge err">do not contact</span>{% endif %}
         {% if b.domain or b.instagram_handle %}<div class="sub-line">{{ b.domain or '' }}{% if b.instagram_handle %} @{{ b.instagram_handle }}{% endif %}</div>{% endif %}</td>
       <td>{{ ui.stage(b) }}</td>
-      <td>{{ ui.score(b) }}{% if not b.researched_at and b.website %}<div class="sub-line">not researched</div>{% endif %}</td>
+      <td>{{ ui.score(b) }}{% set p = best_service(b) %}{% if p %}<div class="sub-line">pitch: {{ service_label(p) }}</div>{% endif %}{% if not b.researched_at and b.website and not listing_host(b.website) %}<div class="sub-line">not researched</div>{% endif %}</td>
       <td>{{ b.city or '' }}{% if b.country %} <span class="muted">{{ b.country }}</span>{% endif %}</td>
       <td>{{ b.industry or '' }}</td>
       <td class="small">{% if b.email_public %}<div>{{ b.email_public }}</div>{% endif %}{% if b.phone_e164 %}<div>{{ b.phone_e164 }}</div>{% endif %}

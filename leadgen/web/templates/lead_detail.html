@@ -35,12 +35,14 @@
     <section class="panel" id="research">
       <div class="panel-head">
         <h2>Research &amp; score</h2>
+        {% if lead.website and not listing_host(lead.website) %}
         <form method="post" action="/leads/{{ lead.id }}/research">
           <button type="submit" class="{{ 'secondary' if lead.researched_at }}" {{ 'disabled' if batch_running }}>{{ 'Research again' if lead.researched_at else 'Research website' }}</button>
         </form>
+        {% endif %}
       </div>
       <div class="meta">
-        <span>{% if lead.researched_at %}Last researched {{ lead.researched_at|local_time }}{% else %}Website not researched yet{% endif %}</span>
+        <span>{% if lead.researched_at %}Last researched {{ lead.researched_at|local_time }}{% elif not lead.website %}No website on record to research{% elif listing_host(lead.website) %}Their only page is on {{ listing_host(lead.website) }}, so there is no website of their own to research{% else %}Website not researched yet{% endif %}</span>
         {% if last_run %}<span>last run {{ ui.status_badge(last_run.status) }} {{ last_run.pages_fetched }} page{{ 's' if last_run.pages_fetched != 1 }}</span>{% endif %}
         {% if batch_running %}<span>A research batch is running; single research is paused until it finishes.</span>{% endif %}
       </div>
@@ -57,6 +59,18 @@
         </div>
       </div>
       <p class="hint">Fit with your customer profile and visible opportunity, based only on the evidence below. It does not measure willingness to buy.</p>
+      {% if fits %}
+      <div class="sub" id="pitch">
+        <h3>What to pitch</h3>
+        <ul class="fit-list">
+          {% for key, fraction, why in fits %}
+          <li><span><strong>{{ service_label(key) }}</strong>{% if key == pitch and fraction >= 0.6 %} <span class="badge ok">best fit</span>{% endif %}
+                <span class="fit-bar" aria-hidden="true"><i style="width: {{ (fraction * 100)|round|int }}%"></i></span></span>
+              <span class="small">{{ why }}</span></li>
+          {% endfor %}
+        </ul>
+      </div>
+      {% endif %}
       {% if lead.score_breakdown %}
       <div class="table-wrap" style="margin-top: 12px"><table>
         <thead><tr><th>Criterion</th><th class="num">Points</th><th>Why</th></tr></thead>
@@ -145,7 +159,8 @@
         {% else %}
         {% if not sender_set %}<div class="flash warn">Add your name and studio in <a href="/settings#sender">Settings, Sender profile</a> so drafts can sign off properly.</div>{% endif %}
         <form method="post" action="/leads/{{ lead.id }}/drafts" class="row">
-          <label>Channel <select name="channel">{% for c in draft_channels %}<option value="{{ c }}">{{ {'email': 'Email', 'instagram': 'Instagram DM', 'linkedin': 'LinkedIn', 'followup': 'Follow-up'}[c] }}</option>{% endfor %}</select></label>
+          <label>Pitch <select name="service">{% for s in services %}<option value="{{ s }}" {{ 'selected' if s == pitch }}>{{ service_label(s) }}</option>{% endfor %}</select></label>
+          <label>Channel <select name="channel">{% for c in draft_channels %}<option value="{{ c }}">{{ {'whatsapp': 'WhatsApp', 'email': 'Email', 'instagram': 'Instagram DM', 'linkedin': 'LinkedIn', 'followup': 'Follow-up'}[c] }}</option>{% endfor %}</select></label>
           <button type="submit" name="mode" value="ai" {{ 'disabled' if not ai_ok }}>Draft with AI</button>
           <button type="submit" name="mode" value="template" class="secondary">Template draft (no AI)</button>
         </form>
@@ -153,7 +168,7 @@
         {% for d in drafts %}
         <div class="draft {{ d.status }}" id="draft-{{ d.id }}">
           <div class="row center between">
-            <strong>{{ {'email': 'Email', 'instagram': 'Instagram DM', 'linkedin': 'LinkedIn', 'followup': 'Follow-up'}.get(d.channel, d.channel|capitalize) }} draft #{{ d.id }}</strong>
+            <strong>{{ {'whatsapp': 'WhatsApp', 'email': 'Email', 'instagram': 'Instagram DM', 'linkedin': 'LinkedIn', 'followup': 'Follow-up'}.get(d.channel, d.channel|capitalize) }} draft #{{ d.id }}{% if d.service %} <span class="muted">({{ service_label(d.service) }})</span>{% endif %}</strong>
             <span class="actions">{{ ui.status_badge(d.status) }}<span class="small muted">{{ 'template' if d.source == 'template' else d.model }}</span></span>
           </div>
           {% if d.status == 'pending' %}<p class="muted" style="margin-top: 8px">Writing… this page refreshes every 10 seconds.</p>
@@ -179,6 +194,7 @@
                 {% if d.channel in ('email', 'followup') and lead.email_public %}
                   <a class="btn secondary" href="mailto:{{ lead.email_public }}?subject={{ (d.subject or '')|urlencode }}&body={{ d.body|urlencode }}">Open in my email app</a>
                 {% endif %}
+                {% if d.channel == 'whatsapp' and lead.phone_e164 %}<a class="btn secondary" href="https://wa.me/{{ lead.phone_e164|replace('+', '') }}" target="_blank" rel="noopener noreferrer">Open WhatsApp chat</a>{% endif %}
                 {% if d.channel == 'instagram' and lead.instagram_handle %}<a class="btn secondary" href="https://www.instagram.com/{{ lead.instagram_handle }}/" target="_blank" rel="noopener noreferrer">Open their Instagram</a>{% endif %}
                 {% if d.channel == 'linkedin' and lead.linkedin_url %}<a class="btn secondary" href="{{ lead.linkedin_url|safe_href }}" target="_blank" rel="noopener noreferrer">Open their LinkedIn</a>{% endif %}
               </div>

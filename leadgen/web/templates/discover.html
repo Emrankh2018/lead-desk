@@ -3,7 +3,7 @@
 {% block content %}
 <div class="page-head">
   <div class="title"><h1>Discover businesses</h1>
-    <div class="meta"><span>Search OpenStreetMap for shops that match a customer profile. Free, nothing is added until you confirm.</span></div></div>
+    <div class="meta"><span>Search OpenStreetMap for businesses that match a customer profile. Free, nothing is added until you confirm.</span></div></div>
 </div>
 <div class="split">
   <form method="post" action="/discover" class="panel">
@@ -12,23 +12,27 @@
       <label>Country <span class="hint">2-letter code</span><input type="text" name="country" value="{{ form.country }}" maxlength="2" class="w-xs" required></label>
       <label class="grow">City <span class="hint">optional</span><input type="text" name="city" value="{{ form.city }}" placeholder="Doha"></label>
       <label class="grow">Customer profile
-        <select name="icp_id">{% for i in icps %}<option value="{{ i.id }}" {{ 'selected' if form.icp_id == i.id }}>{{ i.name }}</option>{% endfor %}</select></label>
+        <select name="icp_id" data-profile-switch>{% for i in icps %}<option value="{{ i.id }}" {{ 'selected' if form.icp_id == i.id }}>{{ i.name }}</option>{% endfor %}</select></label>
     </div>
-    <fieldset>
-      <legend>Shop categories</legend>
-      <div class="grid" style="grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 8px 14px">
-        {% for key, label in shop_types.items() %}
+    <p class="hint">Changing the profile reloads its suggested categories.</p>
+    {% for group, cats in groups.items() %}
+    <fieldset class="cat-group">
+      <legend>{{ group }}</legend>
+      <div class="cat-grid">
+        {% for key, label in cats.items() %}
         <label class="inline"><input type="checkbox" name="types" value="{{ key }}" {{ 'checked' if key in form.types }}> {{ label }}</label>
         {% endfor %}
       </div>
     </fieldset>
+    {% endfor %}
     <div class="form-foot"><button type="submit">Search OpenStreetMap</button> <span class="hint">Takes up to a minute. Results are cached for 24 hours.</span></div>
   </form>
   <div>
     <div class="panel note">
       <h3>What to expect</h3>
-      <p class="small">Branches of the same business are grouped into one lead. Most Qatar listings have a name and location but no website or contact details, and many Instagram-only brands are not on the map.</p>
-      <p class="small">For those, <a href="/import#paste">paste a list</a> of handles or websites instead.</p>
+      <p class="small">Branches of the same business are grouped into one lead. Most Qatar listings have a name and location but no website, which makes them website prospects; those with a phone number can be reached on WhatsApp.</p>
+      <p class="small">"No website listed" only means OpenStreetMap has none on record. Check before you pitch.</p>
+      <p class="small">Instagram-only brands are rarely on the map: <a href="/import#paste">paste a list</a> of handles or websites instead.</p>
       <p class="hint" style="margin: 0">Data © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap contributors</a> (ODbL).</p>
     </div>
   </div>
@@ -39,9 +43,15 @@
   <tbody>
   {% for r in runs %}
   <tr><td class="small">{{ r.created_at|local_time }}</td>
-      <td class="small">{{ r.params.country }}{{ ' / ' ~ r.params.city if r.params.city }}: {{ r.params.types|join(', ') }}{{ ' (cached)' if r.from_cache }}</td>
+      <td class="small">{{ r.params.country }}{{ ' / ' ~ r.params.city if r.params.city }}: {% for t in r.params.types %}{{ label_of(t) }}{{ ', ' if not loop.last }}{% endfor %}{{ ' (cached)' if r.from_cache }}</td>
       <td class="num">{{ r.places_found }}</td><td class="num">{{ r.candidates }}</td><td class="num">{{ r.new_candidates }}</td><td class="num">{{ r.added }}</td></tr>
   {% else %}<tr><td colspan="6" class="empty">No searches yet.</td></tr>{% endfor %}
   </tbody>
 </table></div>
+<script>
+  // Each profile suggests its own categories, so switching profile reloads the form with them.
+  document.querySelector('select[data-profile-switch]').addEventListener('change', e => {
+    location.href = '/discover?icp_id=' + encodeURIComponent(e.target.value);
+  });
+</script>
 {% endblock %}

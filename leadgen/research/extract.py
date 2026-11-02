@@ -34,6 +34,29 @@ PLATFORM_MARKERS = {
 STORE_TEXT_MARKERS = ["add to cart", "add to bag", "add to basket", "buy now", "checkout", "أضف إلى السلة", "اضف للسلة", "اشتر الآن"]
 QATAR_MARKERS = [("QAR", r"\bQAR\b"), ("ر.ق", r"ر\.ق"), ("Doha", r"\bDoha\b"), ("Qatar", r"\bQatar\b"),
                  ("الدوحة", r"الدوحة"), ("قطر", r"قطر"), ("+974", r"\+974")]
+# Chat tools found in page code. WhatsApp automation platforms are listed separately: a business already using one
+# is a weak WhatsApp-bot prospect, while plain wa.me links mean customers message a person.
+CHAT_WIDGETS = {
+    "Tawk.to": ["embed.tawk.to"], "Tidio": ["tidio.co", "tidiochat"], "Intercom": ["widget.intercom.io", "intercomcdn"],
+    "Crisp": ["client.crisp.chat"], "Zendesk chat": ["zopim", "static.zdassets.com"], "LiveChat": ["livechatinc.com"],
+    "Drift": ["js.driftt.com"], "HubSpot chat": ["js.usemessages.com"], "Freshchat": ["wchat.freshchat.com", "freshchat"],
+    "Chatbase": ["chatbase.co"], "Botpress": ["botpress"], "Landbot": ["landbot.io"], "Voiceflow": ["voiceflow.com"],
+    "Tiledesk": ["tiledesk"], "Chatra": ["chatra.io"], "Smartsupp": ["smartsupp"],
+}
+WHATSAPP_AUTOMATION = {
+    "WATI": ["wati.io"], "respond.io": ["respond.io"], "Interakt": ["interakt"], "ManyChat": ["manychat"],
+    "AiSensy": ["aisensy"], "Gallabox": ["gallabox"], "Twilio": ["twilio.com"], "360dialog": ["360dialog"],
+}
+WHATSAPP_BUTTONS = ["getbutton.io", "elfsight", "whatsapp-widget", "wa-widget", "joinchat", "click-to-chat", "qlwapp"]
+BOOKING_TOOLS = {
+    "Calendly": ["calendly.com"], "Fresha": ["fresha.com"], "Booksy": ["booksy.com"], "Setmore": ["setmore.com"],
+    "SimplyBook": ["simplybook"], "Square Appointments": ["squareup.com/appointments", "square.site/book"],
+    "Eat App": ["eatapp.co"], "SevenRooms": ["sevenrooms.com"], "OpenTable": ["opentable."], "Vagaro": ["vagaro.com"],
+    "Zenoti": ["zenoti.com"], "Practo": ["practo.com"], "Bookeo": ["bookeo.com"], "Acuity": ["acuityscheduling.com"],
+    "Talabat": ["talabat.com"], "Snoonu": ["snoonu.com"], "Deliveroo": ["deliveroo."],
+}
+BOOKING_WORDS = ["book now", "book an appointment", "book appointment", "make a reservation", "reserve a table",
+                 "order online", "احجز", "حجز موعد"]
 CONTACT_LINK_WORDS = ["contact", "about", "تواصل", "اتصل", "من نحن"]
 # Outbound links to these are infrastructure (payments, platforms, maps, credits), never prospects.
 SERVICE_HOSTS = ("google.", "apple.com", "shopify.com", "myshopify.com", "wordpress.", "woocommerce.com", "wix.com",
@@ -149,6 +172,28 @@ def extract_page(html: str, page_url: str, *, site_domain: str | None) -> tuple[
                               snippet=_snippet(text, store_hits[0])))
     if products:
         signals.append(Signal("structured_products", f"Page declares {products} product(s) in structured data (schema.org)", {"count": products}))
+
+    has_viewport = tree.css_first('meta[name="viewport"]') is not None
+    signals.append(Signal("mobile_viewport", "Page is set up for phone screens (viewport tag present)" if has_viewport
+                          else "Page has no viewport tag, so it is likely not set up for phone screens", {"present": has_viewport}))
+    secure = page_url.lower().startswith("https://")
+    signals.append(Signal("https", "Site is served over secure https" if secure else "Site is served without https (not secure)",
+                          {"secure": secure}))
+    chat = [n for n, marks in CHAT_WIDGETS.items() if any(m in raw_lower for m in marks)]
+    wa_auto = [n for n, marks in WHATSAPP_AUTOMATION.items() if any(m in raw_lower for m in marks)]
+    wa_button = any(m in raw_lower for m in WHATSAPP_BUTTONS)
+    # Absence is unverified: a tag manager can inject a widget after the page loads.
+    signals.append(Signal("chat_widget", f"Page code includes a chat tool: {', '.join(chat)}" if chat
+                          else "No website chat tool found in the page code", {"tools": chat}, verified=bool(chat)))
+    signals.append(Signal("whatsapp_automation", f"Page code mentions a WhatsApp automation platform: {', '.join(wa_auto)}" if wa_auto
+                          else ("Page has a WhatsApp chat button (opens a normal chat)" if wa_button
+                                else "No WhatsApp automation platform found in the page code"),
+                          {"tools": wa_auto, "button": wa_button}, verified=bool(wa_auto or wa_button)))
+    booking = [n for n, marks in BOOKING_TOOLS.items() if any(m in raw_lower for m in marks)]
+    book_words = [w for w in BOOKING_WORDS if w in text.lower()]
+    signals.append(Signal("online_booking", f"Online booking or ordering: {', '.join(booking + book_words[:2])}" if booking or book_words
+                          else "No online booking or ordering found on the page", {"tools": booking, "wording": book_words},
+                          verified=bool(booking or book_words)))
 
     qa_hits = [label for label, pattern in QATAR_MARKERS if re.search(pattern, text)]
     if qa_hits:

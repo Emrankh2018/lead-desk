@@ -1,42 +1,55 @@
 {% extends "base.html" %}
 {% block title %}Discovery results{% endblock %}
 {% block content %}
-<h1>OpenStreetMap results</h1>
-<p class="small muted">{{ params.country }}{{ ' / ' ~ params.city if params.city }} · {{ run.places_found }} listings → {{ candidates|length }} businesses after grouping branches
-  {%- if unnamed %} · {{ unnamed }} listing{{ 's' if unnamed != 1 }} without a name skipped{% endif %}{{ ' · from cache' if cached }}.
-  Data © OpenStreetMap contributors.</p>
+<div class="page-head">
+  <div class="title"><h1>OpenStreetMap results</h1>
+    <div class="meta">
+      <span>{{ params.country }}{{ ' / ' ~ params.city if params.city }}</span>
+      <span>{{ run.places_found }} listings → {{ candidates|length }} businesses after grouping branches</span>
+      {% if unnamed %}<span>{{ unnamed }} listing{{ 's' if unnamed != 1 }} without a name skipped</span>{% endif %}
+      {% if cached %}<span>from cache</span>{% endif %}
+      <span>Data © OpenStreetMap contributors</span>
+    </div></div>
+</div>
 {% if not candidates %}
-  <div class="panel">No matching businesses found. Try the whole country, more categories, or <a href="/import#paste">paste a list</a>.
-    <a href="/discover">Back</a></div>
+  <div class="panel empty"><strong>No matching businesses found</strong>
+    Try the whole country, more categories, or <a href="/import#paste">paste a list</a>. <a href="/discover">Back to Discover</a></div>
 {% else %}
 <form method="post" action="/discover/add">
   <input type="hidden" name="token" value="{{ token }}">
-  <div class="panel row">
-    <span class="badge ok">{{ counts.new }} new</span>
-    <span class="badge warn">{{ counts.possible_duplicate }} possible duplicate</span>
-    <span class="badge">{{ counts.in_list }} already in list</span>
-    <span class="grow small muted">Chains (3+ locations) and salons are listed but not pre-selected.</span>
-    <label class="inline"><input type="checkbox" name="research" value="1" checked> Research the ones with a website</label>
-    <button type="submit">Add selected</button>
-    <a class="btn secondary" href="/discover">Cancel</a>
+  <div class="panel tight">
+    <div class="row center">
+      <span class="badge ok">{{ counts.new }} new</span>
+      <span class="badge warn">{{ counts.possible_duplicate }} possible duplicate</span>
+      <span class="badge">{{ counts.in_list }} already in list</span>
+      <span class="grow hint">Chains (3+ locations), salons and name-only listings are shown but not pre-selected.</span>
+    </div>
+    <div class="row center" style="margin-top: 12px">
+      <label class="inline grow"><input type="checkbox" name="research" value="1" checked> Research the ones with a website after adding</label>
+      <button type="submit">Add selected</button>
+      <a class="btn secondary" href="/discover">Cancel</a>
+    </div>
   </div>
   <div class="table-wrap"><table>
-    <thead><tr><th><input type="checkbox" aria-label="Select all" onclick="document.querySelectorAll('input[name=keys]:not(:disabled)').forEach(c => c.checked = this.checked)"></th>
-      <th>Business</th><th>Category</th><th>Locations</th><th>Website / Instagram</th><th>Phone</th><th>Status</th></tr></thead>
+    <thead><tr><th class="check"><input type="checkbox" aria-label="Select all" data-select-all="keys"></th>
+      <th>Business</th><th>Category</th><th class="num">Locations</th><th>Website / Instagram</th><th>Phone</th><th>Status</th></tr></thead>
+    <tbody>
     {% for c in candidates %}
     <tr>
-      <td><input type="checkbox" name="keys" value="{{ c.key }}" aria-label="Add {{ c.name }}" {{ 'checked' if c.selected }} {{ 'disabled' if c.status == 'in_list' }}></td>
-      <td><a href="{{ c.osm_urls[0]|safe_href }}" target="_blank" rel="noopener noreferrer">{{ c.name }}</a>
-        {% for n in c.notes %}<div class="small muted">{{ n }}</div>{% endfor %}</td>
+      <td class="check"><input type="checkbox" name="keys" value="{{ c.key }}" aria-label="Add {{ c.name }}" {{ 'checked' if c.selected }} {{ 'disabled' if c.status == 'in_list' }}></td>
+      <td><a class="lead-name" href="{{ c.osm_urls[0]|safe_href }}" target="_blank" rel="noopener noreferrer">{{ c.name }}</a>
+        {% for n in c.notes %}<div class="sub-line">{{ n }}</div>{% endfor %}</td>
       <td class="small">{% for t in c.shop_types %}{{ shop_types.get(t, t) }}{{ ', ' if not loop.last }}{% endfor %}</td>
-      <td>{{ c.branches }}</td>
+      <td class="num">{{ c.branches }}</td>
       <td class="small">{{ c.website or '' }}{% if c.instagram %} @{{ c.instagram }}{% endif %}{% if not c.website and not c.instagram %}<span class="muted">none listed</span>{% endif %}</td>
       <td class="small">{{ c.phone or '' }}</td>
       <td class="small">{% if c.status == 'new' %}<span class="badge ok">new</span>{% elif c.status == 'in_list' %}<span class="badge">in list</span>{% else %}<span class="badge warn">check</span>{% endif %}
-        {% if c.message %}<div class="muted">{{ c.message }}</div>{% endif %}</td>
+        {% if c.message %}<div class="sub-line">{{ c.message }}</div>{% endif %}</td>
     </tr>
     {% endfor %}
+    </tbody>
   </table></div>
+  <div class="form-foot"><button type="submit">Add selected</button></div>
 </form>
 {% endif %}
 {% endblock %}

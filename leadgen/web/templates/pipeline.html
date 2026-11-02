@@ -1,25 +1,32 @@
 {% extends "base.html" %}
+{% import "_ui.html" as ui %}
 {% block title %}Pipeline{% endblock %}
 {% block content %}
-<h1>Pipeline</h1>
+<div class="page-head">
+  <div class="title"><h1>Pipeline</h1>
+    <div class="meta"><span>Move a lead by changing its stage on the card.</span></div></div>
+  <div class="actions"><a class="btn secondary" href="/settings#stages">Edit stages</a></div>
+</div>
+{% set active_filters = flt.q or flt.stage_id or flt.icp_id or flt.city or flt.industry or flt.dnc != 'exclude' or flt.follow_up_due or flt.sort != 'updated' %}
 {% include "_filters.html" %}
 <div class="board">
   {% for stage, cards in columns %}
-  <section class="column" aria-label="{{ stage.name }}">
-    <h3>{{ stage.name }} <span class="muted">{{ cards|length }}</span></h3>
+  <section class="column {{ stage.outcome or '' }}" aria-labelledby="col-{{ stage.id }}">
+    <h2 id="col-{{ stage.id }}">{{ stage.name }} <span class="count">{{ cards|length }}</span></h2>
     {% for b in cards %}
     <div class="card">
-      <a href="/leads/{{ b.id }}">{{ b.name }}</a>
-      <div class="small muted">{{ b.city or '' }}{% if b.industry %} · {{ b.industry }}{% endif %}</div>
-      {% if b.follow_up_on %}<div class="small"><span class="badge {{ 'warn' if b.follow_up_on <= today }}">follow up {{ b.follow_up_on }}</span></div>{% endif %}
+      <a class="lead-name" href="/leads/{{ b.id }}">{{ b.name }}</a>
+      {% if b.city or b.industry %}<div class="detail">{{ b.city or '' }}{% if b.city and b.industry %}, {% endif %}{{ b.industry or '' }}</div>{% endif %}
+      {% if b.follow_up_on %}<div class="detail"><span class="badge {{ 'warn' if b.follow_up_on <= today }}">follow up {{ b.follow_up_on }}</span></div>{% endif %}
       <form method="post" action="/leads/{{ b.id }}/stage">
         <input type="hidden" name="next" value="/pipeline">
-        <select name="stage_id" data-autosubmit aria-label="Move {{ b.name }}">
+        <select name="stage_id" data-autosubmit aria-label="Move {{ b.name }} to stage">
           {% for s in stages %}<option value="{{ s.id }}" {{ 'selected' if s.id == b.stage_id }}>{{ s.name }}</option>{% endfor %}
         </select>
-        <noscript><button type="submit">Move</button></noscript>
+        <noscript><button type="submit" class="small secondary">Move</button></noscript>
       </form>
     </div>
+    {% else %}<div class="none">No leads here.</div>
     {% endfor %}
   </section>
   {% endfor %}

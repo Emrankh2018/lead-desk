@@ -146,3 +146,24 @@ host resolves to a public address and then connects separately, so a hostile dom
   evidence honest; one draft wrote "QAR 0450", which the price guard flagged as intended (left as a warning).
 - Browser re-check after fixes: all 13 pages load; real links intact; unsafe link schemes refused via the forms;
   Today ranks well-researched leads first.
+
+## 2026-11-01 — UI redesign, audit and polish (done, local, not committed)
+- **Design:** grouped sidebar (Daily work / Find leads / Records) that folds into a top bar with a Menu button under 900 px;
+  Qatar maroon `#8a1538` for the one primary action per screen, pearl grey surface, aubergine ink; Bahnschrift (ships
+  with Windows) for headings and figures, Segoe UI for text; no web fonts (local, private app). One shared fit-score +
+  evidence-coverage meter (`templates/_ui.html`), amber when coverage < 60 %, used on Today, Leads and the lead page.
+- **Pages:** every template rewritten on shared classes (no ad-hoc inline layout): page headers with facts and actions,
+  Today split into "Needs you now" / "Keep an eye on", lead page with research/AI/drafts left and activity/history/
+  details right, funnel strip on Analytics, empty states with a next step, secondary filters folded under "More filters".
+- **Bugs found in the browser audit and fixed:** table cells broke words mid-way ("Edi t", "auth.login_fa iled");
+  score points showed "25.0"; Analytics funnel left a grey hole on its second row; stray space before ", source";
+  draft text boxes were a fixed 9 rows; research buttons read "Research 0 …"; "Copy message" silently failed when the
+  browser refused clipboard access (now falls back and says Copied / press Ctrl+C); open phone menu stayed pinned
+  while scrolling; Today ranking (90 above 94) was unexplained.
+- **Hardening:** every response now sends `X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff`,
+  `Referrer-Policy: same-origin` (lead URLs are not leaked to sites the app links to).
+- **Proof:** 142 pytest (3 new in `tests/test_audit.py`: headers, number format, every page renders in the new layout;
+  one older test now asserts no `href="javascript:` instead of slicing on `<main>`). Built-in browser at 1366 px and
+  375 px: all 13 signed-in pages checked, no horizontal page scroll at 375 px, no console errors; menu toggle,
+  auto-submit select, copy button and discovery select-all exercised. Not covered: dark mode (not built), screen-reader
+  pass beyond landmarks/labels, Safari/Firefox rendering (Bahnschrift falls back to system fonts off Windows).

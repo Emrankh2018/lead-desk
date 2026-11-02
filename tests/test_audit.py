@@ -77,7 +77,8 @@ def test_templates_neutralise_unsafe_stored_links(auth_client):
         b.website, b.domain, b.linkedin_url = "javascript:alert(1)", "legacy.qa", "javascript:alert(2)"
         s.commit()
     page = auth_client.get(url).text
-    assert "javascript:alert" not in page.split("<main>")[1].split("Details")[0]
+    # The stored value may still appear as text in the edit form; it must never become a link.
+    assert 'href="javascript:' not in page.lower() and "legacy.qa" in page
 
 
 # 6. Merging deleted the removed record's outreach drafts (including approved ones) through the cascade.
@@ -149,3 +150,24 @@ def test_lead_page_refresh_does_not_discard_typing(auth_client):
         s.commit()
     page = auth_client.get(url).text
     assert 'http-equiv="refresh"' not in page and "data-autorefresh" in page
+
+
+# UI redesign audit (2026-11-01): pages could be framed by another site, and score points showed as "25.0".
+def test_pages_send_basic_security_headers(auth_client):
+    r = auth_client.get("/today")
+    assert r.headers["x-frame-options"] == "DENY" and r.headers["x-content-type-options"] == "nosniff"
+    assert r.headers["referrer-policy"] == "same-origin"
+
+
+def test_score_points_drop_trailing_zero():
+    from leadgen.web.app import num
+    assert num(25.0) == "25" and num(13.5) == "13.5" and num(7) == "7" and num(None) == ""
+
+
+def test_every_page_renders_with_the_new_layout(auth_client):
+    auth_client.post("/leads", data={"name": "Layout Co", "website": "layout.qa"})
+    for path in ["/today", "/leads", "/leads/1", "/leads/new", "/pipeline", "/outreach", "/discover", "/import",
+                 "/research", "/duplicates", "/analytics", "/settings", "/audit", "/leads/1/delete"]:
+        r = auth_client.get(path)
+        assert r.status_code == 200, path
+        assert 'aria-label="Main"' in r.text and 'class="page-head"' in r.text, path

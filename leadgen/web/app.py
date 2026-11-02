@@ -47,6 +47,13 @@ def safe_href(url: str | None) -> str:
     return url if url and urlsplit(url.strip()).scheme.lower() in ("http", "https") else "#"
 
 
+def num(value: float | int | None) -> str:
+    """Score points for display: 25.0 -> '25', 13.5 -> '13.5'."""
+    if value is None:
+        return ""
+    return f"{value:g}" if isinstance(value, float) else str(value)
+
+
 def today_local() -> date:
     return datetime.now(DISPLAY_TZ).date()
 
@@ -60,7 +67,12 @@ class SameOriginMiddleware(BaseHTTPMiddleware):
             if source and source != "null" and urlsplit(source).netloc != request.headers.get("host"):
                 log.warning("blocked cross-origin %s %s from %s", request.method, request.url.path, source)
                 return PlainTextResponse("Cross-origin request blocked", status_code=403)
-        return await call_next(request)
+        response = await call_next(request)
+        # No framing (clickjacking), no MIME sniffing, and lead page URLs are not sent to the sites we link to.
+        response.headers.setdefault("X-Frame-Options", "DENY")
+        response.headers.setdefault("X-Content-Type-Options", "nosniff")
+        response.headers.setdefault("Referrer-Policy", "same-origin")
+        return response
 
 
 def create_app(settings: Settings | None = None) -> FastAPI:
@@ -94,6 +106,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     env = jinja2.Environment(loader=jinja2.FileSystemLoader(WEB_DIR / "templates"), autoescape=True)
     env.filters["local_time"] = local_time
     env.filters["safe_href"] = safe_href
+    env.filters["num"] = num
     env.globals.update(ui_lang=settings.ui_lang, ui_dir=settings.ui_dir)
     app.state.templates = Jinja2Templates(env=env)
 

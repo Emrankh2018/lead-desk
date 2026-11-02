@@ -1,0 +1,16 @@
+{# Shared pieces. Import with: {% import "_ui.html" as ui %} #}
+
+{# Fit score with its evidence coverage underneath. Thin coverage (< 60%) is drawn amber: research first. #}
+{% macro score(b) -%}
+{% if b.score is not none %}{% set cov = b.score_coverage or 0 %}
+<span class="score {{ 'thin' if cov < 60 }}" title="Fit {{ b.score }}/100, evidence for {{ cov }}% of the rubric">
+  <b>{{ b.score }}</b><span class="cov" aria-hidden="true"><i style="width: {{ cov }}%"></i></span><small>{{ cov }}% evidence</small>
+</span>
+{%- else %}<span class="muted" title="Not scored yet">—</span>{% endif %}
+{%- endmacro %}
+
+{% macro stage(b) -%}<span class="badge">{{ b.stage.name }}</span>{%- endmacro %}
+
+{% macro status_badge(status) -%}
+<span class="badge {{ {'ok': 'ok', 'partial': 'warn', 'failed': 'err', 'skipped': 'warn', 'approved': 'ok', 'sent': 'ok', 'pending': 'warn'}.get(status, '') }}">{{ status }}</span>
+{%- endmacro %}

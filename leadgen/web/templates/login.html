@@ -1,14 +1,17 @@
 {% extends "base.html" %}
 {% block title %}Sign in{% endblock %}
 {% block content %}
-<div class="panel login">
-  <h1>Lead Desk</h1>
-  {% if error %}<div class="flash error" role="alert">{{ error }}</div>{% endif %}
-  <form method="post" action="/login">
-    <input type="hidden" name="next" value="{{ next }}">
-    <label>Username <input type="text" name="username" autocomplete="username" required autofocus></label>
-    <label>Password <input type="password" name="password" autocomplete="current-password" required></label>
-    <button type="submit">Sign in</button>
-  </form>
+<div class="login-page">
+  <div class="login">
+    <h1>Lead Desk</h1>
+    <p class="muted small">Prospects, evidence and outreach for your studio. Private to this computer.</p>
+    {% if error %}<div class="flash error" role="alert">{{ error }}</div>{% endif %}
+    <form method="post" action="/login">
+      <input type="hidden" name="next" value="{{ next }}">
+      <label>Username <input type="text" name="username" autocomplete="username" required autofocus></label>
+      <label>Password <input type="password" name="password" autocomplete="current-password" required></label>
+      <button type="submit">Sign in</button>
+    </form>
+  </div>
 </div>
 {% endblock %}

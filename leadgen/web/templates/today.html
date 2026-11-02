@@ -1,63 +1,79 @@
 {% extends "base.html" %}
+{% import "_ui.html" as ui %}
 {% block title %}Today{% endblock %}
 {% block content %}
-<h1>Today <span class="muted small">{{ today }}</span></h1>
-{% if batch.running or ai_pending %}<p class="small muted">
-  {% if batch.running %}Research batch running ({{ batch.done }}/{{ batch.total }}). {% endif %}
-  {% if ai_pending %}{{ ai_pending }} AI job(s) in progress.{% endif %}</p>{% endif %}
+<div class="page-head">
+  <div class="title">
+    <h1>Today</h1>
+    <div class="meta"><span>{{ today }}</span></div>
+  </div>
+  <div class="actions"><a class="btn secondary" href="/leads/new">Add lead</a></div>
+</div>
+{% if batch.running or ai_pending %}<div class="status-line" role="status">
+  {% if batch.running %}<span>Research batch running: {{ batch.done }} of {{ batch.total }} done</span>{% endif %}
+  {% if ai_pending %}<span>{{ ai_pending }} AI job{{ 's' if ai_pending != 1 }} in progress</span>{% endif %}</div>{% endif %}
 
-{% macro lead_link(b) %}<a href="/leads/{{ b.id }}">{{ b.name }}</a> <span class="badge">{{ b.stage.name }}</span>{% endmacro %}
+{% macro lead_link(b) %}<a class="lead-name" href="/leads/{{ b.id }}">{{ b.name }}</a> {{ ui.stage(b) }}{% endmacro %}
+{% macro head(title, n, hot=false) %}<h2>{{ title }}<span class="count {{ 'hot' if hot and n }}">{{ n }}</span></h2>{% endmacro %}
 
-<div class="grid" style="grid-template-columns: repeat(auto-fill, minmax(320px, 1fr))">
-  <section class="panel">
-    <h2 style="margin-top:0">They replied — your move <span class="badge {{ 'warn' if v.replied }}">{{ v.replied|length }}</span></h2>
-    <ul class="timeline">
-      {% for b, a in v.replied %}<li>{{ lead_link(b) }}<div class="small muted">{{ a.occurred_at|local_time }} · {{ a.summary[:140] }}</div></li>
-      {% else %}<li class="muted small">No unanswered replies.</li>{% endfor %}
-    </ul>
-  </section>
+<div class="today">
+  <div class="lane">
+    <h2>Needs you now</h2>
+    <section class="queue {{ 'urgent' if v.replied }}">
+      {{ head('They replied, your move', v.replied|length, true) }}
+      <ul class="list">
+        {% for b, a in v.replied %}<li><div class="item-top">{{ lead_link(b) }}</div>
+          <div class="detail">{{ a.occurred_at|local_time }}: {{ a.summary[:140] }}</div></li>
+        {% else %}<li class="none">No unanswered replies.</li>{% endfor %}
+      </ul>
+    </section>
 
-  <section class="panel">
-    <h2 style="margin-top:0">Follow-ups due <span class="badge {{ 'warn' if v.due }}">{{ v.due|length }}</span></h2>
-    <ul class="timeline">
-      {% for b in v.due %}<li>{{ lead_link(b) }} <span class="badge {{ 'err' if b.follow_up_on < today else 'warn' }}">{{ 'overdue since ' if b.follow_up_on < today else 'due ' }}{{ b.follow_up_on }}</span></li>
-      {% else %}<li class="muted small">Nothing due.</li>{% endfor %}
-    </ul>
-  </section>
+    <section class="queue {{ 'urgent' if v.due }}">
+      {{ head('Follow-ups due', v.due|length, true) }}
+      <ul class="list">
+        {% for b in v.due %}<li><div class="item-top">{{ lead_link(b) }}
+          <span class="badge push {{ 'err' if b.follow_up_on < today else 'warn' }}">{{ 'overdue since ' if b.follow_up_on < today else 'due ' }}{{ b.follow_up_on }}</span></div></li>
+        {% else %}<li class="none">Nothing due.</li>{% endfor %}
+      </ul>
+    </section>
 
-  <section class="panel">
-    <h2 style="margin-top:0">Approved, not yet sent <span class="badge">{{ v.approved_drafts|length }}</span></h2>
-    <ul class="timeline">
-      {% for d in v.approved_drafts %}<li><a href="/leads/{{ d.business_id }}#draft-{{ d.id }}">{{ d.business.name }}</a> <span class="badge">{{ d.channel }}</span>
-        <div class="small muted">{{ d.body[:100] }}…</div></li>
-      {% else %}<li class="muted small">No approved drafts waiting.</li>{% endfor %}
-    </ul>
-  </section>
+    <section class="queue">
+      {{ head('Approved, not yet sent', v.approved_drafts|length) }}
+      <ul class="list">
+        {% for d in v.approved_drafts %}<li><div class="item-top"><a class="lead-name" href="/leads/{{ d.business_id }}#draft-{{ d.id }}">{{ d.business.name }}</a> <span class="badge">{{ d.channel }}</span></div>
+          <div class="detail">{{ d.body[:100] }}{{ '…' if d.body|length > 100 }}</div></li>
+        {% else %}<li class="none">No approved drafts waiting.</li>{% endfor %}
+      </ul>
+    </section>
+  </div>
 
-  <section class="panel">
-    <h2 style="margin-top:0">No reply after {{ await_days }}+ days <span class="badge">{{ v.awaiting|length }}</span></h2>
-    <p class="small muted">Contacted, no reply logged and no follow-up date set. Consider one polite follow-up.</p>
-    <ul class="timeline">
-      {% for b, a, days in v.awaiting %}<li>{{ lead_link(b) }} <span class="small muted">{{ days }} days via {{ a.channel or 'unknown' }}</span></li>
-      {% else %}<li class="muted small">None.</li>{% endfor %}
-    </ul>
-  </section>
+  <div class="lane">
+    <h2>Keep an eye on</h2>
+    <section class="queue">
+      {{ head('No reply after ' ~ await_days ~ '+ days', v.awaiting|length) }}
+      <p class="why">Contacted, no reply logged and no follow-up date set. Consider one polite follow-up.</p>
+      <ul class="list">
+        {% for b, a, days in v.awaiting %}<li><div class="item-top">{{ lead_link(b) }} <span class="small muted push">{{ days }} days via {{ (a.channel or 'unknown')|replace('_', ' ') }}</span></div></li>
+        {% else %}<li class="none">None.</li>{% endfor %}
+      </ul>
+    </section>
 
-  <section class="panel">
-    <h2 style="margin-top:0">Coming up (7 days) <span class="badge">{{ v.upcoming|length }}</span></h2>
-    <ul class="timeline">
-      {% for b in v.upcoming %}<li>{{ lead_link(b) }} <span class="small muted">{{ b.follow_up_on }}</span></li>
-      {% else %}<li class="muted small">Nothing scheduled.</li>{% endfor %}
-    </ul>
-  </section>
+    <section class="queue">
+      {{ head('Coming up in 7 days', v.upcoming|length) }}
+      <ul class="list">
+        {% for b in v.upcoming %}<li><div class="item-top">{{ lead_link(b) }} <span class="small muted push">{{ b.follow_up_on }}</span></div></li>
+        {% else %}<li class="none">Nothing scheduled.</li>{% endfor %}
+      </ul>
+    </section>
 
-  <section class="panel">
-    <h2 style="margin-top:0">Best not-yet-contacted</h2>
-    <p class="small muted">Highest fit score among leads with no outreach logged. Low coverage means research them first.</p>
-    <ul class="timeline">
-      {% for b in v.top_uncontacted %}<li>{{ lead_link(b) }} <strong>{{ b.score }}</strong> <span class="small muted">{{ b.score_coverage }}% cov.</span></li>
-      {% else %}<li class="muted small">No scored, uncontacted leads.</li>{% endfor %}
-    </ul>
-  </section>
+    <section class="queue">
+      <h2>Best not yet contacted</h2>
+      <p class="why">Leads with no outreach logged, ranked by fit discounted for missing evidence, so a well-researched 90 can rank above a thinly researched 94. An amber bar means research them first.</p>
+      <ul class="list">
+        {% for b in v.top_uncontacted %}<li><div class="item-top">{{ lead_link(b) }} <span class="push">{{ ui.score(b) }}</span></div></li>
+        {% else %}<li class="none">No scored, uncontacted leads. <a href="/research">Research some leads</a> to score them.</li>{% endfor %}
+      </ul>
+    </section>
+  </div>
 </div>
 {% endblock %}

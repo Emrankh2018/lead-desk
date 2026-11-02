@@ -1,7 +1,10 @@
 {% extends "base.html" %}
 {% block title %}Discovery unavailable{% endblock %}
 {% block content %}
-<h1>Search did not complete</h1>
+<div class="page-head"><div class="title"><h1>Search did not complete</h1></div></div>
 <div class="flash error" role="alert">{{ error }}</div>
-<p>Nothing was added. <a href="/discover">Back to Discover</a> · or <a href="/import#paste">paste a list</a> instead.</p>
+<div class="panel narrow">
+  <p>Nothing was added.</p>
+  <div class="actions"><a class="btn" href="/discover">Back to Discover</a><a class="btn secondary" href="/import#paste">Paste a list instead</a></div>
+</div>
 {% endblock %}

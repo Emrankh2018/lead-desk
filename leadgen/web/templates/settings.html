@@ -1,116 +1,134 @@
 {% extends "base.html" %}
 {% block title %}Settings{% endblock %}
 {% block content %}
-<h1>Settings</h1>
+<div class="page-head">
+  <div class="title"><h1>Settings</h1>
+    <div class="meta">
+      <a href="#profiles">Customer profiles</a><a href="#sender">Sender profile</a><a href="#ai-settings">AI model</a>
+      <a href="#scoring">Scoring weights</a><a href="#stages">Pipeline stages</a><a href="#offers">Offers</a>
+    </div></div>
+</div>
 
-<h2>Customer profiles</h2>
+<h2 id="profiles">Customer profiles</h2>
+<p class="lede">Who you are looking for. Discover pre-fills from a profile, and scoring compares each lead against it.</p>
 <div class="table-wrap"><table>
-  <thead><tr><th>Name</th><th>Countries</th><th>Cities</th><th>Industries</th><th>Active</th><th></th></tr></thead>
+  <thead><tr><th>Name</th><th>Countries</th><th>Cities</th><th>Industries</th><th>Active</th><th><span hidden>Edit</span></th></tr></thead>
+  <tbody>
   {% for i in icps %}
-  <tr><td>{{ i.name }}</td><td>{{ i.countries|join(', ') }}</td><td class="small">{{ i.cities|join(', ') }}</td>
+  <tr><td><strong>{{ i.name }}</strong></td><td>{{ i.countries|join(', ') }}</td><td class="small">{{ i.cities|join(', ') }}</td>
       <td class="small">{{ i.industries|join(', ') }}</td><td>{{ 'yes' if i.active else 'no' }}</td>
       <td><a href="/settings?icp={{ i.id }}#icp-form">Edit</a></td></tr>
   {% endfor %}
+  </tbody>
 </table></div>
 {% set e = edit_icp %}
 <form method="post" action="/settings/icps" class="panel" id="icp-form">
-  <h2 style="margin-top:0">{{ 'Edit “' ~ e.name ~ '”' if e else 'New profile' }}</h2>
+  <h2>{{ 'Edit “' ~ e.name ~ '”' if e else 'New profile' }}</h2>
   {% if e %}<input type="hidden" name="id" value="{{ e.id }}">{% endif %}
   <div class="grid">
     <label>Name <input type="text" name="name" value="{{ e.name if e else '' }}" required></label>
-    <label>Countries (ISO codes, comma-separated) <input type="text" name="countries" value="{{ e.countries|join(', ') if e else '' }}"></label>
+    <label>Countries <span class="hint">2-letter codes, comma-separated</span><input type="text" name="countries" value="{{ e.countries|join(', ') if e else '' }}"></label>
     <label>Cities <input type="text" name="cities" value="{{ e.cities|join(', ') if e else '' }}"></label>
     <label>Industries <input type="text" name="industries" value="{{ e.industries|join(', ') if e else '' }}"></label>
     <label>Keywords <input type="text" name="keywords" value="{{ e.keywords|join(', ') if e else '' }}"></label>
-    <label class="inline"><input type="checkbox" name="active" value="1" {{ 'checked' if (not e or e.active) }}> Active</label>
+    <label class="inline" style="align-self: end; min-height: 38px"><input type="checkbox" name="active" value="1" {{ 'checked' if (not e or e.active) }}> Active</label>
   </div>
-  <label style="margin-top:8px">Description <textarea name="description">{{ e.description if e else '' }}</textarea></label>
-  <label style="margin-top:8px">Size notes <textarea name="size_notes">{{ e.size_notes if e else '' }}</textarea></label>
-  <p><button type="submit">Save profile</button>{% if e %} <a class="btn secondary" href="/settings">New instead</a>{% endif %}</p>
+  <div class="grid" style="margin-top: 14px; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr))">
+    <label>Description <textarea name="description">{{ e.description if e else '' }}</textarea></label>
+    <label>Size notes <textarea name="size_notes">{{ e.size_notes if e else '' }}</textarea></label>
+  </div>
+  <div class="form-foot"><button type="submit">Save profile</button>{% if e %} <a class="btn secondary" href="/settings#icp-form">Create a new one instead</a>{% endif %}</div>
 </form>
 
 <h2 id="sender">Sender profile</h2>
 <form method="post" action="/settings/sender" class="panel">
-  <p class="small muted">Used to sign drafts. Contact details here are the only ones drafts may contain besides the lead's own.</p>
-  <div class="grid">
+  <p class="hint">Used to sign drafts. Contact details here are the only ones drafts may contain besides the lead's own.</p>
+  <div class="grid" style="margin-top: 10px">
     <label>Your name <input type="text" name="your_name" value="{{ sender.your_name }}"></label>
     <label>Studio / business name <input type="text" name="business_name" value="{{ sender.business_name }}"></label>
-    <label>Your email <input type="text" name="email" value="{{ sender.email }}"></label>
-    <label>Your phone / WhatsApp <input type="text" name="phone" value="{{ sender.phone }}"></label>
+    <label>Your email <input type="text" name="email" value="{{ sender.email }}" inputmode="email"></label>
+    <label>Your phone / WhatsApp <input type="text" name="phone" value="{{ sender.phone }}" inputmode="tel"></label>
     <label>Your Instagram <input type="text" name="instagram" value="{{ sender.instagram }}" placeholder="@handle"></label>
     <label>Portfolio link <input type="text" name="portfolio_url" value="{{ sender.portfolio_url }}"></label>
   </div>
-  <label style="margin-top:8px">Email signature <textarea name="signature">{{ sender.signature }}</textarea></label>
-  <p><button type="submit" class="secondary">Save sender profile</button></p>
+  <label style="margin-top: 14px">Email signature <textarea name="signature">{{ sender.signature }}</textarea></label>
+  <div class="form-foot"><button type="submit">Save sender profile</button></div>
 </form>
 
 <h2 id="ai-settings">AI model</h2>
-<div class="panel small">
+<div class="panel">
   <p><span class="badge {{ 'ok' if ai_status[0] else 'err' }}">{{ 'available' if ai_status[0] else 'unavailable' }}</span> {{ ai_status[1] }}</p>
-  <p class="muted">Provider: {{ ai_settings.ai_provider }} · model: {{ ai_settings.ai_model }} · GPU layers: {{ ai_settings.ai_num_gpu if ai_settings.ai_num_gpu is not none else 'auto' }}.
-    Change with LEADGEN_AI_PROVIDER / LEADGEN_AI_MODEL / LEADGEN_AI_NUM_GPU in .env and restart. Paid AI services stay off unless you decide otherwise.</p>
+  <div class="meta" style="margin: 0 0 10px">
+    <span>Provider: <strong>{{ ai_settings.ai_provider }}</strong></span>
+    <span>Model: <strong>{{ ai_settings.ai_model }}</strong></span>
+    <span>GPU layers: <strong>{{ ai_settings.ai_num_gpu if ai_settings.ai_num_gpu is not none else 'auto' }}</strong></span>
+  </div>
+  <p class="hint">Change with <code>LEADGEN_AI_PROVIDER</code>, <code>LEADGEN_AI_MODEL</code> and <code>LEADGEN_AI_NUM_GPU</code> in <code>.env</code>, then restart. Paid AI services stay off unless you decide otherwise.</p>
 </div>
 
 <h2 id="scoring">Scoring weights</h2>
-<p class="small muted">Each criterion adds points only when there is evidence for it. Set a weight to 0 to ignore a criterion. Saving rescores every lead (no websites are fetched).</p>
+<p class="lede">Each criterion adds points only when there is evidence for it. Set a weight to 0 to ignore a criterion. Saving rescores every lead; no websites are fetched.</p>
 {% for i in icps %}
 <form method="post" action="/settings/scoring/{{ i.id }}" class="panel">
-  <strong>{{ i.name }}</strong>
+  <h3>{{ i.name }}</h3>
   {% set w = weights_for(i) %}
-  <div class="grid" style="margin-top:8px">
+  <div class="grid" style="margin-top: 10px">
     {% for c in criteria %}
-    <label title="{{ c.help }}">{{ c.label }} <input type="number" name="{{ c.id }}" min="0" max="100" value="{{ w[c.id] }}"><span class="small">{{ c.help }}</span></label>
+    <label>{{ c.label }} <input type="number" name="{{ c.id }}" min="0" max="100" value="{{ w[c.id] }}" class="w-sm"><span class="hint">{{ c.help }}</span></label>
     {% endfor %}
   </div>
-  <p><button type="submit" class="secondary">Save weights and rescore</button></p>
+  <div class="form-foot"><button type="submit" class="secondary">Save weights and rescore</button></div>
 </form>
 {% endfor %}
 
-<h2>Pipeline stages</h2>
+<h2 id="stages">Pipeline stages</h2>
 <div class="table-wrap"><table>
-  <thead><tr><th>Order</th><th>Name</th><th>Outcome</th><th>Leads</th><th></th></tr></thead>
+  <thead><tr><th>Order</th><th>Name</th><th>Outcome</th><th class="num">Leads</th><th><span hidden>Delete</span></th></tr></thead>
+  <tbody>
   {% for s in stages %}
   <tr>
-    <td class="row">
-      <form method="post" action="/settings/stages/{{ s.id }}"><input type="hidden" name="action" value="up"><button class="secondary" type="submit" aria-label="Move {{ s.name }} up" {{ 'disabled' if loop.first }}>↑</button></form>
-      <form method="post" action="/settings/stages/{{ s.id }}"><input type="hidden" name="action" value="down"><button class="secondary" type="submit" aria-label="Move {{ s.name }} down" {{ 'disabled' if loop.last }}>↓</button></form>
-    </td>
-    <td><form method="post" action="/settings/stages/{{ s.id }}" class="row"><input type="hidden" name="action" value="rename">
-        <input type="text" name="name" value="{{ s.name }}" aria-label="Stage name"><button class="secondary" type="submit">Rename</button></form></td>
+    <td><div class="stage-order">
+      <form method="post" action="/settings/stages/{{ s.id }}"><input type="hidden" name="action" value="up"><button class="secondary small" type="submit" aria-label="Move {{ s.name }} up" {{ 'disabled' if loop.first }}>↑</button></form>
+      <form method="post" action="/settings/stages/{{ s.id }}"><input type="hidden" name="action" value="down"><button class="secondary small" type="submit" aria-label="Move {{ s.name }} down" {{ 'disabled' if loop.last }}>↓</button></form>
+    </div></td>
+    <td><form method="post" action="/settings/stages/{{ s.id }}" class="inline-form"><input type="hidden" name="action" value="rename">
+        <input type="text" name="name" value="{{ s.name }}" aria-label="Name of stage {{ s.name }}" style="min-width: 9em"><button class="secondary small" type="submit">Rename</button></form></td>
     <td><form method="post" action="/settings/stages/{{ s.id }}"><input type="hidden" name="action" value="outcome">
-        <select name="outcome" data-autosubmit aria-label="Outcome for {{ s.name }}">
+        <select name="outcome" data-autosubmit aria-label="Outcome for {{ s.name }}" style="min-width: 7em">
           <option value="" {{ 'selected' if not s.outcome }}>open</option>
           <option value="won" {{ 'selected' if s.outcome == 'won' }}>won</option>
           <option value="lost" {{ 'selected' if s.outcome == 'lost' }}>lost</option>
-        </select></form></td>
-    <td>{{ stage_counts.get(s.id, 0) }}</td>
-    <td>{% if not stage_counts.get(s.id) %}<form method="post" action="/settings/stages/{{ s.id }}"><input type="hidden" name="action" value="delete"><button class="secondary" type="submit">Delete</button></form>{% endif %}</td>
+        </select><noscript><button class="secondary small" type="submit">Set</button></noscript></form></td>
+    <td class="num">{{ stage_counts.get(s.id, 0) }}</td>
+    <td>{% if not stage_counts.get(s.id) %}<form method="post" action="/settings/stages/{{ s.id }}"><input type="hidden" name="action" value="delete"><button class="quiet small" type="submit" aria-label="Delete stage {{ s.name }}">Delete</button></form>{% endif %}</td>
   </tr>
   {% endfor %}
+  </tbody>
 </table></div>
-<form method="post" action="/settings/stages" class="panel row" style="margin-top:12px">
+<form method="post" action="/settings/stages" class="panel tight row">
   <label class="grow">New stage name <input type="text" name="name" required></label>
-  <button type="submit">Add stage</button>
+  <button type="submit" class="secondary">Add stage</button>
 </form>
 
-<h2>Offers</h2>
+<h2 id="offers">Offers</h2>
+<p class="lede">Drafts may only quote these prices.</p>
 {% for o in offers %}
-<form method="post" action="/settings/offers" class="panel row">
+<form method="post" action="/settings/offers" class="panel tight row">
   <input type="hidden" name="id" value="{{ o.id }}">
   <label>Name <input type="text" name="name" value="{{ o.name }}" required></label>
-  <label>Price <input type="text" name="price" value="{{ o.price if o.price is not none else '' }}" size="8" placeholder="quote"></label>
-  <label>Currency <input type="text" name="currency" value="{{ o.currency }}" size="4"></label>
+  <label>Price <input type="text" name="price" value="{{ o.price if o.price is not none else '' }}" class="w-sm" placeholder="quote" inputmode="decimal"></label>
+  <label>Currency <input type="text" name="currency" value="{{ o.currency }}" class="w-xs"></label>
   <label class="grow">Description <input type="text" name="description" value="{{ o.description }}"></label>
-  <label class="inline"><input type="checkbox" name="active" value="1" {{ 'checked' if o.active }}> Active</label>
-  <button type="submit" class="secondary">Save</button>
+  <label class="inline" style="min-height: 38px"><input type="checkbox" name="active" value="1" {{ 'checked' if o.active }}> Active</label>
+  <button type="submit" class="secondary">Save offer</button>
 </form>
 {% endfor %}
-<form method="post" action="/settings/offers" class="panel row">
+<form method="post" action="/settings/offers" class="panel tight row note">
   <label>New offer <input type="text" name="name" required></label>
-  <label>Price <input type="text" name="price" size="8"></label>
-  <label>Currency <input type="text" name="currency" value="QAR" size="4"></label>
+  <label>Price <input type="text" name="price" class="w-sm" inputmode="decimal"></label>
+  <label>Currency <input type="text" name="currency" value="QAR" class="w-xs"></label>
   <label class="grow">Description <input type="text" name="description"></label>
   <input type="hidden" name="active" value="1">
-  <button type="submit">Add offer</button>
+  <button type="submit" class="secondary">Add offer</button>
 </form>
 {% endblock %}

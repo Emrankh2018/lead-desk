@@ -60,10 +60,22 @@ def today_local() -> date:
     return datetime.now(DISPLAY_TZ).date()
 
 
+LOCAL_OWNER = "owner"  # who the audit log records when login is off
+
+
 class SameOriginMiddleware(BaseHTTPMiddleware):
-    """Reject state-changing requests whose Origin/Referer points at another site (CSRF defence)."""
+    """Reject state-changing requests whose Origin/Referer points at another site (CSRF defence).
+
+    Without a login, also refuse any request not addressed to this computer by name. Otherwise a web page could
+    point its own domain at 127.0.0.1 (DNS rebinding) and read the lead list through the visitor's browser."""
 
     async def dispatch(self, request: Request, call_next):
+        settings = request.app.state.settings
+        if not settings.require_login:
+            host = urlsplit("//" + (request.headers.get("host") or "")).hostname
+            if host not in settings.local_hosts:
+                log.warning("blocked request for host %r while login is off", host)
+                return PlainTextResponse("Lead Desk only answers on localhost / 127.0.0.1", status_code=403)
         if request.method in UNSAFE_METHODS:
             source = request.headers.get("origin") or request.headers.get("referer")
             if source and source != "null" and urlsplit(source).netloc != request.headers.get("host"):
@@ -109,7 +121,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     env.filters["local_time"] = local_time
     env.filters["safe_href"] = safe_href
     env.filters["num"] = num
-    env.globals.update(ui_lang=settings.ui_lang, ui_dir=settings.ui_dir, service_label=offerings.label, listing_host=normalize.listing_host,
+    env.globals.update(ui_lang=settings.ui_lang, ui_dir=settings.ui_dir, require_login=settings.require_login, service_label=offerings.label, listing_host=normalize.listing_host,
                        best_service=lambda biz: best_service(biz.score_breakdown, biz.icp))
     app.state.templates = Jinja2Templates(env=env)
 
@@ -138,6 +150,8 @@ def get_session(request: Request):
 
 def current_user(request: Request) -> str:
     user = request.session.get("user")
+    if not user and not request.app.state.settings.require_login:
+        return LOCAL_OWNER
     if not user:
         raise LoginRequired()
     return user
@@ -149,7 +163,7 @@ def flash(request: Request, message: str, kind: str = "ok") -> None:
 
 def render(request: Request, name: str, status_code: int = 200, **ctx):
     ctx["flashes"] = request.session.pop("flash", [])
-    ctx["user"] = request.session.get("user")
+    ctx["user"] = request.session.get("user") or (None if request.app.state.settings.require_login else LOCAL_OWNER)
     return request.app.state.templates.TemplateResponse(request, name, ctx, status_code=status_code)
 
 

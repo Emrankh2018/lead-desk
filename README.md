@@ -21,9 +21,10 @@ way to close the gap; a paid directory such as Google Places is the other. See `
 ## Run (Windows, PowerShell)
 ```powershell
 uv sync                                         # Python 3.12 env + dependencies
-uv run python -m leadgen.cli set-password owner # create your login (prompts, min 10 chars)
-uv run python -m leadgen.cli serve              # http://127.0.0.1:8765
+uv run python -m leadgen.cli serve              # http://127.0.0.1:8765 (no login on this computer)
 ```
+There is no login by default: the app only listens on this computer. To host it anywhere else, set
+`LEADGEN_REQUIRE_LOGIN=true` in `.env` and create a login with `set-password owner` (prompts, min 10 chars).
 Other commands: `backup` (timestamped SQLite copy in `data/backups/`), `dev-user` (local testing login with a random
 password in `data/dev-credentials.txt`).
 
@@ -93,9 +94,10 @@ Configuration via environment or `.env` (git-ignored), prefix `LEADGEN_`: `DATA_
   Set your name and studio in Settings → Sender profile first so drafts sign off correctly.
 
 ## Security notes
-Binds to 127.0.0.1 only. scrypt password hashes, login throttling (5 failures → 60 s), signed HttpOnly SameSite=Strict
+Binds to 127.0.0.1 only. With login off (default) it also refuses requests not addressed to localhost/127.0.0.1,
+which blocks DNS-rebinding pages from reading it. With `LEADGEN_REQUIRE_LOGIN=true`: scrypt password hashes, login throttling (5 failures → 60 s), signed HttpOnly SameSite=Strict
 session cookie, same-origin check on every POST, Jinja autoescaping, no API docs endpoints exposed.
-Before any VPS deployment: HTTPS, `LEADGEN_HTTPS_ONLY_COOKIES=true`, backups, and a deliberate decision.
+Before any VPS deployment: `LEADGEN_REQUIRE_LOGIN=true`, HTTPS, `LEADGEN_HTTPS_ONLY_COOKIES=true`, backups, and a deliberate decision.
 
 ## Development
 ```powershell

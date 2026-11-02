@@ -14,7 +14,8 @@ TEST_USER, TEST_PASSWORD = "owner", "test-password-123"
 
 @pytest.fixture
 def settings(tmp_path):
-    return Settings(data_dir=tmp_path, secret_key="test-secret-key", _env_file=None)
+    # The suite covers the login-protected mode (for hosting); tests/test_local_mode.py covers login off.
+    return Settings(data_dir=tmp_path, secret_key="test-secret-key", require_login=True, _env_file=None)
 
 
 @pytest.fixture

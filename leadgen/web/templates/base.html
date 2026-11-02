@@ -29,7 +29,7 @@
         {{ nav('/analytics', 'Analytics') }}{{ nav('/audit', 'Audit log') }}{{ nav('/settings', 'Settings') }}
       </div>
     </nav>
-    <form method="post" action="/logout" class="signout"><button type="submit">Sign out</button></form>
+    {% if require_login %}<form method="post" action="/logout" class="signout"><button type="submit">Sign out</button></form>{% endif %}
   </header>
   <main id="main">
     {% for kind, msg in flashes %}<div class="flash {{ kind }}" role="status">{{ msg }}</div>{% endfor %}

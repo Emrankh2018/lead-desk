@@ -12,8 +12,8 @@
 ## First-time setup
 ```powershell
 uv sync
-uv run python -m leadgen.cli set-password owner
 ```
+No login is needed on this computer. (Only when hosting elsewhere: `LEADGEN_REQUIRE_LOGIN=true` and `set-password owner`.)
 Then Settings → Sender profile (name, studio, email, Instagram, portfolio link, signature) and check the offers.
 
 ## Backup and restore
@@ -43,7 +43,7 @@ and writes `docs/benchmark/<date>-qa.md`.
 ## Moving to a VPS later (not done; needs your decision and a server)
 1. Build the image: `docker build -t leaddesk .` (Dockerfile in the repo; not yet built or tested).
 2. Copy `data/leadgen.sqlite` (from a backup) into the `leaddesk-data` volume, create `.env` with `LEADGEN_SECRET_KEY`
-   (random), `LEADGEN_HTTPS_ONLY_COOKIES=true`, and AI settings (a VPS without a GPU will be slow with local models).
+   (random), `LEADGEN_REQUIRE_LOGIN=true`, `LEADGEN_HTTPS_ONLY_COOKIES=true`, and AI settings (a VPS without a GPU will be slow with local models).
 3. Run behind HTTPS (e.g. Caddy) and keep the app port bound to 127.0.0.1 on the server.
 4. Re-run `set-password`, the test suite and a backup/restore drill on the server before relying on it.
 

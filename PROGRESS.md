@@ -184,3 +184,12 @@ host resolves to a public address and then connects separately, so a hostile dom
   created (#4, not sent). DB backed up first: data/backups/leadgen-before-services-2026-11-02.sqlite.
 - Real local model (qwen3 4B, prompt p4): one WhatsApp website draft (#5, 70 s, no warnings, not sent); it mentioned
   "listed in OpenStreetMap", which reads oddly in a pitch. AI opportunity ideas with p4 not run live.
+
+## 2026-11-02 — Login removed for local use (done, local, not committed)
+- Owner request: no username/password, since Lead Desk runs only on this computer.
+- `LEADGEN_REQUIRE_LOGIN` (default false): pages open directly as "owner"; login page redirects to Today; Sign out hidden.
+  Login code, hashing and throttling kept for hosting (set it true on any VPS; README and runbook updated).
+- Safeguard with login off: requests not addressed to localhost / 127.0.0.1 / ::1 get 403 (blocks DNS rebinding);
+  the cross-site POST check stays.
+- Proof: 170/170 pytest (10 new in tests/test_local_mode.py; the rest run with login on); browser: signed-out session
+  opens the lead page directly, no Sign out button.

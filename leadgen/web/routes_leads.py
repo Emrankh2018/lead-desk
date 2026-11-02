@@ -70,11 +70,15 @@ def filter_from_query(request: Request) -> LeadFilter:
 
 @router.get("/login")
 def login_form(request: Request):
+    if not request.app.state.settings.require_login:
+        return _see_other("/today")
     return render(request, "login.html", next=_safe_next(request.query_params.get("next")))
 
 
 @router.post("/login")
 async def login(request: Request, session: Session = SessionDep):
+    if not request.app.state.settings.require_login:
+        return _see_other("/today")
     form = await request.form()
     client = request.client.host if request.client else "unknown"
     throttle = request.app.state.throttle

@@ -16,6 +16,10 @@ class Settings(BaseSettings):
     secret_key: str | None = None  # defaults to a generated key persisted in data_dir
     https_only_cookies: bool = False  # set true when served behind HTTPS
     session_max_age: int = 60 * 60 * 12
+    # Off for a single owner on this computer (the app only listens on 127.0.0.1). Turn on before hosting it anywhere
+    # others can reach, e.g. a VPS; the login page, password hashing and throttling are all still there.
+    require_login: bool = False
+    local_hosts: list[str] = ["127.0.0.1", "localhost", "::1"]
     default_country: str = "QA"  # ISO region used to parse phone numbers without a country code
     ui_lang: str = "en"
     ui_dir: str = "ltr"  # "rtl" once Arabic strings are added

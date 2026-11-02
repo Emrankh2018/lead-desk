@@ -6,7 +6,7 @@ an AI product-advertising service in Qatar; target profiles, stages and offers a
 **Status:** MVP complete (M0–M5) and audited. CRM core, website research with evidence and explainable scoring, AI
 ideas and approval-gated outreach drafts, free discovery (OpenStreetMap + pasted lists), Today view, analytics with a
 time/cost log, and a prospect benchmark. No paid services are used; Google Places is deliberately not connected.
-Day-to-day use and maintenance: `docs/RUNBOOK.md`. Latest benchmark: `docs/benchmark/`.
+New here? Start with `docs/HOW-TO-USE.md`. Maintenance: `docs/RUNBOOK.md`. Latest benchmark: `docs/benchmark/`.
 
 **Benchmark (Qatar, free sources only):** 8 of the 20-prospect target — OpenStreetMap lists 108 relevant product
 businesses but 99 have no website, phone, email or Instagram. The paste-a-list import (Instagram brands) is the free

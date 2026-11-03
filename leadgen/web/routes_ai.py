@@ -7,7 +7,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from leadgen.ai import tasks
-from leadgen.models import AiInsight, OutreachDraft, PipelineStage, utcnow
+from leadgen.models import AiInsight, OutreachDraft, utcnow
 from leadgen.offerings import SERVICES
 from leadgen.services import audit, leads
 from leadgen.services.leads import LeadError
@@ -15,7 +15,6 @@ from leadgen.web.app import SessionDep, UserDep, flash, render
 from leadgen.web.routes_leads import _get_lead
 
 router = APIRouter()
-EARLY_STAGES = {"discovered", "qualified", "ready"}
 
 
 def _see_other(url: str) -> RedirectResponse:
@@ -118,19 +117,11 @@ async def update_draft(draft_id: int, request: Request, session: Session = Sessi
                 flash(request, "Follow-up date must be YYYY-MM-DD.", "error")
                 return _see_other(back)
         try:
-            leads.add_activity(session, biz, kind="outreach", channel=channel,
-                               summary=f"Sent {draft.channel} message (draft #{draft.id}):\n{draft.body[:1500]}",
-                               follow_up_on=follow, actor=user)
+            leads.mark_draft_sent(session, draft, channel=channel, follow_up_on=follow, actor=user)
         except LeadError as exc:
             session.rollback()
             flash(request, f"Not marked as sent: {exc}", "error")
             return _see_other(back)
-        draft.status, draft.sent_at = "sent", utcnow()
-        if biz.stage.key in EARLY_STAGES:
-            contacted = session.scalars(select(PipelineStage).where(PipelineStage.key == "contacted")).first()
-            if contacted:
-                leads.change_stage(session, biz, contacted, actor=user)
-        audit.record(session, user, "draft.sent_manually", "business", biz.id, draft_id=draft.id, channel=channel)
         flash(request, "Logged as sent" + (f"; follow-up set for {follow}." if follow else "."))
     session.commit()
     return _see_other(back)

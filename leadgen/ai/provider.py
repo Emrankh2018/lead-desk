@@ -116,11 +116,26 @@ class OpenAICompatibleProvider:
                 "response_format": {"type": "json_schema", "json_schema": {"name": "result", "schema": schema}},
                 "messages": [{"role": "system", "content": system}, {"role": "user", "content": user}],
             })
+            if resp.status_code == 429:
+                raise ProviderError("the AI service's free limit was reached; try again in a minute")
             resp.raise_for_status()
         except httpx.HTTPError as exc:
             raise ProviderError(f"AI server request failed ({type(exc).__name__})") from exc
         content = resp.json()["choices"][0]["message"]["content"]
         return Completion(_parse(content), round((time.perf_counter() - t0) * 1000), self.name, self.model)
+
+
+class GeminiProvider(OpenAICompatibleProvider):
+    """Google Gemini through its OpenAI-compatible endpoint; the free tier needs only an AI Studio key."""
+    name = "gemini"
+    BASE_URL = "https://generativelanguage.googleapis.com/v1beta/openai"
+    DEFAULT_MODEL = "gemini-2.5-flash"
+
+    def __init__(self, settings: Settings, client: httpx.Client | None = None):
+        if not settings.ai_api_key:
+            raise ProviderError("LEADGEN_AI_API_KEY is not set (create a free key in Google AI Studio)")
+        model = settings.ai_model if settings.ai_model.startswith("gemini") else self.DEFAULT_MODEL
+        super().__init__(settings.model_copy(update={"ai_base_url": settings.ai_base_url or self.BASE_URL, "ai_model": model}), client)
 
 
 class DisabledProvider:
@@ -142,6 +157,8 @@ def make_provider(settings: Settings) -> Provider:
             return OllamaProvider(settings)
         if settings.ai_provider == "openai_compatible":
             return OpenAICompatibleProvider(settings)
+        if settings.ai_provider == "gemini":
+            return GeminiProvider(settings)
     except ProviderError as exc:  # misconfiguration must not take the whole app down
         return DisabledProvider(f"AI is misconfigured: {exc}")
     return DisabledProvider()

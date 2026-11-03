@@ -27,6 +27,8 @@ class AiWorker:
         self._start_lock = threading.Lock()
         self._status: tuple[float, bool, str] | None = None
         self.current: str | None = None
+        # Called with (kind, row_id, actor) after each job is saved, e.g. so the Telegram bot can send the finished draft.
+        self.on_done: list[Callable[[str, int, str], None]] = []
 
     def status(self) -> tuple[bool, str]:
         """Provider availability, cached briefly so page loads stay fast."""
@@ -84,6 +86,11 @@ class AiWorker:
             audit.record(s, actor, f"ai.{kind}", "business", row.business_id, row_id=row_id, status=row.status,
                          model=row.model, latency_ms=row.latency_ms)
             s.commit()
+        for callback in self.on_done:
+            try:
+                callback(kind, row_id, actor)
+            except Exception:
+                log.exception("after-job callback failed for %s %s", kind, row_id)
 
 
 def fail_interrupted(session: Session) -> None:

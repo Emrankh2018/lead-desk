@@ -27,6 +27,9 @@ from leadgen.research.service import BatchRunner, rescore_all
 from leadgen import normalize, offerings
 from leadgen.research.scoring import best_service
 from leadgen.services.seed import seed_defaults
+from leadgen.telegram.bot import LeadBot
+from leadgen.telegram.client import TelegramClient, TelegramError
+from leadgen.telegram.daily import DailyJob
 
 log = logging.getLogger("leadgen")
 WEB_DIR = Path(__file__).parent
@@ -102,6 +105,12 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             rescore_all(s)  # offline and cheap; keeps stored scores in step with the current rubric code
             fail_interrupted(s)
             s.commit()
+        if _app.state.telegram and settings.public_url and settings.telegram_webhook_secret:
+            try:  # tell Telegram where to deliver button taps; harmless to repeat on every start
+                _app.state.telegram.client.set_webhook(settings.public_url.rstrip("/") + "/telegram/webhook",
+                                                       settings.telegram_webhook_secret)
+            except TelegramError as exc:
+                log.error("could not register the Telegram webhook: %s", exc)
         yield
         db.engine.dispose()
 
@@ -116,6 +125,10 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     provider = make_provider(settings)
     app.state.ai_provider_factory = lambda: provider  # tests replace this with a scripted provider
     app.state.ai = AiWorker(db.sessionmaker, lambda: app.state.ai_provider_factory())
+    app.state.telegram = None
+    if settings.telegram_bot_token:
+        app.state.telegram = LeadBot(settings, db.sessionmaker, TelegramClient(settings.telegram_bot_token), app.state.ai)
+    app.state.daily = DailyJob(app.state)
 
     env = jinja2.Environment(loader=jinja2.FileSystemLoader(WEB_DIR / "templates"), autoescape=True)
     env.filters["local_time"] = local_time
@@ -134,7 +147,8 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     async def _login_redirect(request: Request, _exc: LoginRequired):
         return RedirectResponse(f"/login?next={request.url.path}", status_code=303)
 
-    from leadgen.web import routes_admin, routes_ai, routes_discovery, routes_insights, routes_leads, routes_research
+    from leadgen.web import routes_admin, routes_ai, routes_bot, routes_discovery, routes_insights, routes_leads, routes_research
+    app.include_router(routes_bot.router)
     app.include_router(routes_insights.router)
     app.include_router(routes_leads.router)
     app.include_router(routes_admin.router)

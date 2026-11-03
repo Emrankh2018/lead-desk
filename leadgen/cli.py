@@ -4,6 +4,8 @@
   set-password <username>        create the user or change its password (prompts, never echoes)
   backup                         copy the database to data/backups/ with a timestamp
   dev-user                       local testing only: user 'owner' with a random password in data/dev-credentials.txt
+  bot-poll                       run the Telegram bot on this computer (no web server or public address needed)
+  daily                          run the morning job now: find, research and send today's list to Telegram
 """
 import argparse
 import getpass
@@ -29,6 +31,8 @@ def main(argv: list[str] | None = None) -> int:
     bm = sub.add_parser("benchmark")
     bm.add_argument("--country", default="QA")
     bm.add_argument("--no-research", action="store_true", help="skip fetching websites")
+    sub.add_parser("bot-poll")
+    sub.add_parser("daily")
     ev = sub.add_parser("eval")
     ev.add_argument("--quick", action="store_true", help="3 cases, 1 draft each")
     args = parser.parse_args(argv)
@@ -64,6 +68,27 @@ def main(argv: list[str] | None = None) -> int:
         report = evals.run(provider, quick=args.quick)
         print(json.dumps(report["summary"], indent=1))
         print(f"Report: {report['path']}")
+        return 0
+
+    if args.cmd in ("bot-poll", "daily"):
+        import logging
+        from leadgen.telegram import local
+        from leadgen.web.app import today_local
+        logging.basicConfig(level=logging.INFO)
+        logging.getLogger("httpx").setLevel(logging.WARNING)  # its request log lines would show the bot token
+        settings.data_dir.mkdir(parents=True, exist_ok=True)
+        state = local.build_state(settings)
+        if not state.telegram:
+            print("Set LEADGEN_TELEGRAM_BOT_TOKEN in .env first.", file=sys.stderr)
+            return 1
+        if args.cmd == "daily":
+            print(json.dumps(state.daily.run_now(today_local())))
+            state.ai.drain()
+            return 0
+        try:
+            local.poll(state)
+        except KeyboardInterrupt:
+            pass
         return 0
 
     settings.data_dir.mkdir(parents=True, exist_ok=True)

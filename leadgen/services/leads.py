@@ -264,3 +264,20 @@ def query_leads(session: Session, flt: LeadFilter, today: date, limit: int | Non
     if limit:
         stmt = stmt.limit(limit)
     return list(session.scalars(stmt))
+
+
+EARLY_STAGES = {"discovered", "qualified", "ready"}
+
+
+def mark_draft_sent(session: Session, draft: OutreachDraft, *, channel: str, follow_up_on: date | None, actor: str) -> None:
+    """Log an approved draft as sent by the owner and move an early-stage lead to Contacted. Raises LeadError."""
+    biz = draft.business
+    add_activity(session, biz, kind="outreach", channel=channel,
+                 summary=f"Sent {draft.channel} message (draft #{draft.id}):\n{draft.body[:1500]}",
+                 follow_up_on=follow_up_on, actor=actor)
+    draft.status, draft.sent_at = "sent", utcnow()
+    if biz.stage.key in EARLY_STAGES:
+        contacted = session.scalars(select(PipelineStage).where(PipelineStage.key == "contacted")).first()
+        if contacted:
+            change_stage(session, biz, contacted, actor=actor)
+    audit.record(session, actor, "draft.sent_manually", "business", biz.id, draft_id=draft.id, channel=channel)

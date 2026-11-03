@@ -11,7 +11,8 @@ class Base(DeclarativeBase):
 
 def make_engine(url: str) -> Engine:
     connect_args = {"check_same_thread": False} if url.startswith("sqlite") else {}
-    engine = create_engine(url, connect_args=connect_args)
+    # pre_ping: a hosted app sleeps between requests and the database may have closed idle connections meanwhile.
+    engine = create_engine(url, connect_args=connect_args, pool_pre_ping=not url.startswith("sqlite"))
     if url.startswith("sqlite"):
         @event.listens_for(engine, "connect")
         def _sqlite_pragmas(dbapi_conn, _record):

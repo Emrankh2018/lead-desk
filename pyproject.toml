@@ -19,6 +19,7 @@ dependencies = [
     "rapidfuzz>=3.9",
     "openpyxl>=3.1",
     "tzdata>=2026.6",
+    "psycopg[binary]>=3.2",
 ]
 
 [dependency-groups]

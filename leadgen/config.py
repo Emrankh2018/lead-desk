@@ -1,4 +1,5 @@
 """Runtime configuration. Values come from environment variables or a git-ignored .env file."""
+import re
 import secrets
 from functools import lru_cache
 from pathlib import Path
@@ -9,10 +10,11 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 
 
 class Settings(BaseSettings):
-    model_config = SettingsConfigDict(env_prefix="LEADGEN_", env_file=PROJECT_ROOT / ".env", extra="ignore")
+    # env_ignore_empty: a blank line in .env (e.g. "LEADGEN_TELEGRAM_CHAT_ID=") means "not set yet".
+    model_config = SettingsConfigDict(env_prefix="LEADGEN_", env_file=PROJECT_ROOT / ".env", extra="ignore", env_ignore_empty=True)
 
     data_dir: Path = PROJECT_ROOT / "data"
-    database_url: str | None = None  # defaults to sqlite file inside data_dir
+    database_url: str | None = None  # defaults to sqlite file inside data_dir; a postgres:// URL (e.g. Supabase) also works
     secret_key: str | None = None  # defaults to a generated key persisted in data_dir
     https_only_cookies: bool = False  # set true when served behind HTTPS
     session_max_age: int = 60 * 60 * 12
@@ -24,7 +26,7 @@ class Settings(BaseSettings):
     ui_lang: str = "en"
     ui_dir: str = "ltr"  # "rtl" once Arabic strings are added
 
-    # AI provider. "ollama" (local, default), "openai_compatible" (any /v1/chat/completions server; needs explicit
+    # AI provider. "ollama" (local, default), "gemini" (Google AI Studio key; free tier), "openai_compatible" (any /v1/chat/completions server; needs explicit
     # owner approval if it is a paid service), or "none" (template drafts only).
     ai_provider: str = "ollama"
     ai_model: str = "qwen3:4b-instruct-2507-q4_K_M"
@@ -34,9 +36,19 @@ class Settings(BaseSettings):
     ai_base_url: str | None = None  # openai_compatible only
     ai_api_key: str | None = None  # openai_compatible only; keep in .env, never in code
 
+    # Telegram bot (optional). The bot only talks to telegram_chat_id; Telegram proves webhook calls with the secret.
+    telegram_bot_token: str | None = None
+    telegram_chat_id: int | None = None
+    telegram_webhook_secret: str | None = None
+    public_url: str | None = None  # e.g. https://lead-desk.onrender.com, used to register the webhook
+    cron_key: str | None = None  # protects /cron/daily, which a free scheduler (cron-job.org) opens each morning
+    digest_size: int = 8
+
     @property
     def db_url(self) -> str:
-        return self.database_url or f"sqlite:///{(self.data_dir / 'leadgen.sqlite').as_posix()}"
+        url = self.database_url or f"sqlite:///{(self.data_dir / 'leadgen.sqlite').as_posix()}"
+        # Supabase and Render hand out postgres:// URLs; SQLAlchemy needs the driver named.
+        return re.sub(r"^postgres(ql)?://", "postgresql+psycopg://", url)
 
     def session_secret(self) -> str:
         if self.secret_key:

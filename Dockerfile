@@ -1,4 +1,4 @@
-# Lead Desk container image for a later VPS deployment (not built or verified yet).
+# Lead Desk container image. Used by Render (free web service, see docs/DEPLOY-RENDER.md) or any VPS.
 # Build:  docker build -t leaddesk .
 # Run:    docker run -p 127.0.0.1:8765:8765 -v leaddesk-data:/data --env-file .env leaddesk
 # Put HTTPS (e.g. Caddy) in front and set LEADGEN_HTTPS_ONLY_COOKIES=true before exposing it beyond localhost.
@@ -21,4 +21,5 @@ USER leaddesk
 VOLUME ["/data"]
 EXPOSE 8765
 # Inside the container the app must listen on all interfaces; the -p 127.0.0.1:... mapping keeps it local.
-CMD ["/app/.venv/bin/uvicorn", "leadgen.web.asgi:app", "--host", "0.0.0.0", "--port", "8765"]
+# Render tells the app which port to use in $PORT; elsewhere it is 8765.
+CMD ["sh", "-c", "exec /app/.venv/bin/uvicorn leadgen.web.asgi:app --host 0.0.0.0 --port ${PORT:-8765} --proxy-headers --forwarded-allow-ips='*'"]

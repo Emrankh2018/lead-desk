@@ -254,3 +254,15 @@ class AuditLog(Base):
     entity: Mapped[str] = mapped_column(String(40))
     entity_id: Mapped[int | None] = mapped_column(Integer)
     detail: Mapped[dict] = mapped_column(JSON, default=dict)
+
+
+class BotPick(Base):
+    """A lead the Telegram bot has offered in a daily list, and what the owner chose (one row per lead)."""
+    __tablename__ = "bot_picks"
+    id: Mapped[int] = mapped_column(primary_key=True)
+    business_id: Mapped[int] = mapped_column(ForeignKey("businesses.id", ondelete="CASCADE"), unique=True)
+    status: Mapped[str] = mapped_column(String(12), default="offered")  # offered | pursue | skipped
+    offered_on: Mapped[date] = mapped_column(Date, index=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)
+
+    business: Mapped[Business] = relationship()

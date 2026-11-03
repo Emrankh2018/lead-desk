@@ -54,8 +54,19 @@ def app_ctx(bot_settings):
     app = create_app(bot_settings)
     fake = FakeTelegram()
     app.state.telegram.client = fake
+    app.state.ai_provider_factory = lambda: FakeProvider(available=False)  # never a real model
     with TestClient(app, base_url="http://testserver") as c:
         yield app, c, fake
+
+
+def test_digest_adds_an_ai_idea_per_lead(app_ctx):
+    app, _c, fake = app_ctx
+    add(app, "Cafe One", phone="+974 5555 0001")
+    app.state.ai_provider_factory = lambda: FakeProvider(
+        {"hypotheses": [], "angle": "Offer a bilingual menu website.", "insufficient_evidence": True})
+    app.state.ai._status = None
+    app.state.telegram.send_digest(date(2026, 11, 3))
+    assert any("Idea: Offer a bilingual menu website." in t for _, t, _ in fake.sent)
 
 
 def add(app, name, **kw):
@@ -196,9 +207,9 @@ def test_gemini_provider_defaults_and_free_limit(tmp_path):
         return httpx.Response(429, json={"error": "quota"})
 
     p = GeminiProvider(settings, httpx.Client(transport=httpx.MockTransport(handler)))
-    assert p.model == "gemini-2.5-flash" and p.url.startswith("https://generativelanguage.googleapis.com/")
+    assert p.model == "gemini-3.5-flash" and len(seen) == 0 and p.url.startswith("https://generativelanguage.googleapis.com/")
     with pytest.raises(ProviderError, match="free limit"):
         p.complete_json("s", "u", {"type": "object"})
-    assert seen[0].url.path.endswith("/chat/completions")
+    assert seen[0].url.path.endswith("/chat/completions") and len(seen) == 3  # each fallback model tried once
     no_key = make_provider(Settings(data_dir=tmp_path, ai_provider="gemini", _env_file=None))
     assert no_key.name == "none" and "AI Studio" in no_key.status()[1]

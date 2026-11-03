@@ -129,13 +129,32 @@ class GeminiProvider(OpenAICompatibleProvider):
     """Google Gemini through its OpenAI-compatible endpoint; the free tier needs only an AI Studio key."""
     name = "gemini"
     BASE_URL = "https://generativelanguage.googleapis.com/v1beta/openai"
-    DEFAULT_MODEL = "gemini-2.5-flash"
+    # Checked live 2026-11-03: 2.5 models are closed to new keys; newer ones are sometimes "high demand" (503).
+    DEFAULT_MODEL = "gemini-3.5-flash"
+    FALLBACK_MODELS = ("gemini-3.5-flash", "gemini-3-flash-preview", "gemini-flash-latest")
 
     def __init__(self, settings: Settings, client: httpx.Client | None = None):
         if not settings.ai_api_key:
             raise ProviderError("LEADGEN_AI_API_KEY is not set (create a free key in Google AI Studio)")
         model = settings.ai_model if settings.ai_model.startswith("gemini") else self.DEFAULT_MODEL
         super().__init__(settings.model_copy(update={"ai_base_url": settings.ai_base_url or self.BASE_URL, "ai_model": model}), client)
+        self.models = [model] + [m for m in self.FALLBACK_MODELS if m != model]
+
+    def complete_json(self, system: str, user: str, schema: dict) -> Completion:
+        """Try the next model when one is busy (503), retired (404) or out of free quota (429)."""
+        for i, model in enumerate(self.models):
+            self.model = model
+            try:
+                return super().complete_json(system, user, schema)
+            except ProviderError as exc:
+                cause = exc.__cause__
+                busy = "free limit" in str(exc) or (isinstance(cause, httpx.HTTPStatusError)
+                                                    and cause.response.status_code in (404, 503))
+                if not busy or i == len(self.models) - 1:
+                    raise
+            finally:
+                self.model = self.models[0]
+        raise ProviderError("no Gemini model available")
 
 
 class DisabledProvider:

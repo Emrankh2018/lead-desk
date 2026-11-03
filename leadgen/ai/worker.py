@@ -38,6 +38,9 @@ class AiWorker:
             self._status = (now, ok, msg)
         return self._status[1], self._status[2]
 
+    def provider(self) -> Provider:
+        return self._provider_factory()
+
     def pending(self) -> int:
         return self._queue.qsize() + (1 if self.current else 0)
 

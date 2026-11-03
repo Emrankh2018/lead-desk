@@ -10,13 +10,15 @@ from datetime import date, datetime, timedelta
 from urllib.parse import quote
 from zoneinfo import ZoneInfo
 
+from pydantic import ValidationError
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from leadgen.ai import tasks
+from leadgen.ai.provider import ProviderError
 from leadgen.ai.worker import AiWorker
 from leadgen.config import Settings
-from leadgen.models import BotPick, Business, OutreachDraft, PipelineStage, utcnow
+from leadgen.models import AiInsight, BotPick, Business, OutreachDraft, PipelineStage, utcnow
 from leadgen.offerings import label as service_label
 from leadgen.research.scoring import service_fits
 from leadgen.services import audit, leads
@@ -99,6 +101,24 @@ class LeadBot:
             Business.do_not_contact.is_(False), PipelineStage.outcome.is_(None), Business.follow_up_on <= today)
             .order_by(Business.follow_up_on)))
 
+    def _add_ideas(self, session: Session, picks: list[Business]) -> None:
+        """One AI idea per lead in the list (a few seconds each with Gemini). Skipped quietly when AI is unavailable."""
+        if not self.ai.status()[0]:
+            return
+        provider = self.ai.provider()
+        for biz in picks:
+            if tasks.latest_insight(session, biz):
+                continue
+            insight = AiInsight(business_id=biz.id)
+            session.add(insight)
+            session.flush()
+            try:
+                tasks.run_insight(session, insight, provider)
+            except (ProviderError, ValidationError) as exc:
+                insight.status, insight.error = "failed", str(exc)[:300]
+                log.warning("idea for lead %s failed: %s", biz.id, exc)
+            session.commit()
+
     def send_digest(self, today: date, note: str = "") -> int:
         if not self.chat_id:
             return 0
@@ -108,6 +128,7 @@ class LeadBot:
                 self.client.send(self.chat_id, "⏰ <b>Follow-ups due</b>\n" + "\n".join(
                     f"• {esc(b.name)} (since {b.follow_up_on:%d %b})" for b in due[:15]))
             picks = self.candidates(s)
+            self._add_ideas(s, picks)
             if not picks:
                 self.client.send(self.chat_id, "No new leads to suggest today." + (f"\n{esc(note)}" if note else ""))
                 return 0
